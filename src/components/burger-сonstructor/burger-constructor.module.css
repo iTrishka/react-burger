@@ -1,4 +1,45 @@
 .wrapper{
+    width: 600px;
     display: flex;
-    flex-direction: column;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    
+    
 }
+
+.scroll{
+    height: 656px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.scroll::-webkit-scrollbar{
+    width: 8px;  
+}
+
+.scroll::-webkit-scrollbar-track{
+    background: #2F2F37;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.scroll::-webkit-scrollbar-thumb{
+    background-color: #8585AD;    /* цвет плашки */ 
+}
+
+.constructorCard{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.totalWrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+

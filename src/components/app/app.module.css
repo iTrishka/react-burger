@@ -1,0 +1,15 @@
+.app {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  margin: 0 auto;
+  height: 100%;
+  background-color: black;
+}
+
+main{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+

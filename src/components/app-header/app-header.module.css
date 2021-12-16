@@ -1,33 +1,48 @@
+.primaryColor{
+    color: #F2F2F3;
+}
+
+.secondaryColor{
+    color: #8585AD;
+}
+
 .header{
-    padding: 16px 0;
-    width: 1200px;
+    width: 1240px;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: center;
+    justify-content: space-between;
     color:bisque;
+    
 }
 
 .header section{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    width: calc(100%/3.3);
+    
+}
+
+.header section:nth-child(1){
+    justify-content: flex-start;
 }
 
 .header section:nth-child(2){
-    flex: 1 1 auto;
     justify-content: center;
+}
+
+.header section:nth-child(3){
+    justify-content: flex-end;
 }
 
 .btn{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    padding: 0;
     border: none;
     font: inherit;
     color: inherit;
     background-color: transparent;
-    padding: 0 20px;
     cursor: pointer;
 
 }

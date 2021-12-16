@@ -1,5 +1,6 @@
 import React from "react";
 import { Tab, Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import PropTypes from 'prop-types';
 
 import styleBurgerIngredient from "./burger-ingredients.module.css";
 
@@ -77,5 +78,9 @@ const BurgerIngredients =  ({data}) => {
     )
 };  
 
+
+BurgerIngredients.propTypes = {
+    data: PropTypes.array,
+  }; 
 
 export default BurgerIngredients;

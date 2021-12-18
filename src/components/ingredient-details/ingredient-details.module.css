@@ -1,0 +1,18 @@
+.modalMain{
+    width: 480px;
+}
+
+.modalMain p{
+    text-align: center;
+}
+
+.modalProps{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.modalProps li{
+    list-style: none;
+    text-align: center;
+}

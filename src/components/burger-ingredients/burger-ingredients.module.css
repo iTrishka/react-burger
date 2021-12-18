@@ -36,5 +36,6 @@
     flex-flow: column nowrap;
     align-items: center;
     position: relative;
+    cursor: pointer;
 }
 

@@ -57,10 +57,14 @@ const BurgerConstructor =  ({data}) => {
 };  
 
 
-// BurgerConstructor.propTypes = {
-//     data: PropTypes.array,
-//     modalVisible: PropTypes.bool,
-//     dataChecked: PropTypes.array,
-//   }; 
+BurgerConstructor.propTypes = {
+    item: PropTypes.shape({
+        _id: PropTypes.number.isRequired,
+        type: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        price: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired
+      })
+  }; 
 
 export default BurgerConstructor;

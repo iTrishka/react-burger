@@ -21,7 +21,7 @@ const Modal = (props) => {
     },[])
 
     return ReactDOM.createPortal(
-        <ModalOverlay  onClose={onClose} onkeydown>
+        <ModalOverlay  onClose={onClose}>
             <div className={`${ModalStyle.modalWrapper} pl-10 pt-10 pr-10 pb-15`}>
                 <section className={ModalStyle.header}>
                     <p className="text text_type_main-large">{header}</p> 
@@ -35,9 +35,15 @@ const Modal = (props) => {
       );
 };  
 
-// Modal.propTypes  = {
-//   modalRoot: PropTypes.node,
-// }
+Modal.propTypes  = {
+  header: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.oneOf([null])]).isRequired,
+  onClose: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+]).isRequired
+}
 
 
 export default Modal;

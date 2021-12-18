@@ -87,15 +87,13 @@ const BurgerIngredients = ({data}) => {
 };  
 
 
-// BurgerIngredients.propTypes = {
-//     data: PropTypes.array,
-//     current: PropTypes.string,
-//     currentElement: PropTypes.object,
-//     card: PropTypes.object,
-//     tabsName: PropTypes.array,
-//     bunList: PropTypes.object,
-//     mainList: PropTypes.object,
-//     sauceList: PropTypes.object,
-//   }; 
+BurgerIngredients.propTypes = {
+    data: PropTypes.array,
+    card: PropTypes.shape({
+        _id: PropTypes.number.isRequired,
+        image: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      }),
+  }; 
 
 export default BurgerIngredients;

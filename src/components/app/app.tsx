@@ -13,30 +13,49 @@ const App = () => {
     error: false
   });
 
-  const url = 'https://norma.nomoreparties.space/api/ingredients';
+  const url = 'https://norma.nomoreparties.space/api/ingredients ';
 
   
   React.useEffect(() => {
       fetch(url)
-        .then((response) => response.json())
+        .then(result => {
+          if (result.ok) {
+               return result.json();
+          }
+          return Promise.reject(result.status);
+         })
         .then((result) => {
-          setState({ ...state, dataIngredients: result.data, loading: false });
+          setState({ error: false, dataIngredients: result.data, loading: false });
         })
         .catch((error) => {
           setState({...state, loading: false, error: true});
       });
   }, []);
 
-  return (
+  const error = (
+    <>
+      Что-то пошло не так. Повторите попытку позже. 
+    </>
+  )
+
+  const loading = (
+    <>
+      Загрузка 
+    </>
+  )
+
+   return (
     <div className={styleApp.app}>
       <AppHeader />
       <main>
+        {state.loading ? loading : ""}
+        {state.error ? error : ""} 
         {state.dataIngredients ? 
         <>
         <BurgerIngredients data={state.dataIngredients} />
         <BurgerConstructor data={state.dataIngredients} />
         </>
-      :  "Загрузка"}
+      :  ""}
       </main>
       
     </div>

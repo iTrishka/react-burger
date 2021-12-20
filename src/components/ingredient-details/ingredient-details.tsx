@@ -1,5 +1,4 @@
-
-import PropTypes from 'prop-types';
+import menuItemPropTypes from '../../utils/constants';
 
 import StyleIngredientDetails from './ingredient-details.module.css';
 
@@ -7,7 +6,7 @@ const IngredientDetails =  ({elem}) => {
     return(
         <section className={`${StyleIngredientDetails.modalMain} `}>
             <img src={elem.image_large} alt={elem.name} className={`mr-4`}/>
-            <p className={`text text_type_main-medium mb-4`} style={{ textAlign: 'center' }}>
+            <p className={`text text_type_main-medium mb-4`}>
               {elem.name}</p>
             <p className="text text_type_main-small mb-4">
                 Превосходные котлеты из марсианской Магнолии для фирменных космических бургеров, набирающий популярность по всей вселенной
@@ -35,14 +34,7 @@ const IngredientDetails =  ({elem}) => {
 };  
 
 IngredientDetails.propTypes  = {
-  elem: PropTypes.shape({
-    image_large: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    calories: PropTypes.number.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired
-  })
+  elem: menuItemPropTypes
 }
 
 export default IngredientDetails;

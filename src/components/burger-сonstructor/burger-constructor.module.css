@@ -8,10 +8,14 @@
 }
 
 .scroll{
+    width: 600px;
     height: 656px;
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .scroll::-webkit-scrollbar{
@@ -31,15 +35,28 @@
 .constructorCard{
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
+
+.constructorCard:first-child{
+    align-self: end;
+}
+
+.constructorCard:last-child{
+    align-self: end;
+}
+
 
 .totalWrapper{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+}
+
+.totalWrapper p{
+    display: inline;
 }
 
 

@@ -6,6 +6,10 @@
     align-items: flex-start;
 }
 
+.tabsWrapper{
+    display: flex;
+}
+
 .ingedientCardContainer{
     display: flex;
     flex-flow: column nowrap;
@@ -30,12 +34,5 @@
     flex-flow: row wrap;
 }
 
-.ingedientCard{
-    max-width: 270px;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-}
+
 

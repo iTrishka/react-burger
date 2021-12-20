@@ -1,9 +1,11 @@
 import React from 'react';
-import {Tab, Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
+import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBurgerIngredient from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import IngredientCard from '../ingredient-card/ingredient-card';
+import PropTypes from 'prop-types';
+import menuItemPropTypes from '../../utils/constants';
 
 const BurgerIngredients = ({data}) => {
     const [current, setCurrent] = React.useState('Булки');
@@ -22,22 +24,7 @@ const BurgerIngredients = ({data}) => {
     );
 
     const getIngredientCard = (card) => {
-        return(
-            <li
-                data-id={card._id}
-                key={card._id}  
-                className={`${styleBurgerIngredient.ingedientCard} mr-4 mt-5 mb-10`}
-                onClick={handleOpenModal}
-            >
-                <img src={card.image} alt={card.name} className={`mr-4`} />
-                <Counter count={1} size="default" />
-                <div className={`mt-1`} style={{ display: 'flex' }}>
-                    <p className={`text text_type_digits-default mt-1 mr-2` }  style={{ display: 'inline' }}>{card.price}</p>
-                    <CurrencyIcon type="primary" />
-                </div>
-                <div className={`mt-1`} style={{ textAlign: 'center' }}>{card.name}</div>
-            </li>
-        )
+        return IngredientCard(card, handleOpenModal)
     };
     
     const handleCloseModal = (e) => {
@@ -61,14 +48,14 @@ const BurgerIngredients = ({data}) => {
             <p className="text text_type_main-large mt-40">
                 Соберите бургер
             </p>
-            <div className={`mt-5`} style={{ display: 'flex' }} >
+            <div className={`${styleBurgerIngredient.tabsWrapper}  mt-5`} >
                 {getTabs}
             </div>
             <div className={`${styleBurgerIngredient.ingedientCardContainer} mt-10`}>
                 {bunList.length ? <p key="bun" className="text text_type_main-medium">
                     Булки</p> : ""}
                 <ul className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {bunList.map(card =>(getIngredientCard(card)))}
+                    {bunList.map((card) =>(getIngredientCard(card)))}
                 </ul>
                 {mainList.length ? <p key="main" className="text text_type_main-medium">
                     Начинки</p>  : ""}
@@ -88,12 +75,8 @@ const BurgerIngredients = ({data}) => {
 
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.array,
-    card: PropTypes.shape({
-        _id: PropTypes.number.isRequired,
-        image: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
+    data: PropTypes.arrayOf(menuItemPropTypes),
+    card: menuItemPropTypes
   }; 
 
 export default BurgerIngredients;

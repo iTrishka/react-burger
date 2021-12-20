@@ -1,0 +1,16 @@
+.ingedientCard{
+    max-width: 270px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.priceWrapper{
+    display: flex;
+}
+
+.titleCard{
+    text-align: center;
+}

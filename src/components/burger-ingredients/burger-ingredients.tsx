@@ -24,7 +24,7 @@ const BurgerIngredients = ({data}) => {
     );
 
     const getIngredientCard = (card) => {
-        return IngredientCard(card, handleOpenModal)
+        return <IngredientCard card={card} handleOpenModal={handleOpenModal}/>
     };
     
     const handleCloseModal = (e) => {

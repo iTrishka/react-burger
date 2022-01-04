@@ -1,0 +1,62 @@
+.wrapper{
+    width: 600px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    
+    
+}
+
+.scroll{
+    width: 600px;
+    height: 656px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scroll::-webkit-scrollbar{
+    width: 8px;  
+}
+
+.scroll::-webkit-scrollbar-track{
+    background: #2F2F37;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.scroll::-webkit-scrollbar-thumb{
+    background-color: #8585AD;    /* цвет плашки */ 
+}
+
+.constructorCard{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.constructorCard:first-child{
+    align-self: end;
+}
+
+.constructorCard:last-child{
+    align-self: end;
+}
+
+
+.totalWrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.totalWrapper p{
+    display: inline;
+}
+
+

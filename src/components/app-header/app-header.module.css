@@ -1,0 +1,56 @@
+.primaryColor{
+    color: #F2F2F3;
+}
+
+.secondaryColor{
+    color: #8585AD;
+}
+
+.header{
+    width: 1240px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    color:bisque;
+    
+}
+
+.header section{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    width: calc(100%/3.3);
+    
+}
+
+.header section:nth-child(1){
+    justify-content: flex-start;
+}
+
+.header section:nth-child(2){
+    justify-content: center;
+}
+
+.header section:nth-child(3){
+    justify-content: flex-end;
+}
+
+.btn{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+
+}
+
+.btn:first-child{
+    margin-right: 8px;
+}
+
+.btn span{
+    margin-left: 8px;
+}

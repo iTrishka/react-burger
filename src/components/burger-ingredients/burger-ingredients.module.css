@@ -1,0 +1,38 @@
+.wrapper{
+    width: 600px;
+    height: 830px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+}
+
+.tabsWrapper{
+    display: flex;
+}
+
+.ingedientCardContainer{
+    display: flex;
+    flex-flow: column nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.ingedientCardContainer::-webkit-scrollbar{
+    width: 8px;  
+}
+
+.ingedientCardContainer::-webkit-scrollbar-track{
+    background: #2F2F37;
+}
+
+.ingedientCardContainer::-webkit-scrollbar-thumb{
+    background-color: #8585AD;    /* цвет плашки */ 
+}
+
+.ingedientType{
+    display: flex;
+    flex-flow: row wrap;
+}
+
+
+

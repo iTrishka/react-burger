@@ -3,7 +3,7 @@ import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-com
 import menuItemPropTypes from '../../utils/constants';
 import PropTypes from 'prop-types';
 
-const IngredientCard = (card, handleOpenModal) => {
+const IngredientCard = ({card, handleOpenModal}) => {
     return (
         <li
             data-id={card._id}

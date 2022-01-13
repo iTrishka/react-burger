@@ -3,7 +3,7 @@ import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-component
 import { IngredientContext } from '../../utils/ingredient-context';
 
 const OrderDetails =  () => {
-    const {state, setState} = React.useContext(IngredientContext);
+    const {state} = React.useContext(IngredientContext);
     return(
         <>
             <p className="text text_type_digits-large">{state.orderNumber}</p> 

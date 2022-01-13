@@ -8,7 +8,6 @@ import { IngredientContext } from '../../utils/ingredient-context';
 
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
-import { isTemplateExpression } from 'typescript';
 
 const BurgerConstructor =  () => {
     const {state, setState} = React.useContext(IngredientContext);
@@ -137,8 +136,8 @@ BurgerConstructor.defaultProps = {
 
 
 BurgerConstructor.propTypes = {
-    //data: PropTypes.arrayOf(menuItemPropTypes),
-    //item: menuItemPropTypes
+    data: PropTypes.arrayOf(menuItemPropTypes),
+    item: menuItemPropTypes
   }; 
 
 export default BurgerConstructor;

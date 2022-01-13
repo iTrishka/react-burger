@@ -8,9 +8,9 @@ import { IngredientContext } from '../../utils/ingredient-context';
 import ModalStyle from './modal.module.css';
 
 const Modal = (props) => {
-    const {header, order, onClose} = props;
+    const {header, onClose} = props;
     const modalRoot = document.getElementById("reactModals")!;
-    const {state, setState} = React.useContext(IngredientContext);
+    const {state} = React.useContext(IngredientContext);
     const testData = state.dataIngredients.length;
 
     React.useEffect(() => {
@@ -39,15 +39,15 @@ const Modal = (props) => {
       );
 };  
 
-// Modal.propTypes  = {
-//   header: PropTypes.oneOfType([
-//     PropTypes.string, PropTypes.oneOf([null])]).isRequired,
-//   onClose: PropTypes.func,
-//   children: PropTypes.oneOfType([
-//     PropTypes.arrayOf(PropTypes.node),
-//     PropTypes.node
-// ]).isRequired
-// }
+Modal.propTypes  = {
+  header: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.oneOf([null])]).isRequired,
+  onClose: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+]).isRequired
+}
 
 
 export default Modal;

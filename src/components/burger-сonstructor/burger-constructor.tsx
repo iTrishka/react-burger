@@ -1,7 +1,7 @@
 import React from 'react';
 import {ConstructorElement, CurrencyIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
-import OrderDetails from '../oder-details/oder-details';
+import OrderDetails from '../order-details/order-details';
 import menuItemPropTypes from '../../utils/constants';
 import PropTypes from 'prop-types';
 import { IngredientContext } from '../../utils/ingredient-context';

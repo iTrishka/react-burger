@@ -7,7 +7,6 @@ const IngredientCard = ({card, handleOpenModal}) => {
     return (
         <li
             data-id={card._id}
-            key={card._id}  
             className={`${styleIngredientCard.ingedientCard} mr-4 mt-5 mb-10`}
             onClick={handleOpenModal}
             >

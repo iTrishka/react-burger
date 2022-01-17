@@ -22,10 +22,6 @@ const BurgerIngredients = ({data}) => {
                 </p>
             </Tab>
     );
-
-    const getIngredientCard = (card) => {
-        return <IngredientCard card={card} handleOpenModal={handleOpenModal}/>
-    };
     
     const handleCloseModal = (e) => {
         setCurrentElement(null);
@@ -54,18 +50,24 @@ const BurgerIngredients = ({data}) => {
             <div className={`${styleBurgerIngredient.ingedientCardContainer} mt-10`}>
                 {bunList.length ? <p key="bun" className="text text_type_main-medium">
                     Булки</p> : ""}
-                <ul className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {bunList.map((card) =>(getIngredientCard(card)))}
+                <ul key="bunList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
+                    {bunList.map((card) =>(
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        ))}
                 </ul>
                 {mainList.length ? <p key="main" className="text text_type_main-medium">
                     Начинки</p>  : ""}
-                <ul className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {mainList.map(card =>(getIngredientCard(card)))}
+                <ul key="mainList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
+                    {mainList.map(card =>(
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        ))}
                 </ul>
                 {bunList.length ? <p key="sauce" className="text text_type_main-medium">
                     Соусы</p> : ""}
-                <ul className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {sauceList.map(card =>(getIngredientCard(card)))}
+                <ul key="sauceList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
+                    {sauceList.map(card =>(
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        ))}
                 </ul>
             </div>
             {currentElement ? fillModal(currentElement) : null}

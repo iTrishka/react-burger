@@ -3,13 +3,17 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-end;
-    
-    
+    justify-content: space-between;   
+}
+
+li{
+    display: flex;
+    align-self: stretch;
 }
 
 .scroll{
     width: 600px;
-    height: 656px;
+    max-height: 656px;
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;

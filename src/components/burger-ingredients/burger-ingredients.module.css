@@ -1,6 +1,6 @@
 .wrapper{
     width: 600px;
-    height: 830px;
+    height: 80vh;
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
@@ -8,6 +8,10 @@
 
 .tabsWrapper{
     display: flex;
+}
+
+.tabsWrapper div{
+    background-color: transparent;
 }
 
 .ingedientCardContainer{

@@ -1,16 +1,18 @@
 import React from 'react';
-import {ConstructorElement, CurrencyIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
+import {ConstructorElement, CurrencyIcon, Button, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import menuItemPropTypes from '../../utils/constants';
+import { MENUITEMPROPTYPES } from '../../utils/constants';
 import PropTypes from 'prop-types';
-import { IngredientContext } from '../../utils/ingredient-context';
+import { IngredientContext } from '../../services/ingredient-context';
+import { URL } from '../../utils/constants';
+import  { v4 as uuidv4 } from 'uuid';
 
 
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 
-const totalPrice:any = { price: 0 };
+const totalPrice = { price: 0 };
 
 function reducer(state , action){
     switch (action.type) {
@@ -25,10 +27,9 @@ const BurgerConstructor =  () => {
     const [state, setState] = React.useContext(IngredientContext);
     const bun = state.selectedIngredients.bun;
     const ingedients = state.selectedIngredients.main;
-
     //получение номера заказа
     const getOrderNumberApi = () => {
-        const url = "https://norma.nomoreparties.space/api/orders";
+        const url = `${URL}orders`;
         const allSelectedIdBun = [bun._id]
         const allSelectedIdBMain = ingedients.map(item => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain)
@@ -60,7 +61,7 @@ const BurgerConstructor =  () => {
     const[modalVisible, setModalVisible] = React.useState(false);
     const handleCloseModal = () => {
         setModalVisible(false);
-        setState({...state, orderNumber: 0})
+        setState(prevState => ({ ...prevState, orderNumber: 0 }));
     };
 
     const handleOpenModal = () => {
@@ -77,7 +78,7 @@ const BurgerConstructor =  () => {
 
     //Рассчет итоговой стоимости  
       
-    const getTotalPrice = ():any => {
+    const getTotalPrice = () => {
         let total = 0;
         ingedients.map(item => total += item.price);
         total += bun.price *2
@@ -92,40 +93,54 @@ const BurgerConstructor =  () => {
             totalPrice: getTotalPrice()
         })
     }, [state.selectedIngredients])
+
+
+
+    const getBunElement = (pos) => {
+        let textPosition = "верх"
+        if(pos === "bottom"){
+            textPosition = "низ"
+        }
+
+        bun.map( bunItem => {
+            return(
+            <li key={`${bunItem._id}${pos}`} className="mr-4">
+                <ConstructorElement
+                    type={pos}
+                    isLocked={true}
+                    text={`${bun.name} (${textPosition})`}
+                    price={bun.price}
+                    thumbnail={bun.image}
+                />
+            </li>    
+        )})
+    };
+
+    const getIngridientElements = () => {
+        ingedients.map(ingedient => {
+            return(
+                <li key={`${ingedient._id}`} className="mr-4">
+                    <DragIcon type="primary"/>
+                    <ConstructorElement
+                    isLocked={false}
+                    text={`${ingedient.name}`}
+                    price={ingedient.price}
+                    thumbnail={ingedient.image}
+                    
+                    />
+                </li>
+            )
+        })
+    };
     
 
     return(
         <>
             <section className={styleBurgerConstructor.wrapper}>
                 <ul className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
-                    <li key={`${bun._id}up` }>{bun && (
-                        <ConstructorElement
-                            type="top"
-                            isLocked={true}
-                            text={`${bun.name} (вверх)`}
-                            price={bun.price}
-                            thumbnail={bun.image}
-                            />)}</li>
-                    {ingedients && (
-                        ingedients.map(ingedient => {
-                            return(
-                                <li key={`${ingedient._id}${Math.random()*1000}`}><ConstructorElement
-                                isLocked={false}
-                                text={`${ingedient.name}`}
-                                price={ingedient.price}
-                                thumbnail={ingedient.image}
-                                /></li>
-                            )
-                        })
-                    )}
-                    <li key={`${bun._id}down`}>{bun && (
-                        <ConstructorElement
-                            type="bottom"
-                            isLocked={true}
-                            text={`${bun.name} (низ)`}
-                            price={bun.price}
-                            thumbnail={bun.image}
-                            />)}</li>   
+                    {bun.length ? getBunElement("top"): <li className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
+                    {ingedients.length ? getIngridientElements() : <li className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>}
+                    {bun.length ? getBunElement("bottom"): <li className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
                 </ul>
                 <div className={`${styleBurgerConstructor.totalWrapper} mt-10 mb-15`} >
                     <div className={`mr-10`} >
@@ -149,8 +164,9 @@ BurgerConstructor.defaultProps = {
 
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(menuItemPropTypes),
-    item: menuItemPropTypes
+    data: PropTypes.arrayOf(MENUITEMPROPTYPES),
+    item: MENUITEMPROPTYPES,
+    getTotalPrice: PropTypes.any
   }; 
 
 export default BurgerConstructor;

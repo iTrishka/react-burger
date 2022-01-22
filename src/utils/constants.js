@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 
-const menuItemPropTypes = PropTypes.shape({
+const MENUITEMPROPTYPES = PropTypes.shape({
     _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
@@ -16,4 +16,6 @@ const menuItemPropTypes = PropTypes.shape({
     __v: PropTypes.number.isRequired,
 });
 
-export default menuItemPropTypes;
+const URL = 'https://norma.nomoreparties.space/api/'
+
+ export { MENUITEMPROPTYPES, URL}

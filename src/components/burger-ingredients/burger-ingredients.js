@@ -5,7 +5,7 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
-import menuItemPropTypes from '../../utils/constants';
+import { MENUITEMPROPTYPES } from '../../utils/constants';
 
 const BurgerIngredients = ({data}) => {
     const [current, setCurrent] = React.useState('Булки');
@@ -52,21 +52,21 @@ const BurgerIngredients = ({data}) => {
                     Булки</p> : ""}
                 <ul key="bunList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
                     {bunList.map((card) =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
                         ))}
                 </ul>
                 {mainList.length ? <p key="main" className="text text_type_main-medium">
                     Начинки</p>  : ""}
                 <ul key="mainList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
                     {mainList.map(card =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
                         ))}
                 </ul>
                 {bunList.length ? <p key="sauce" className="text text_type_main-medium">
                     Соусы</p> : ""}
                 <ul key="sauceList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
                     {sauceList.map(card =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}${Math.random()*1000}`} />
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
                         ))}
                 </ul>
             </div>
@@ -77,8 +77,8 @@ const BurgerIngredients = ({data}) => {
 
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(menuItemPropTypes),
-    card: menuItemPropTypes
+    data: PropTypes.arrayOf(MENUITEMPROPTYPES),
+    card: MENUITEMPROPTYPES
   }; 
 
 export default BurgerIngredients;

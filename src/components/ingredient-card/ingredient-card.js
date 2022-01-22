@@ -1,6 +1,6 @@
 import styleIngredientCard from './ingredient-card.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import menuItemPropTypes from '../../utils/constants';
+import { MENUITEMPROPTYPES } from '../../utils/constants';
 import PropTypes from 'prop-types';
 
 const IngredientCard = ({card, handleOpenModal}) => {
@@ -16,14 +16,14 @@ const IngredientCard = ({card, handleOpenModal}) => {
                     <p className={`text text_type_digits-default mt-1 mr-2` } >{card.price}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <p className={`${styleIngredientCard.titleCard} mt-1`}>{card.name}</p>
+                <p className={`${styleIngredientCard.titleCard} text text_type_main-default  mt-1`}>{card.name}</p>
             </li>
       );
 };
 
 
 IngredientCard.propTypes = {
-    card: menuItemPropTypes,
+    card: MENUITEMPROPTYPES,
     handleOpenModal: PropTypes.func
   };
 

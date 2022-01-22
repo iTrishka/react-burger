@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientContext } from '../../utils/ingredient-context';
+import { IngredientContext } from '../../services/ingredient-context';
 
 const OrderDetails =  () => {
     const [state, setState]  = React.useContext(IngredientContext);

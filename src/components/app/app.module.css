@@ -2,8 +2,8 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  margin: 0 auto;
-  height: 100%;
+  /* margin: 0 auto; */
+  height: 100vh;
   background-color: black;
 }
 

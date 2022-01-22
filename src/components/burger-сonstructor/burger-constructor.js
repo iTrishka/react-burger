@@ -8,25 +8,14 @@ import { IngredientContext } from '../../services/ingredient-context';
 import { URL } from '../../utils/constants';
 import  { v4 as uuidv4 } from 'uuid';
 
-
-
 import styleBurgerConstructor from "./burger-constructor.module.css";
-
-const totalPrice = { price: 0 };
-
-function reducer(state , action){
-    switch (action.type) {
-        case "total":
-            return state
-        default:
-          throw new Error(`Wrong type of action: ${action.type}`);
-      }
-}
 
 const BurgerConstructor =  () => {
     const [state, setState] = React.useContext(IngredientContext);
     const bun = state.selectedIngredients.bun;
     const ingedients = state.selectedIngredients.main;
+    let totalPrice = 0;
+
     //получение номера заказа
     const getOrderNumberApi = () => {
         const url = `${URL}orders`;
@@ -49,7 +38,7 @@ const BurgerConstructor =  () => {
             return Promise.reject(result.status);
             })
             .then((result) => {
-                setState({...state, orderNumber: result.order.number})
+                setState(prevState=> ({...prevState, orderNumber: result.order.number}))
             })
             .catch((error) => {
                 console.log("Ошибка: " + error);
@@ -57,76 +46,109 @@ const BurgerConstructor =  () => {
             
     }
 
+   
+
     //модальное окно
-    const[modalVisible, setModalVisible] = React.useState(false);
     const handleCloseModal = () => {
-        setModalVisible(false);
         setState(prevState => ({ ...prevState, orderNumber: 0 }));
     };
 
     const handleOpenModal = () => {
         getOrderNumberApi();
-        setModalVisible(true);
     };
 
     const fillModal = () =>  (
         <Modal header="" onClose={handleCloseModal}> 
-             {modalVisible ? <OrderDetails/> : ""}
+             {state.orderNumber ? <OrderDetails/> : ""}
         </Modal>
     );
 
 
     //Рассчет итоговой стоимости  
-      
+    
     const getTotalPrice = () => {
-        let total = 0;
-        ingedients.map(item => total += item.price);
-        total += bun.price *2
-        return total
-    }
+        let totalBun = 0;
+        let totalIngedients = 0;
 
-    const [statePrice, dispatch] = React.useReducer(reducer, totalPrice, getTotalPrice);
-   
-    React.useEffect(() => {
-        setState({
-            ...state,
-            totalPrice: getTotalPrice()
+        if(state.selectedIngredients.main.length){
+            state.selectedIngredients.main.forEach(item => {
+                totalIngedients += item.price;
+        })}
+        
+        if(state.selectedIngredients.bun.length){
+            state.selectedIngredients.bun.forEach(item => {
+                totalBun += item.price;
+            })
+            totalBun = totalBun*2
+        }
+
+        return (totalBun + totalIngedients)
+    };
+
+    totalPrice = React.useMemo(() => getTotalPrice(), [state.selectedIngredients]);
+
+    
+     // удаление ингредиенты из конструктора
+    
+     const onDeleteIngredient = (uid, id) => {
+        const newIngerientsAr = state.selectedIngredients.main.filter(item => item.key !== uid);
+        setState( prevState => ({
+            ...prevState, 
+            selectedIngredients: {
+                ...prevState.selectedIngredients, 
+                main: newIngerientsAr
+            }
+        }))
+
+        const newArr = state.dataIngredients.map(item => {
+            if(item._id === id){
+                return {...item, counter: item.counter-1}
+            } else return item
         })
-    }, [state.selectedIngredients])
+    
+    
+        setState(prevState => ({
+            ...prevState, 
+            dataIngredients: newArr
+        }))
+    };
 
+    
 
+    //___________
 
     const getBunElement = (pos) => {
         let textPosition = "верх"
         if(pos === "bottom"){
             textPosition = "низ"
         }
-
-        bun.map( bunItem => {
+        return bun.map(bunItem => {
             return(
-            <li key={`${bunItem._id}${pos}`} className="mr-4">
+            <li key={uuidv4()} className="mr-4">
                 <ConstructorElement
                     type={pos}
                     isLocked={true}
-                    text={`${bun.name} (${textPosition})`}
-                    price={bun.price}
-                    thumbnail={bun.image}
+                    text={`${bunItem.name} (${textPosition})`}
+                    price={bunItem.price}
+                    thumbnail={bunItem.image}
                 />
             </li>    
         )})
     };
 
     const getIngridientElements = () => {
-        ingedients.map(ingedient => {
+       return ingedients.map(ingredient => {
+           const uid = uuidv4();
+           ingredient.key = uid;
             return(
-                <li key={`${ingedient._id}`} className="mr-4">
+                <li key={uid} className="mr-4">
                     <DragIcon type="primary"/>
                     <ConstructorElement
                     isLocked={false}
-                    text={`${ingedient.name}`}
-                    price={ingedient.price}
-                    thumbnail={ingedient.image}
-                    
+                    text={`${ingredient.name}`}
+                    price={ingredient.price}
+                    thumbnail={ingredient.image}
+                    handleClose={() => onDeleteIngredient(uid, ingredient._id )}
                     />
                 </li>
             )
@@ -144,7 +166,7 @@ const BurgerConstructor =  () => {
                 </ul>
                 <div className={`${styleBurgerConstructor.totalWrapper} mt-10 mb-15`} >
                     <div className={`mr-10`} >
-                    <p className={`text text_type_digits-medium mt-1 mr-2 ` }>{state.totalPrice}</p>
+                    <p className={`text text_type_digits-medium mt-1 mr-2 ` }>{totalPrice}</p>
                     <CurrencyIcon type="primary" />
                 </div>
                 <Button type="primary" size="medium" onClick={handleOpenModal} >
@@ -152,7 +174,7 @@ const BurgerConstructor =  () => {
                 </Button>
                 </div>
             </section>
-            {modalVisible ? fillModal() : null}
+            {state.orderNumber ? fillModal() : null}
         </>
     )
     
@@ -166,7 +188,7 @@ BurgerConstructor.defaultProps = {
 BurgerConstructor.propTypes = {
     data: PropTypes.arrayOf(MENUITEMPROPTYPES),
     item: MENUITEMPROPTYPES,
-    getTotalPrice: PropTypes.any
+    getTotalPrice: PropTypes.func
   }; 
 
 export default BurgerConstructor;

@@ -15,4 +15,5 @@
 .modalProps li{
     list-style: none;
     text-align: center;
+    flex-direction: column;
 }

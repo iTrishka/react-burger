@@ -13,10 +13,9 @@ const App = () => {
     loading: false,
     error: false,
     selectedIngredients: {
-      "bun": [],
-      "main": []
+      bun: [],
+      main: []
     },
-    totalPrice: 0,
     orderNumber: 0
   });
 
@@ -30,12 +29,14 @@ React.useEffect(() => {
           return Promise.reject(result.status);
          })
         .then((result) => {
-          setState(prevState => ({ ...prevState, error: false, dataIngredients: result.data, loading: false }));
+          setState(prevState => ({ ...prevState, error: false, dataIngredients: result.data.map(item => ({...item, "key": '', counter: 0 })), loading: false }));
         })
         .catch((error) => {
           setState(prevState => ({...prevState, loading: false, error: true}));
       });
   }, []);
+
+  
 
   const error = (
     <>
@@ -49,8 +50,10 @@ React.useEffect(() => {
     </>
   )
 
+  const value = React.useMemo(() => ([state, setState]), [state]);
+
    return (
-    <IngredientContext.Provider value={[state, setState]} >
+    <IngredientContext.Provider value={value} >
       <div className={`${styleApp.app} mt-10 mb-10`}>
         <AppHeader />
         <main>

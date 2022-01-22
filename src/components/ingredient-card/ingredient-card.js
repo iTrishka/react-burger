@@ -11,7 +11,7 @@ const IngredientCard = ({card, handleOpenModal}) => {
             onClick={handleOpenModal}
             >
                 <img src={card.image} alt={card.name} className={`mr-4`} />
-                <Counter count={1} size="default" />
+                {card.counter > 0 ? <Counter count={card.counter } size="default" /> : ""}
                 <div className={`${styleIngredientCard.priceWrapper} mt-1`} >
                     <p className={`text text_type_digits-default mt-1 mr-2` } >{card.price}</p>
                     <CurrencyIcon type="primary" />

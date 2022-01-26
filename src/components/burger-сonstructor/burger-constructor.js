@@ -2,10 +2,10 @@ import React from 'react';
 import {ConstructorElement, CurrencyIcon, Button, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import { MENUITEMPROPTYPES } from '../../utils/constants';
+import { menuItemPropTypes } from '../../utils/constants';
 import PropTypes from 'prop-types';
 import { IngredientContext } from '../../services/ingredient-context';
-import { URL } from '../../utils/constants';
+import { API_URL } from '../../utils/constants';
 import  { v4 as uuidv4 } from 'uuid';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
@@ -18,7 +18,7 @@ const BurgerConstructor =  () => {
 
     //получение номера заказа
     const getOrderNumberApi = () => {
-        const url = `${URL}orders`;
+        const url = `${API_URL}orders`;
         const allSelectedIdBun = [bun._id]
         const allSelectedIdBMain = ingedients.map(item => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain)
@@ -66,7 +66,7 @@ const BurgerConstructor =  () => {
 
     //Рассчет итоговой стоимости  
     
-    const getTotalPrice = () => {
+    totalPrice = React.useMemo(() => { 
         let totalBun = 0;
         let totalIngedients = 0;
 
@@ -83,12 +83,11 @@ const BurgerConstructor =  () => {
         }
 
         return (totalBun + totalIngedients)
-    };
-
-    totalPrice = React.useMemo(() => getTotalPrice(), [state.selectedIngredients]);
+        
+    }, [state.selectedIngredients]);
 
     
-     // удаление ингредиенты из конструктора
+     // удаление ингредиентов из конструктора
     
      const onDeleteIngredient = (uid, id) => {
         const newIngerientsAr = state.selectedIngredients.main.filter(item => item.key !== uid);
@@ -186,8 +185,8 @@ BurgerConstructor.defaultProps = {
 
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(MENUITEMPROPTYPES),
-    item: MENUITEMPROPTYPES,
+    data: PropTypes.arrayOf(menuItemPropTypes),
+    item: menuItemPropTypes,
     getTotalPrice: PropTypes.func
   }; 
 

@@ -5,7 +5,7 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
-import { MENUITEMPROPTYPES } from '../../utils/constants';
+import { menuItemPropTypes } from '../../utils/constants';
 import { IngredientContext } from '../../services/ingredient-context';
 
 
@@ -120,8 +120,8 @@ const BurgerIngredients = ({data}) => {
 
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(MENUITEMPROPTYPES),
-    card: MENUITEMPROPTYPES
+    data: PropTypes.arrayOf(menuItemPropTypes),
+    card: menuItemPropTypes
   }; 
 
 export default BurgerIngredients;

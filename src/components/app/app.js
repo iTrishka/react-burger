@@ -4,7 +4,7 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-сonstructor/burger-constructor';
 import styleApp from './app.module.css';
 import { IngredientContext } from '../../services/ingredient-context';
-import { URL } from '../../utils/constants';
+import { API_URL } from '../../utils/constants';
 
 
 const App = () => {
@@ -21,7 +21,7 @@ const App = () => {
 
 React.useEffect(() => {
       setState({ ...state, loading: true });
-      fetch(`${URL}ingredients`)
+      fetch(`${API_URL}ingredients`)
         .then(result => {
           if (result.ok) {
                return result.json();

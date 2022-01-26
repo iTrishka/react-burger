@@ -1,6 +1,6 @@
 import styleIngredientCard from './ingredient-card.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import { MENUITEMPROPTYPES } from '../../utils/constants';
+import { menuItemPropTypes } from '../../utils/constants';
 import PropTypes from 'prop-types';
 
 const IngredientCard = ({card, handleOpenModal}) => {
@@ -23,7 +23,7 @@ const IngredientCard = ({card, handleOpenModal}) => {
 
 
 IngredientCard.propTypes = {
-    card: MENUITEMPROPTYPES,
+    card: menuItemPropTypes,
     handleOpenModal: PropTypes.func
   };
 

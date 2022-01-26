@@ -1,4 +1,4 @@
-import { MENUITEMPROPTYPES } from '../../utils/constants';
+import { menuItemPropTypes } from '../../utils/constants';
 
 import StyleIngredientDetails from './ingredient-details.module.css';
 
@@ -34,7 +34,7 @@ const IngredientDetails =  ({elem}) => {
 };  
 
 IngredientDetails.propTypes  = {
-  elem: MENUITEMPROPTYPES
+  elem: menuItemPropTypes
 }
 
 export default IngredientDetails;

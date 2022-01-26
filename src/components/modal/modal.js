@@ -8,7 +8,7 @@ import ModalStyle from './modal.module.css';
 
 const Modal = (props) => {
     const {header, onClose} = props;
-    const modalRoot = document.getElementById("reactModals")!;
+    const modalRoot = document.getElementById("reactModals");
 
     React.useEffect(() => {
         const close = (e) => {

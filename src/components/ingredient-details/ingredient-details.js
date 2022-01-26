@@ -1,4 +1,4 @@
-import menuItemPropTypes from '../../utils/constants';
+import { menuItemPropTypes } from '../../utils/constants';
 
 import StyleIngredientDetails from './ingredient-details.module.css';
 

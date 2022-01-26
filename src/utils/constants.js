@@ -16,4 +16,6 @@ const menuItemPropTypes = PropTypes.shape({
     __v: PropTypes.number.isRequired,
 });
 
-export default menuItemPropTypes;
+const API_URL = 'https://norma.nomoreparties.space/api/'
+
+ export { menuItemPropTypes, API_URL}

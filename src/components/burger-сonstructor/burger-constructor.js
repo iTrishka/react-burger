@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import {ConstructorElement, CurrencyIcon, Button, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
@@ -7,6 +8,8 @@ import PropTypes from 'prop-types';
 import { IngredientContext } from '../../services/ingredient-context';
 import { API_URL } from '../../utils/constants';
 import  { v4 as uuidv4 } from 'uuid';
+import { GET_ORDER,  RESET_ORDER } from '../../services/actions/order-number';
+import { GET_INGREDIENTS_CONSTRUCTOR_MAIN } from '../../services/actions/constructor-list';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 
@@ -15,6 +18,7 @@ const BurgerConstructor =  () => {
     const bun = state.selectedIngredients.bun;
     const ingedients = state.selectedIngredients.main;
     let totalPrice = 0;
+    const dispatch = useDispatch();
 
     //получение номера заказа
     const getOrderNumberApi = () => {
@@ -39,6 +43,10 @@ const BurgerConstructor =  () => {
             })
             .then((result) => {
                 setState(prevState=> ({...prevState, orderNumber: result.order.number}))
+                dispatch({
+                    type: GET_ORDER,
+                    payload: result.order.number
+                  })
             })
             .catch((error) => {
                 console.log("Ошибка: " + error);
@@ -51,6 +59,9 @@ const BurgerConstructor =  () => {
     //модальное окно
     const handleCloseModal = () => {
         setState(prevState => ({ ...prevState, orderNumber: 0 }));
+        dispatch({
+            type: RESET_ORDER
+          })
     };
 
     const handleOpenModal = () => {
@@ -91,6 +102,10 @@ const BurgerConstructor =  () => {
     
      const onDeleteIngredient = (uid, id) => {
         const newIngerientsAr = state.selectedIngredients.main.filter(item => item.key !== uid);
+        dispatch({
+            type: GET_INGREDIENTS_CONSTRUCTOR_MAIN,
+            payload: newIngerientsAr
+        })
         setState( prevState => ({
             ...prevState, 
             selectedIngredients: {

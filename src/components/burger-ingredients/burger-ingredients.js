@@ -7,9 +7,15 @@ import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
 import { menuItemPropTypes } from '../../utils/constants';
 import { IngredientContext } from '../../services/ingredient-context';
+import { useDispatch } from 'react-redux';
+import { GET_INGREDIENTS_CONSTRUCTOR_BUN, GET_INGREDIENTS_CONSTRUCTOR_MAIN, ADD_INGREDIENTS_CONSTRUCTOR_MAIN } from '../../services/actions/constructor-list';
+import { GET_SELECTED_INGREDIENT, RESER_SELECTED_INGREDIENT } from '../../services/actions/selected-ingedient';
+
+
 
 
 const BurgerIngredients = ({data}) => {
+    const dispatch = useDispatch();
     const [state, setState] = React.useContext(IngredientContext);
     const [current, setCurrent] = React.useState('Булки');
     const [currentElement, setCurrentElement] = React.useState(null);
@@ -28,13 +34,28 @@ const BurgerIngredients = ({data}) => {
     
     const handleCloseModal = (e) => {
         setCurrentElement(null);
+        dispatch({
+            type: RESER_SELECTED_INGREDIENT
+        })
+
     };
 
     const handleOpenModal = (e) => {
         const id = e.currentTarget.getAttribute('data-id');
         const getCurrentElem =  data.filter((item) => {return item._id === id});
+
+        dispatch({
+            type: GET_SELECTED_INGREDIENT,
+            payload: getCurrentElem[0]
+        })
+
         setCurrentElement(getCurrentElem[0]);
         if(getCurrentElem[0].type === "bun"){
+            console.log(getCurrentElem[0])
+            dispatch({
+                type: GET_INGREDIENTS_CONSTRUCTOR_BUN,
+                payload: getCurrentElem[0]
+            })
             setState( prevState => ({
                 ...prevState, 
                 selectedIngredients: {
@@ -42,7 +63,11 @@ const BurgerIngredients = ({data}) => {
                     bun: getCurrentElem
                 }
             }))
-        } else (
+        } else {
+            dispatch({
+                type: ADD_INGREDIENTS_CONSTRUCTOR_MAIN,
+                payload: getCurrentElem[0]
+            })
             setState( prevState => ({
                 ...prevState, 
                 selectedIngredients: {
@@ -53,7 +78,8 @@ const BurgerIngredients = ({data}) => {
                     ]
                 }
             }))
-        ) 
+            
+        }
 
         //счетчик
         

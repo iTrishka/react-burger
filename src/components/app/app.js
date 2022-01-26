@@ -5,9 +5,13 @@ import BurgerConstructor from '../burger-сonstructor/burger-constructor';
 import styleApp from './app.module.css';
 import { IngredientContext } from '../../services/ingredient-context';
 import { API_URL } from '../../utils/constants';
+import { useDispatch } from 'react-redux';
+import { GET_INGREDIENTS } from '../../services/actions/ingredients-list';
 
 
 const App = () => {
+  const dispatch = useDispatch();
+
   const [state, setState] = React.useState({ 
     dataIngredients: null,
     loading: false,
@@ -30,6 +34,10 @@ React.useEffect(() => {
          })
         .then((result) => {
           setState(prevState => ({ ...prevState, error: false, dataIngredients: result.data.map(item => ({...item, "key": '', counter: 0 })), loading: false }));
+          dispatch({
+            type: GET_INGREDIENTS,
+            payload: result
+          })
         })
         .catch((error) => {
           setState(prevState => ({...prevState, loading: false, error: true}));

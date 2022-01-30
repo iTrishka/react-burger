@@ -16,7 +16,7 @@ const store = createStore(rootReducer, enhancer);
 ReactDOM.render(
   
     <React.StrictMode>
-      <Provider store={store}>
+      <Provider  store={store}>
         <App />
       </Provider>
     </React.StrictMode>,

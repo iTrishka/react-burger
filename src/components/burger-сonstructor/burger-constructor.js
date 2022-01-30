@@ -1,76 +1,65 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import {ConstructorElement, CurrencyIcon, Button, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useCallback, memo} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {ConstructorElement, CurrencyIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { menuItemPropTypes } from '../../utils/constants';
 import PropTypes from 'prop-types';
-import { IngredientContext } from '../../services/ingredient-context';
-import { API_URL } from '../../utils/constants';
 import  { v4 as uuidv4 } from 'uuid';
-import { GET_ORDER,  RESET_ORDER } from '../../services/actions/order-number';
-import { GET_INGREDIENTS_CONSTRUCTOR_MAIN } from '../../services/actions/constructor-list';
+import { RESET_ORDER } from '../../services/actions/order-number';
+import { GET_INGREDIENTS_CONSTRUCTOR_MAIN, ADD_INGREDIENTS_CONSTRUCTOR_MAIN, GET_INGREDIENTS_CONSTRUCTOR_BUN, SORT_INGREDIENTS_CONSTRUCTOR, RESET_INGREDIENTS_CONSTRUCTOR} from '../../services/actions/constructor-list';
+import { SET_DATA_API } from '../../services/actions/data-api';
+import { useDrop } from "react-dnd";
+import { IngrediendCardConstructor } from '../ingrediend-card-constructor/ingrediend-card-constructor';
+import update from 'immutability-helper';
+import getOrderApi from '../../services/request-order-api';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 
-const BurgerConstructor =  () => {
-    const [state, setState] = React.useContext(IngredientContext);
-    const bun = state.selectedIngredients.bun;
-    const ingedients = state.selectedIngredients.main;
+export const BurgerConstructor = memo(function BurgerConstructor()  {
+    const { dataApi } = useSelector(state => state.dataApiReducer);
+    const { bun, main } = useSelector(state => state.constructorList);
+    const orderNumber = useSelector(state => state.orderNumber.orderNumber);
     let totalPrice = 0;
-    const dispatch = useDispatch();
+    
+    const dispatch = useDispatch();  
 
     //получение номера заказа
+
+    
     const getOrderNumberApi = () => {
-        const url = `${API_URL}orders`;
-        const allSelectedIdBun = [bun._id]
-        const allSelectedIdBMain = ingedients.map(item => item._id)
-        const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain)
-        fetch(url, { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-                },
-            body: JSON.stringify({ 
-                "ingredients": allSelectedId
-            }) 
-            })
-            .then(result => {
-            if (result.ok) {
-                return result.json();
-            }
-            return Promise.reject(result.status);
-            })
-            .then((result) => {
-                setState(prevState=> ({...prevState, orderNumber: result.order.number}))
-                dispatch({
-                    type: GET_ORDER,
-                    payload: result.order.number
-                  })
-            })
-            .catch((error) => {
-                console.log("Ошибка: " + error);
-            });
-            
+        if(!bun[0]){return}
+        const allSelectedIdBun = [bun[0]._id]
+        const allSelectedIdBMain = main.map(item => item._id)
+        const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain);
+        dispatch(getOrderApi("orders", allSelectedId))     
     }
 
-   
 
     //модальное окно
     const handleCloseModal = () => {
-        setState(prevState => ({ ...prevState, orderNumber: 0 }));
         dispatch({
             type: RESET_ORDER
           })
+        dispatch({
+        type: RESET_INGREDIENTS_CONSTRUCTOR
+        })
+        console.log(dataApi)
+        const arrayWithZeroCounter = dataApi.map(item => {
+                return {...item, counter: 0}})
+        dispatch({
+            type: SET_DATA_API  , 
+            payload: arrayWithZeroCounter
+        })
     };
 
     const handleOpenModal = () => {
-        getOrderNumberApi();
+        getOrderNumberApi();        
     };
 
     const fillModal = () =>  (
         <Modal header="" onClose={handleCloseModal}> 
-             {state.orderNumber ? <OrderDetails/> : ""}
+             {orderNumber > 0 ? <OrderDetails/> : ""}
         </Modal>
     );
 
@@ -81,13 +70,13 @@ const BurgerConstructor =  () => {
         let totalBun = 0;
         let totalIngedients = 0;
 
-        if(state.selectedIngredients.main.length){
-            state.selectedIngredients.main.forEach(item => {
+        if(main.length){
+            main.forEach(item => {
                 totalIngedients += item.price;
         })}
         
-        if(state.selectedIngredients.bun.length){
-            state.selectedIngredients.bun.forEach(item => {
+        if(bun.length){
+            bun.forEach(item => {
                 totalBun += item.price;
             })
             totalBun = totalBun*2
@@ -95,36 +84,28 @@ const BurgerConstructor =  () => {
 
         return (totalBun + totalIngedients)
         
-    }, [state.selectedIngredients]);
+    }, [bun, main]);
 
     
      // удаление ингредиентов из конструктора
     
      const onDeleteIngredient = (uid, id) => {
-        const newIngerientsAr = state.selectedIngredients.main.filter(item => item.key !== uid);
+        const newIngerientsAr = main.filter(item => item.key !== uid);
         dispatch({
             type: GET_INGREDIENTS_CONSTRUCTOR_MAIN,
             payload: newIngerientsAr
         })
-        setState( prevState => ({
-            ...prevState, 
-            selectedIngredients: {
-                ...prevState.selectedIngredients, 
-                main: newIngerientsAr
-            }
-        }))
 
-        const newArr = state.dataIngredients.map(item => {
+        const newArrDataApi = dataApi.map(item => {
             if(item._id === id){
                 return {...item, counter: item.counter-1}
             } else return item
         })
-    
-    
-        setState(prevState => ({
-            ...prevState, 
-            dataIngredients: newArr
-        }))
+
+        dispatch({
+            type: SET_DATA_API  , 
+            payload: newArrDataApi
+        })
     };
 
     
@@ -150,32 +131,95 @@ const BurgerConstructor =  () => {
         )})
     };
 
-    const getIngridientElements = () => {
-       return ingedients.map(ingredient => {
-           const uid = uuidv4();
-           ingredient.key = uid;
-            return(
-                <li key={uid} className="mr-4">
-                    <DragIcon type="primary"/>
-                    <ConstructorElement
-                    isLocked={false}
-                    text={`${ingredient.name}`}
-                    price={ingredient.price}
-                    thumbnail={ingredient.image}
-                    handleClose={() => onDeleteIngredient(uid, ingredient._id )}
-                    />
-                </li>
-            )
-        })
-    };
+    //сортировка 
     
+
+    const findCard = useCallback((id) => {
+        const card = main.filter((c) => `${c.key}` === id)[0];
+        return {
+            card,
+            index: main.indexOf(card),
+        };
+    }, [main]);
+    
+    const moveCard = useCallback((id, atIndex) => {
+        const { card, index } = findCard(id);
+        const newArr = update(main, {$splice: [
+                    [index, 1],
+                    [atIndex, 0, card],
+                ]})
+        dispatch({
+            type: SORT_INGREDIENTS_CONSTRUCTOR, 
+            payload: newArr
+            })
+        
+    }, [findCard, main, dispatch]);
+
+
+
+    const [, dropSort] = useDrop(() => ({ accept: "sorting" }));
+
+   
+
+    const getIngridientElements = () => {
+       
+       return main.map((ingredient) => {  
+        return (<IngrediendCardConstructor 
+                key={ingredient.key} 
+                ingredient={ingredient} 
+                onDeleteIngredient={onDeleteIngredient}  
+                id={`${ingredient.key}`} moveCard={moveCard} findCard={findCard}/>)
+      }
+       )};
+
+
+    const [, drop] = useDrop({
+        accept: 'constructor', 
+        drop(item) {
+            if(item.card.type === 'bun'){
+                dispatch({
+                    type: GET_INGREDIENTS_CONSTRUCTOR_BUN,
+                    payload: {...item.card, key: uuidv4()}
+                });
+               
+            }else{
+                dispatch({
+                    type: ADD_INGREDIENTS_CONSTRUCTOR_MAIN,
+                    payload:  {...item.card, key: uuidv4()}
+                });
+            }
+
+            const arrayWithNewCounter = dataApi.map(ingred => {
+                if(ingred.type === 'bun' && item.card.type === "bun"){
+                    if(ingred._id === item.card._id){
+                        return {...ingred, counter:  1}
+                    }else  {
+                        return  {...ingred, counter: 0}
+                    }
+                }else if( !ingred.counter && ingred._id === item.card._id){
+                    return {...ingred, counter: 1}
+                }else if(ingred.counter > 0 & ingred._id === item.card._id){
+                    return {...ingred, counter: ingred.counter + 1}
+                }else return ingred
+            })
+            
+            dispatch({
+                type: SET_DATA_API  , 
+                payload: arrayWithNewCounter
+            })
+        },
+    })
+  
 
     return(
         <>
-            <section className={styleBurgerConstructor.wrapper}>
-                <ul className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
-                    {bun.length ? getBunElement("top"): <li className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
-                    {ingedients.length ? getIngridientElements() : <li className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>}
+            <section ref={ drop } className={styleBurgerConstructor.wrapper} >
+                <ul  
+               
+               ref={dropSort}  
+                className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
+                    {bun.length ? getBunElement("top"): <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
+                    {main.length ? getIngridientElements() : <li   className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>}
                     {bun.length ? getBunElement("bottom"): <li className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
                 </ul>
                 <div className={`${styleBurgerConstructor.totalWrapper} mt-10 mb-15`} >
@@ -188,11 +232,11 @@ const BurgerConstructor =  () => {
                 </Button>
                 </div>
             </section>
-            {state.orderNumber ? fillModal() : null}
+            {orderNumber > 0 ? fillModal() : null}
         </>
     )
     
-};  
+});  
 
 BurgerConstructor.defaultProps = {
     isLocked: true
@@ -205,4 +249,4 @@ BurgerConstructor.propTypes = {
     getTotalPrice: PropTypes.func
   }; 
 
-export default BurgerConstructor;
+

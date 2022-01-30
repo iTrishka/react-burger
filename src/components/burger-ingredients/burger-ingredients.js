@@ -1,28 +1,30 @@
-import React from 'react';
-import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { useRef } from 'react';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBurgerIngredient from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
 import { menuItemPropTypes } from '../../utils/constants';
-import { IngredientContext } from '../../services/ingredient-context';
-import { useDispatch } from 'react-redux';
-import { GET_INGREDIENTS_CONSTRUCTOR_BUN, GET_INGREDIENTS_CONSTRUCTOR_MAIN, ADD_INGREDIENTS_CONSTRUCTOR_MAIN } from '../../services/actions/constructor-list';
-import { GET_SELECTED_INGREDIENT, RESER_SELECTED_INGREDIENT } from '../../services/actions/selected-ingedient';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_SELECTED_INGREDIENT, RESET_SELECTED_INGREDIENT } from '../../services/actions/selected-ingedient';
+import getDataApi from '../../services/request-data-api';
 
 
-
-
-const BurgerIngredients = ({data}) => {
+const BurgerIngredients = () => {
+    const { dataApiRequest, dataApiFailed, dataApi } = useSelector(state => state.dataApiReducer);
+    const { selectedIngidient } = useSelector(store => ({selectedIngidient: store.selectedIngidient}));
+    
     const dispatch = useDispatch();
-    const [state, setState] = React.useContext(IngredientContext);
+    
+    //запрос ингридиентов с API
+    React.useEffect(()=> {
+        dispatch(getDataApi("ingredients"))
+    }, [dispatch])
+
+    //табы
     const [current, setCurrent] = React.useState('Булки');
-    const [currentElement, setCurrentElement] = React.useState(null);
     const tabsName = ["Булки", "Начинки", "Соусы"];
-    const bunList = data.filter((item)=> { return item.type === "bun"});
-    const mainList = data.filter((item)=> { return item.type === "main"});
-    const sauceList = data.filter((item)=> { return item.type === "sauce"});
    
     const getTabs = tabsName.map(tab => 
             <Tab key={tab} value={tab} active={current === tab} onClick={setCurrent}>
@@ -31,115 +33,98 @@ const BurgerIngredients = ({data}) => {
                 </p>
             </Tab>
     );
-    
-    const handleCloseModal = (e) => {
-        setCurrentElement(null);
-        dispatch({
-            type: RESER_SELECTED_INGREDIENT
-        })
 
+    //переключать табы при прокрутке 
+    const refTitle = useRef(null);
+    const refBun = useRef(null);
+    const refMain = useRef(null);
+    const reSauce = useRef(null);  
+    
+    const getScroll = () => {
+        const topTitle = refTitle.current.getBoundingClientRect().top
+        
+        if(refBun.current && refBun.current.getBoundingClientRect().top > topTitle && refBun.current.getBoundingClientRect().top < topTitle + 200 ){
+            setCurrent("Булки")
+        }else if(refMain.current && refMain.current.getBoundingClientRect().top > topTitle && refMain.current.getBoundingClientRect().top < topTitle + 200 ){
+            setCurrent("Начинки")
+        }else if(refMain.current && refMain.current.getBoundingClientRect().top > topTitle + 400 ){
+            setCurrent("Булки")
+        }
+        else if(reSauce.current && reSauce.current.getBoundingClientRect().top > topTitle && reSauce.current.getBoundingClientRect().top < topTitle + 200 ){
+            setCurrent("Соусы")
+        } else if(reSauce.current && reSauce.current.getBoundingClientRect().top > topTitle + 400){
+            setCurrent("Начинки")
+        }
+        
+    };
+
+    //модальное окно    
+    const handleCloseModal = (e) => {
+        dispatch({
+            type: RESET_SELECTED_INGREDIENT
+        })
     };
 
     const handleOpenModal = (e) => {
         const id = e.currentTarget.getAttribute('data-id');
-        const getCurrentElem =  data.filter((item) => {return item._id === id});
-
+        const getCurrentElem =  dataApi.filter((item) => {return item._id === id});
+       
         dispatch({
             type: GET_SELECTED_INGREDIENT,
             payload: getCurrentElem[0]
         })
-
-        setCurrentElement(getCurrentElem[0]);
-        if(getCurrentElem[0].type === "bun"){
-            console.log(getCurrentElem[0])
-            dispatch({
-                type: GET_INGREDIENTS_CONSTRUCTOR_BUN,
-                payload: getCurrentElem[0]
-            })
-            setState( prevState => ({
-                ...prevState, 
-                selectedIngredients: {
-                    ...prevState.selectedIngredients,
-                    bun: getCurrentElem
-                }
-            }))
-        } else {
-            dispatch({
-                type: ADD_INGREDIENTS_CONSTRUCTOR_MAIN,
-                payload: getCurrentElem[0]
-            })
-            setState( prevState => ({
-                ...prevState, 
-                selectedIngredients: {
-                    ...prevState.selectedIngredients, 
-                    main: [
-                        ...prevState.selectedIngredients.main,
-                        getCurrentElem[0]
-                    ]
-                }
-            }))
-            
-        }
-
-        //счетчик
-        
-        const newArr = state.dataIngredients.map(item => {
-            if(item.type === 'bun' && getCurrentElem[0].type === "bun"){
-                if(item._id === id){
-                    return {...item, counter:  1}
-                }else  {
-                    return  {...item, counter: 0}
-                }
-            }else if(item._id === id){
-                return {...item, counter: item.counter + 1}
-            }else return item
-        })
-
-        setState(prevState => ({
-            ...prevState, 
-            dataIngredients: newArr
-        }))
-        
     };
+
+    //верстка_блоки с ингрединтами
+    const blockIngredientsType = (pKey, ulKey, name, refName) => {
+        const category = dataApi.filter((item) => {return item.type === pKey});
+        return(
+            <>
+                <p key={pKey} className="text text_type_main-medium" ref={refName} >{name}</p> 
+                <ul key={ulKey} className={`${styleBurgerIngredient.ingedientType} pl-1`} >
+                    {category.map(card =>(                         
+                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
+                        ))}
+                </ul>
+            </>
+        )
+    }
+
+    //отрисовать данные по итогу запроса к API
+    const getIngedients = () => {
+        if (dataApiFailed) {
+            return <p>Произошла ошибка при получении данных</p>
+        } else if (dataApiRequest) { 
+            return <p>Загрузка...</p>
+        } else {
+            return (
+                <> 
+                {blockIngredientsType("bun", "bunList", "Булки", refBun)}
+                {blockIngredientsType("main", "mainList", "Начинки", refMain )}
+                {blockIngredientsType("sauce", "sauceList", "Соусы", reSauce)}
+                </>
+            )  
+        }
+    }
+
+    const ingredient = getIngedients()
 
     const fillModal = (elem) => (
         <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-             {currentElement ? <IngredientDetails elem={elem}/> : ""}
+             {selectedIngidient ? <IngredientDetails elem={elem}/> : ""}
         </Modal>
       );
 
     return(
         <section className={`${styleBurgerIngredient.wrapper} mt-10 mb-10 mr-10`}>
-            <p className="text text_type_main-large mt-40">
-                Соберите бургер
-            </p>
-            <div className={`${styleBurgerIngredient.tabsWrapper}  mt-5`} >
+            <p className="text text_type_main-large mt-40" > Соберите бургер</p>
+            <div className={`${styleBurgerIngredient.tabsWrapper}  mt-5`} ref={refTitle} >
                 {getTabs}
             </div>
-            <div className={`${styleBurgerIngredient.ingedientCardContainer} mt-10`}>
-                {bunList.length ? <p key="bun" className="text text_type_main-medium">
-                    Булки</p> : ""}
-                <ul key="bunList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {bunList.map((card) =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
-                        ))}
-                </ul>
-                {mainList.length ? <p key="main" className="text text_type_main-medium">
-                    Начинки</p>  : ""}
-                <ul key="mainList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {mainList.map(card =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
-                        ))}
-                </ul>
-                {bunList.length ? <p key="sauce" className="text text_type_main-medium">
-                    Соусы</p> : ""}
-                <ul key="sauceList" className={`${styleBurgerIngredient.ingedientType} pl-1`}>
-                    {sauceList.map(card =>(
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
-                        ))}
-                </ul>
+            <div className={`${styleBurgerIngredient.ingedientCardContainer} mt-10`} onScroll={getScroll} >                
+               {ingredient}
             </div>
-            {currentElement ? fillModal(currentElement) : null}
+            {selectedIngidient ? fillModal(selectedIngidient) : null}
         </section>
     )
 };  

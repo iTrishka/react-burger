@@ -1,12 +1,12 @@
 import React from 'react';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientContext } from '../../services/ingredient-context';
+import { useSelector } from 'react-redux';
 
 const OrderDetails =  () => {
-    const [state, setState]  = React.useContext(IngredientContext);
+    const  orderNumber  = useSelector(state => state.orderNumber.orderNumber);
     return(
         <>
-            <p className="text text_type_digits-large">{state.orderNumber}</p> 
+            <p className="text text_type_digits-large">{orderNumber}</p> 
             <p className="text text_type_main-medium mt-8 mb-15">идентификатор заказа</p>
             <CheckMarkIcon type="primary" />
             <p className="text text_type_main-default mt-15">Ваш заказ начали готовить</p>

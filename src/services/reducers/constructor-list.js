@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_CONSTRUCTOR_BUN, GET_INGREDIENTS_CONSTRUCTOR_MAIN , RESET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENTS_CONSTRUCTOR_MAIN} from '../actions/constructor-list';
+import { GET_INGREDIENTS_CONSTRUCTOR_BUN, GET_INGREDIENTS_CONSTRUCTOR_MAIN , RESET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENTS_CONSTRUCTOR_MAIN, SORT_INGREDIENTS_CONSTRUCTOR} from '../actions/constructor-list';
 
 const initialState = {
     constructorList: {
@@ -9,7 +9,6 @@ const initialState = {
 
 // Редьюсер списка ингридиентов в конструкторе
 const constructorList = (state = initialState.constructorList, action) => {
-    console.log("Тип", action.type) 
     switch(action.type) {
         case GET_INGREDIENTS_CONSTRUCTOR_BUN:
             return {
@@ -33,6 +32,11 @@ const constructorList = (state = initialState.constructorList, action) => {
             return {
                 bun: [],
                 main: []
+            }
+        case SORT_INGREDIENTS_CONSTRUCTOR:
+            return {
+                ...state,
+                main:  action.payload
             }
         default:
             return state;

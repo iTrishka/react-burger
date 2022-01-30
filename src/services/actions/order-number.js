@@ -1,2 +1,4 @@
-export const GET_ORDER = 'GET_ORDER';
+export const GET_ORDER_API = 'GET_ORDER_API';
+export const GET_ORDER_API_FAILED = 'GET_ORDER_API_FAILED';
+export const GET_ORDER_API_SUCCESS = 'GET_ORDER_API_SUCCESS';
 export const RESET_ORDER= 'RESET_ORDER';

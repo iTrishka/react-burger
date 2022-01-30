@@ -5,7 +5,7 @@ const ModalOverlay = (props) => {
     const {children, onClose} = props;
 
     const handleCloseModal = (e) => {
-        if(e.target === document.querySelector('div[data-name="overlay"]')){
+        if((e.target === e.currentTarget)){
             onClose()
         }
     };

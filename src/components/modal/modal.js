@@ -12,13 +12,13 @@ const Modal = (props) => {
 
     React.useEffect(() => {
         const close = (e) => {
-          if(e.keyCode === 27){
+          if(e.key === "Escape"){
             onClose()
           }
         }
         window.addEventListener('keydown', close)
       return () => window.removeEventListener('keydown', close)
-    },[])
+    },[onClose])
 
     return ReactDOM.createPortal(
         <ModalOverlay  onClose={onClose}>

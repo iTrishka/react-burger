@@ -34,7 +34,7 @@ const IngredientDetails =  ({elem}) => {
 };  
 
 IngredientDetails.propTypes  = {
-  elem: menuItemPropTypes
+  elem: menuItemPropTypes.isRequired
 }
 
 export default IngredientDetails;

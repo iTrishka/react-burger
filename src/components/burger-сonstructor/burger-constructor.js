@@ -6,13 +6,17 @@ import OrderDetails from '../order-details/order-details';
 import { menuItemPropTypes } from '../../utils/constants';
 import PropTypes from 'prop-types';
 import  { v4 as uuidv4 } from 'uuid';
-import { RESET_ORDER } from '../../services/actions/order-number';
-import { GET_INGREDIENTS_CONSTRUCTOR_MAIN, ADD_INGREDIENTS_CONSTRUCTOR_MAIN, GET_INGREDIENTS_CONSTRUCTOR_BUN, SORT_INGREDIENTS_CONSTRUCTOR, RESET_INGREDIENTS_CONSTRUCTOR} from '../../services/actions/constructor-list';
-import { SET_DATA_API } from '../../services/actions/data-api';
 import { useDrop } from "react-dnd";
 import { IngrediendCardConstructor } from '../ingrediend-card-constructor/ingrediend-card-constructor';
 import update from 'immutability-helper';
-import getOrderApi from '../../services/request-order-api';
+import getOrder from '../../services/actions/get-order';
+import { get_ingredients_constructor_bun, 
+        get_ingredients_constructor_main, 
+        add_ingredients_constructor_main,
+        reset_ingredients_constructor,
+        sort_ingredients_constructor } from '../../services/actions/constructor-list';
+import { setDataApi } from '../../services/actions/data-api';
+import { resetOrder } from '../../services/actions/order-number';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 
@@ -24,33 +28,24 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     
     const dispatch = useDispatch();  
 
-    //получение номера заказа
-
-    
+    //получение номера заказа    
     const getOrderNumberApi = () => {
         if(!bun[0]){return}
         const allSelectedIdBun = [bun[0]._id]
         const allSelectedIdBMain = main.map(item => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain);
-        dispatch(getOrderApi("orders", allSelectedId))     
+        dispatch(getOrder("orders", allSelectedId))     
     }
 
 
     //модальное окно
     const handleCloseModal = () => {
-        dispatch({
-            type: RESET_ORDER
-          })
-        dispatch({
-        type: RESET_INGREDIENTS_CONSTRUCTOR
-        })
-        console.log(dataApi)
+        dispatch(resetOrder())
+        dispatch(reset_ingredients_constructor())
         const arrayWithZeroCounter = dataApi.map(item => {
                 return {...item, counter: 0}})
-        dispatch({
-            type: SET_DATA_API  , 
-            payload: arrayWithZeroCounter
-        })
+        dispatch(setDataApi(arrayWithZeroCounter))
+
     };
 
     const handleOpenModal = () => {
@@ -65,7 +60,6 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
 
     //Рассчет итоговой стоимости  
-    
     totalPrice = React.useMemo(() => { 
         let totalBun = 0;
         let totalIngedients = 0;
@@ -88,13 +82,9 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
     
      // удаление ингредиентов из конструктора
-    
      const onDeleteIngredient = (uid, id) => {
         const newIngerientsAr = main.filter(item => item.key !== uid);
-        dispatch({
-            type: GET_INGREDIENTS_CONSTRUCTOR_MAIN,
-            payload: newIngerientsAr
-        })
+        dispatch(get_ingredients_constructor_main(newIngerientsAr))
 
         const newArrDataApi = dataApi.map(item => {
             if(item._id === id){
@@ -102,10 +92,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
             } else return item
         })
 
-        dispatch({
-            type: SET_DATA_API  , 
-            payload: newArrDataApi
-        })
+        dispatch(setDataApi(newArrDataApi))
     };
 
     
@@ -132,8 +119,6 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     };
 
     //сортировка 
-    
-
     const findCard = useCallback((id) => {
         const card = main.filter((c) => `${c.key}` === id)[0];
         return {
@@ -148,10 +133,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                     [index, 1],
                     [atIndex, 0, card],
                 ]})
-        dispatch({
-            type: SORT_INGREDIENTS_CONSTRUCTOR, 
-            payload: newArr
-            })
+        dispatch( sort_ingredients_constructor(newArr))
         
     }, [findCard, main, dispatch]);
 
@@ -177,17 +159,8 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         accept: 'constructor', 
         drop(item) {
             if(item.card.type === 'bun'){
-                dispatch({
-                    type: GET_INGREDIENTS_CONSTRUCTOR_BUN,
-                    payload: {...item.card, key: uuidv4()}
-                });
-               
-            }else{
-                dispatch({
-                    type: ADD_INGREDIENTS_CONSTRUCTOR_MAIN,
-                    payload:  {...item.card, key: uuidv4()}
-                });
-            }
+                dispatch(get_ingredients_constructor_bun({...item.card, key: uuidv4()}));    
+            }else{dispatch(add_ingredients_constructor_main({...item.card, key: uuidv4()}))}
 
             const arrayWithNewCounter = dataApi.map(ingred => {
                 if(ingred.type === 'bun' && item.card.type === "bun"){
@@ -203,10 +176,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 }else return ingred
             })
             
-            dispatch({
-                type: SET_DATA_API  , 
-                payload: arrayWithNewCounter
-            })
+            dispatch(setDataApi(arrayWithNewCounter))
         },
     })
   

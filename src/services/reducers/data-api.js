@@ -22,7 +22,7 @@ export const dataApiReducer = (state = initialState, action) => {
         case GET_DATA_API_SUCCESS: {
             return { 
                       ...state, 
-                      dataApi: action.data, 
+                      dataApi: action.payload, 
                       dataApiRequest: false 
                   };
           }

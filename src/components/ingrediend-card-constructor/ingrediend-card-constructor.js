@@ -53,9 +53,9 @@ export const IngrediendCardConstructor = memo(function IngrediendCardConstructor
 
 
 IngrediendCardConstructor.propTypes = {
-    ingredient: PropTypes.shape({constructorItemPropTypes}),
-    onDeleteIngredient: PropTypes.func,
-    id: PropTypes.string,
-    moveCard: PropTypes.func,
-    findCard: PropTypes.func,
+    ingredient: PropTypes.shape({constructorItemPropTypes}).isRequired,
+    onDeleteIngredient: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    moveCard: PropTypes.func.isRequired,
+    findCard: PropTypes.func.isRequired,
   }; 

@@ -25,7 +25,7 @@ const initialState = {
         case GET_ORDER_API_SUCCESS: {
             return { 
                       ...state, 
-                      orderNumber: action.data, 
+                      orderNumber: action.payload, 
                       orderApiRequest: false 
                   };
           }

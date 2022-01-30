@@ -7,8 +7,8 @@ import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
 import { menuItemPropTypes } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_SELECTED_INGREDIENT, RESET_SELECTED_INGREDIENT } from '../../services/actions/selected-ingedient';
-import getDataApi from '../../services/request-data-api';
+import getIngredientsApi from '../../services/actions/get-ingredients-api';
+import { getSelectedIngredient, resetSelectedIngredient } from '../../services/actions/selected-ingedient';
 
 
 const BurgerIngredients = () => {
@@ -19,15 +19,32 @@ const BurgerIngredients = () => {
     
     //запрос ингридиентов с API
     React.useEffect(()=> {
-        dispatch(getDataApi("ingredients"))
+        dispatch(getIngredientsApi("ingredients"))
     }, [dispatch])
 
     //табы
     const [current, setCurrent] = React.useState('Булки');
     const tabsName = ["Булки", "Начинки", "Соусы"];
+
+    const refTitle = useRef(null);
+    const refBun = useRef(null);
+    const refMain = useRef(null);
+    const reSauce = useRef(null); 
+
+    const changeTab = (e) => {
+        setCurrent(e)
+        if(refMain && e === "Начинки"){
+            refMain.current.scrollIntoView({ behavior: "smooth"});
+        }else if (refMain && e === "Соусы"){
+            reSauce.current.scrollIntoView({behavior: "smooth"});
+        }else if(refMain && e === "Булки"){
+            refBun.current.scrollIntoView({ behavior: "smooth"});
+        }
+
+    }
    
     const getTabs = tabsName.map(tab => 
-            <Tab key={tab} value={tab} active={current === tab} onClick={setCurrent}>
+            <Tab key={tab} value={tab} active={current === tab} onClick={changeTab}>
                 <p className="text text_type_main-default">
                         {tab}
                 </p>
@@ -35,10 +52,7 @@ const BurgerIngredients = () => {
     );
 
     //переключать табы при прокрутке 
-    const refTitle = useRef(null);
-    const refBun = useRef(null);
-    const refMain = useRef(null);
-    const reSauce = useRef(null);  
+     
     
     const getScroll = () => {
         const topTitle = refTitle.current.getBoundingClientRect().top
@@ -60,19 +74,15 @@ const BurgerIngredients = () => {
 
     //модальное окно    
     const handleCloseModal = (e) => {
-        dispatch({
-            type: RESET_SELECTED_INGREDIENT
-        })
+        dispatch(resetSelectedIngredient())
     };
 
     const handleOpenModal = (e) => {
         const id = e.currentTarget.getAttribute('data-id');
         const getCurrentElem =  dataApi.filter((item) => {return item._id === id});
        
-        dispatch({
-            type: GET_SELECTED_INGREDIENT,
-            payload: getCurrentElem[0]
-        })
+        dispatch(getSelectedIngredient(getCurrentElem[0]))
+        
     };
 
     //верстка_блоки с ингрединтами

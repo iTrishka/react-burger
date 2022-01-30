@@ -43,8 +43,8 @@ const IngredientCard = ({card, handleOpenModal}) => {
 
 
 IngredientCard.propTypes = {
-    card: menuItemPropTypes,
-    handleOpenModal: PropTypes.func
+    card: menuItemPropTypes.isRequired,
+    handleOpenModal: PropTypes.func.isRequired
   };
 
 export default IngredientCard;

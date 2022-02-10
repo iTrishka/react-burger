@@ -6,7 +6,7 @@ export const SET_DATA_API= 'SET_DATA_API';
 
 function getDataApi(payload) {
     return {
-      type: GET_DATA_API ,
+      type: GET_DATA_API,
       payload
     }
 }

@@ -8,8 +8,11 @@ import {
     getUserLoginSuccess,
 } from './user-login';
 
+import { addUserInfo } from './user-info'
+
 function userLoginRequest(endpoint, body) {
     return function(dispatch) {
+      console.log("Пытаемся userLoginRequest")
       dispatch(getUserLogin())
       fetch(`${API_URL}${endpoint}`, {
         method: 'POST', 
@@ -30,8 +33,9 @@ function userLoginRequest(endpoint, body) {
             if(authToken){
               setCookie('token', authToken);
               setCookie('refreshToken', refreshToken);
+              dispatch(addUserInfo(res.user))
             }
-            dispatch(getUserLoginSuccess(res.user))
+            
       } else {
           dispatch(getUserLoginFailed())
       }

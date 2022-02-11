@@ -9,6 +9,7 @@ import {
 
 function getUserRegisterApiRequest(endpoint, body) {
     return function(dispatch) {
+      console.log("Пытаемся getUserRegisterApiRequest")
       dispatch(getUserRegisterApi())
       fetch(`${API_URL}${endpoint}`, {
         method: 'POST', 

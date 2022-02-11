@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import getUserInfoApi from '../services/actions/get-user-info-api';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { apiFetchRefresh } from '../services/refresh-token';
 
 
 export function ProtectedRoute({ children, ...rest }) {
@@ -13,18 +14,19 @@ export function ProtectedRoute({ children, ...rest }) {
 
     const init = () => {
         // Вызовем запрос getUser и изменим состояние isUserLoaded
-    dispatch(getUserInfoApi());
-    setUserLoaded(true);
+        console.log("Пытаемся получить UserInfo")
+        console.log(dispatch(getUserInfoApi))
+        setUserLoaded(true);
     };
 
     useEffect(() => {
     // При монтировании компонента запросим данные о пользователе
-    init();
+        init();
     }, []);
 
-    if (!isUserLoaded) {
-        return null;
-    }
+    // if (!isUserLoaded) {
+    //     return null;
+    // }
 
     return (
         <Route

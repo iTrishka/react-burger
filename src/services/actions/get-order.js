@@ -9,6 +9,7 @@ import {
 
 function getOrder(endpoint, data) {
     return function(dispatch) {
+      console.log("Пытаемся getOrder")
       dispatch(getOrderApi())
       fetch(`${API_URL}${endpoint}`, { 
                 method: 'POST',

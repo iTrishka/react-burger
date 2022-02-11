@@ -15,7 +15,7 @@ const AppHeader =  () => {
                         </Link>
                     </button>
                     <button className={`${styleHeader.btn} pr-5  mr-2`}>
-                        <Link to="/profile">
+                        <Link to="/profile/orders">
                         <ListIcon type="secondary" />
                         <span className={styleHeader.secondaryColor}>Лента заказов</span>
                         </Link>

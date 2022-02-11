@@ -8,10 +8,15 @@ import {
     userLogoutSuccess
 } from './user-logout';
 
+import {
+  resetUserInfo
+} from './user-info'
+
 
 
 function userLogoutRequestApi(refreshToken) {
     return function(dispatch) {
+      console.log("Пытаемся userLogoutRequestApi")
       dispatch(userLogoutRequest())
       fetch(`${API_URL}auth/logout `, {
         method: 'POST', 
@@ -27,15 +32,20 @@ function userLogoutRequestApi(refreshToken) {
               setCookie('token', "");
               setCookie('refreshToken', "");
               console.log("Successful logout")  
-              userLogoutSuccess()                   
+              userLogoutSuccess()  
+              dispatch(resetUserInfo()) 
+              return res                
             } else {
                 throw res.err
+    
             }
       } else {
           dispatch(userLogoutFailed())
+          return res
       }
   }).catch( err => {
       dispatch(userLogoutFailed())
+      return err
   })
   }
   } 

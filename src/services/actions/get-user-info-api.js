@@ -10,7 +10,7 @@ import {
 
  function getUserInfoApi() {
     return function(dispatch){
-      console.log('Bearer ' + getCookie('refreshToken'))
+      console.log("Пытаемся getUserInfoApi")
       dispatch(getUserInfo())
       fetch(`${API_URL}auth/user`, {
         method: 'GET',
@@ -23,12 +23,14 @@ import {
         .then( res => {
           if (res && res.success) {
             dispatch(userInfoRequestSuccess(res.user))
+            return res
       } else {
           dispatch(userInfoRequestFailed())
+          throw res.err
       }
       }).catch( err => {
           dispatch(userInfoRequestFailed())
-          console.log("провал", err)
+          return err
         })
   } 
 }

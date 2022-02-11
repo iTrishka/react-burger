@@ -10,6 +10,7 @@ import {
 
 function changeUserInfoApi(data) {
     return function(dispatch){
+      console.log("Пытаемся changeUserInfoApi")
       console.log('Bearer ' + getCookie('refreshToken'))
       dispatch(getUserInfo())
       fetch(`${API_URL}auth/user`, {

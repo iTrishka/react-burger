@@ -9,6 +9,7 @@ import {
 
 function getIngredientsApi(endpoint) {
     return function(dispatch) {
+        console.log("Пытаемся getIngredientsApi")
       dispatch(getDataApi())
       fetch(`${API_URL}${endpoint}`)
         .then(checkResponse)

@@ -1,13 +1,23 @@
 export const GET_USER_INFO = 'GET_USER_INFO';
+export const ADD_USER_INFO = 'ADD_USER_INFO';
 export const USER_INFO_REQUEST_FAILED = 'USER_INFO_REQUEST_FAILED';
 export const USER_INFO_REQUEST_SUCCESS = 'USER_INFO_REQUEST_SUCCESS';
 export const RESET_USER_INFO = 'RESET_USER_INFO';
 
 function getUserInfo(payload) {
+   console.log("Вызываем getUserInfo")
     return {
       type: GET_USER_INFO,
       payload
     }
+}
+
+function addUserInfo(payload) {
+  console.log("Вызываем addUserInfo")
+   return {
+     type: ADD_USER_INFO,
+     payload
+   }
 }
 
 function userInfoRequestFailed() {
@@ -31,6 +41,7 @@ function resetUserInfo() {
 
 export {
   getUserInfo,
+  addUserInfo,
   userInfoRequestFailed,
   userInfoRequestSuccess,
   resetUserInfo

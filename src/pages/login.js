@@ -41,7 +41,7 @@ export function LoginPage() {
             "email": email, 
             "password": password, 
         }
-    
+        console.log("кнопка логин")
         dispatch(userLoginRequest("auth/login", body))
         if (userLogin.name) {
             return (
@@ -61,7 +61,8 @@ export function LoginPage() {
         return null;
     }
 
-   if (!userInfo.name) {
+
+ if (!userInfo.name) {
         return (
         <>
             <AppHeader/>

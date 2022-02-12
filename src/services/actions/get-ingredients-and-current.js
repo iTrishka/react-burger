@@ -11,7 +11,6 @@ import { getSelectedIngredient } from "../actions/selected-ingredient";
 
 function getIngredientsAndCurrent(id) {
     return function(dispatch) {
-      console.log("Пытаемся getIngredientsAndCurrent")
       dispatch(getDataApi())
       fetch(`${API_URL}ingredients`)
         .then(checkResponse)

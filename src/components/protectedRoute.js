@@ -15,7 +15,7 @@ export function ProtectedRoute({ children, ...rest }) {
     const init = () => {
         // Вызовем запрос getUser и изменим состояние isUserLoaded
         console.log("Пытаемся получить UserInfo")
-        console.log(dispatch(getUserInfoApi))
+        dispatch(getUserInfoApi);
         setUserLoaded(true);
     };
 

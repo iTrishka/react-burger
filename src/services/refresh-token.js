@@ -11,7 +11,8 @@ import {
 
 
 export function refreshToken() { 
-    fetch(`${API_URL}token`, {
+  console.log("Refreshing token...")
+    fetch(`${API_URL}auth/token`, {
         method: 'POST', 
         headers: {
             'Content-Type': 'application/json'
@@ -28,6 +29,8 @@ export function refreshToken() {
             refreshToken = res.refreshToken
             }
             if(authToken){
+              setCookie('token', "");
+              setCookie('refreshToken', "");
               setCookie('token', authToken);
               setCookie('refreshToken', refreshToken);
               userInfoRequestSuccess(res.user)

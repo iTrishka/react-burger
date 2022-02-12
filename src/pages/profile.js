@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef} from "react";
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -13,13 +13,14 @@ import { apiFetchRefresh } from "../services/refresh-token";
 
 
 import ProfileStyles  from './profile.module.css';
-import { ProtectedRoute } from "../components/protectedRoute";
 
 export function ProfilePage() {
     const { email, name} = useSelector(state => state.userInfo.userInfo)
+    const  userInfoRequestFailed  = useSelector(store => store.userInfo.userInfoRequestFailed)
 
-    const [value, setValue] = React.useState('имя')
+    const [inputName, setInputName] = React.useState('имя')
     const [login, setLogin] = React.useState('email')
+    const [password, setPassword] = React.useState('')
     const inputRefName = React.useRef(null)
     const inputRefEmail = React.useRef(null)
     const inputRefPassword = React.useRef(null)
@@ -28,17 +29,14 @@ export function ProfilePage() {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // React.useEffect(() = > {
-    //     if 
-    // }, [])
 
     React.useEffect(()=> {
-        apiFetchRefresh(getUserInfoApi)
+        dispatch(getUserInfoApi)
     }, [dispatch])
 
     useEffect(()=> {
         if(email || name){
-            setValue(name)
+            setInputName(name)
             setLogin(email)
     }
      }, [email, name])
@@ -62,40 +60,70 @@ export function ProfilePage() {
     const [disableEmail, setdisableEmail] = useState(true);
     const [disablePassword, setdisablePassword] = useState(true);
 
+    const [typeInputPassword, setTypeInputPassword] = useState("password");
+
+    useEffect(() =>{
+        if(iconPassword === "CheckMarkIcon"){
+            setTypeInputPassword("text") 
+        } else(setTypeInputPassword("password"))
+    }, [iconPassword])
+
     const showButton = () => {
         if(!isButtonShow) {setIsButtonShow(true)}
     }
 
+    
+
+
     const onChangeUserInfo = useCallback(
         () => {
-            //e.preventDefault();
             let body = {
                 "email": login, 
-                "name": value, 
+                "name": inputName, 
+                "password": password
             }
             dispatch(changeUserInfoApi(body))  
-            setIsButtonShow(false)    
+            if(userInfoRequestFailed){
+                setInputName(name);
+                setLogin(email);
+                setPassword("") 
+                setIsButtonShow(false);
+                setIconNameAll()
+            }else {
+            setIsButtonShow(false)  
+            setIconNameAll()
+            setPassword("")  
+            }
         },
-        [login,value],
+        [login, inputName, password, userInfoRequestFailed],
       );
     
 
-    const ChangeButton = <div>
-        <Button type="primary" size="small" onClick={()=>onChangeUserInfo()}> Сохранить </Button>
-        <span className="mr-2"></span>
-        <Button type="primary" size="small" onClick={()=> {
-            setValue(name);
+    const ChangeButton = <div className={ProfileStyles.changeButton}>
+        <Button type="secondary" size="medium" onClick={()=> {
+            setInputName(name);
             setLogin(email);
-            setIsButtonShow(false)
+            setIsButtonShow(false);
+            setIconNameAll()
         }} > Отменить </Button>
+        <span className="mr-2"></span>
+        <Button type="primary" size="medium" onClick={()=>onChangeUserInfo()}> Сохранить </Button>       
     </div>
+
+    const setIconNameAll = () => {
+        setIconName('EditIcon')
+        setIconEmail('EditIcon')
+        setIconPassword('EditIcon')
+        setdisableName(true)
+        setdisableEmail(true)
+        setdisablePassword(true)
+        }
 
     const onChangeName = (e) => {
         showButton()
         setdisableName(!disableName)
         disableName ? setIconName('CheckMarkIcon') : setIconName('EditIcon');
         setTimeout(() => inputRefName.current.focus(), 0);
-        // if(!disableName){onChangeUserInfo()}
     }
 
     const onChangeEmail = (e) => {
@@ -103,8 +131,6 @@ export function ProfilePage() {
         setdisableEmail(!disableEmail)
         disableEmail ? setIconEmail('CheckMarkIcon') : setIconEmail('EditIcon');
         setTimeout(() => inputRefEmail.current.focus(), 0);
-        console.log(!disableEmail)
-        // if(disableEmail){onChangeUserInfo()}
     }
 
     const onChangePassword = (e) => {
@@ -112,23 +138,17 @@ export function ProfilePage() {
         setdisablePassword(!disablePassword)
         disablePassword ? setIconPassword('CheckMarkIcon') : setIconPassword('EditIcon');
         setTimeout(() => inputRefPassword.current.focus(), 0)
-        // if(!disablePassword){onChangeUserInfo()}
     }
 
     
-
-    // const [password, setPassword] = React.useState('password')
-    // const onChange = e => {
-    //     setValue(e.target.value)
-    // }
 
     const Profile = (
         <form className="mb-20"><Input
         type={'text'}
         placeholder={'Имя'}
-        onChange={e => {setValue(e.target.value); showButton()}}
+        onChange={e => {setInputName(e.target.value); showButton()}}
         icon={iconName}
-        value={value}
+        value={inputName}
         name={'name'}
         error={false}
         ref={inputRefName}
@@ -144,7 +164,7 @@ export function ProfilePage() {
         onChange={e => {setLogin(e.target.value); showButton()}}
         icon={iconEmail}
         value={login}
-        name={'name'}
+        name={'email'}
         error={false}
         ref={inputRefEmail}
         onIconClick={onChangeEmail}
@@ -154,12 +174,12 @@ export function ProfilePage() {
         key={'2userProfile'}
     />
     <Input
-        type={'password'}
+        type={typeInputPassword}
         placeholder={'Пароль'}
-        onChange={e => {setLogin(e.target.value); showButton()}}
+        onChange={e => {setPassword(e.target.value); showButton()}}
         icon={iconPassword}
-        value={login}
-        name={'name'}
+        value={password}
+        name={'password'}
         error={false}
         ref={inputRefPassword}
         onIconClick={onChangePassword}
@@ -171,8 +191,46 @@ export function ProfilePage() {
     </form>
     );
     const Orders = <div>Orders</div>
-
     
+
+        //переключение кнопок
+    
+    const [styleProfile, setStyleProfile] = useState(false)
+    const [styleOrders, setStyleOrders] = useState(true)
+
+    const switchTab = (e) => {
+        if(history.location.pathname === "/profile/orders"){
+            setStyleOrders(!styleOrders)
+            setStyleProfile(!styleProfile)
+        }else if(history.location.pathname === "/profile"){
+            console.log()
+            setStyleOrders(!styleOrders)
+            setStyleProfile(!styleProfile)
+        } else {}
+
+    }
+
+
+    //useEffect(() => {switchTab()}, [history.location.pathname])
+    console.log("history", history.location.pathname)
+    const [colorProfile, setColorProfile] = useState("secondary")
+    const [colorOrders, setColorOrders] = useState("secondary")
+
+    const setActiveMenu = () => {
+        if(history.location.pathname === "/profile"){
+            setColorProfile("primary")
+            setColorOrders("secondary")
+        }else if(history.location.pathname === "/profile/orders"){
+            setColorProfile("secondary")
+            setColorOrders("primary")
+        }else{}
+    }
+
+    useEffect(()=> {
+        setActiveMenu()
+    }, [history.location.pathname])
+ 
+     
     
 
     return (
@@ -181,11 +239,11 @@ export function ProfilePage() {
                 <main>
                     <div className={`${ProfileStyles.container} mt-30`}>
                         <section className="mr-15"> 
-                        <Button type="secondary" size="medium">
-                            <Link to={`${url}`} className={`text text_type_main-medium  ${ProfileStyles.textBtn} ${ProfileStyles.active}`}> Профиль</Link>
+                        <Button  type="secondary" size="medium">
+                            <Link to={`${url}`}  className={`text text_type_main-medium ${ProfileStyles[colorProfile]}`}> Профиль</Link>
                         </Button>
-                        <Button type="secondary" size="medium">
-                            <Link to={`${url}/orders`} className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> История заказов</Link>
+                        <Button   type="secondary" size="medium">
+                            <Link to={`${url}/orders`}  className={`text text_type_main-medium } ${ProfileStyles[colorOrders]}`}> История заказов</Link>
                         </Button>
                         <Button type="secondary" size="medium" onClick={onLogout}>
                             <a className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> Выход</a>

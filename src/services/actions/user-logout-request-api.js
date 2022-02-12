@@ -1,6 +1,6 @@
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
-import { setCookie, getCookie } from '../cookies';
+import { setCookie } from '../cookies';
 
 import {
     userLogoutRequest,

@@ -2,13 +2,11 @@ import {
     GET_USER_LOGIN, 
     GET_USER_LOGIN_FAILED, 
     GET_USER_LOGIN_SUCCESS, 
-    RESET_USER_LOGIN 
 } from '../actions/user-login';
 
 const initialState = {
     userLoginRequest1: false,
-    userLoginFailed: false,
-    userLogin: {}   
+    userLoginFailed: false,  
 }
 
 export const userLogin = (state = initialState, action) => { 
@@ -23,7 +21,6 @@ export const userLogin = (state = initialState, action) => {
         case GET_USER_LOGIN_SUCCESS: {
             return { 
                       ...state, 
-                      userLogin: action.payload, 
                       userLoginFailed: false 
                   };
           }
@@ -34,12 +31,6 @@ export const userLogin = (state = initialState, action) => {
                     userLoginRequest1: false 
                 };
         }
-        case RESET_USER_LOGIN : {
-            return { 
-                        ...state, 
-                        userLogin:{}
-                    };
-            }
         default: {
             return state
         }

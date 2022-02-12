@@ -16,14 +16,11 @@
     padding: 17px 0;
 }
 
-.container section:first-child button .active{
-    color: #F2F2F3;
-}
 
-
-.container section:first-child  a{
+.container section:first-child a{
     text-decoration: none;
 }
+
 
 .container section:first-child p{
     opacity: 0.4;
@@ -36,4 +33,16 @@
     justify-content: space-between;
 }
 
+.changeButton{
+    display: flex;
+    justify-content: end;
+}
 
+.primary{
+    color: #F2F2F3;
+  }
+  
+  .secondary{
+    color: #8585AD;
+  }
+  

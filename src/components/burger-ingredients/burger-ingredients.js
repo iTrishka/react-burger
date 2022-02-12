@@ -17,14 +17,14 @@ const BurgerIngredients = () => {
     const {selectedIngredient } = useSelector(store => ({selectedIngredient: store.selectedIngredient}));
     const [ isModalOnen, setIsModalOnen] = useState(false)
     
-    
 
     const history = useHistory(); 
     const dispatch = useDispatch();
     
     //запрос ингридиентов с API
     React.useEffect(()=> {
-        dispatch(getIngredientsApi("ingredients"))
+        console.log(dataApi)
+        if(dataApi.length < 1) {dispatch(getIngredientsApi("ingredients"))}
     }, [dispatch])
 
     //табы

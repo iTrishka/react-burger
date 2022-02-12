@@ -12,7 +12,7 @@ export function RegisterPage() {
     const [password, setPassword] = React.useState('');
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
-    const { userRegisterApiRequest, userRegisterApiFailed, userRegisterApi } = useSelector(state => state.userRegisterApi);
+    const { userRegisterApiRequest, userRegisterApiFailed, userRegisterApi } = useSelector(state => state.userInfo);
 
     const dispatch = useDispatch();
 

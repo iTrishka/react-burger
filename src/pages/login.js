@@ -43,7 +43,7 @@ export function LoginPage() {
         }
         console.log("кнопка логин")
         dispatch(userLoginRequest("auth/login", body))
-        if (userLogin.name) {
+        if (userInfo.name) {
             return (
                 history.push("/")
             )};

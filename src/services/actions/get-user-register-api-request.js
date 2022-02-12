@@ -1,5 +1,7 @@
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
+import { customFetch } from '../custom-fetch';
+
 
 import {
     getUserRegisterApi,
@@ -9,8 +11,8 @@ import {
 
 function getUserRegisterApiRequest(endpoint, body) {
     return function(dispatch) {
-      console.log("Пытаемся getUserRegisterApiRequest")
       dispatch(getUserRegisterApi())
+      customFetch(endpoint, "POST", body)
       fetch(`${API_URL}${endpoint}`, {
         method: 'POST', 
         headers: {

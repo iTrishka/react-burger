@@ -9,6 +9,10 @@ import {
     getUserRegisterApiSuccess,
 } from './user-register-api';
 
+import {
+  addUserInfo
+} from './user-info'
+
 function getUserRegisterApiRequest(endpoint, body) {
     return function(dispatch) {
       dispatch(getUserRegisterApi())
@@ -24,6 +28,7 @@ function getUserRegisterApiRequest(endpoint, body) {
         .then( res => {
           if (res && res.success) {
           dispatch(getUserRegisterApiSuccess(res))
+          dispatch(addUserInfo(res.user))
       } else {
           dispatch(getUserRegisterApiFailed())
       }

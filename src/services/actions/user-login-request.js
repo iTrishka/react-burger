@@ -1,18 +1,16 @@
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
-import { setCookie, getCookie } from '../cookies';
+import { setCookie } from '../cookies';
 
 import {
     getUserLogin,
     getUserLoginFailed,
-    getUserLoginSuccess,
 } from './user-login';
 
 import { addUserInfo } from './user-info'
 
 function userLoginRequest(endpoint, body) {
     return function(dispatch) {
-      console.log("Пытаемся userLoginRequest")
       dispatch(getUserLogin())
       fetch(`${API_URL}${endpoint}`, {
         method: 'POST', 

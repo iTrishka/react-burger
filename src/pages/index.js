@@ -6,8 +6,7 @@ import { NotFound404 } from "./not-found-404";
 import { ProfilePage } from "./profile";
 import { RegisterPage } from "./register";
 import { ResetPasswordPage } from "./reset-password";
-import { ProfileOrderPage } from "./profile-orders";
 
 
 
-export { ForgotPasswordPage, IngredientPage, LoginPage, MainPage, NotFound404, ProfilePage, RegisterPage, ResetPasswordPage, ProfileOrderPage };
+export { ForgotPasswordPage, IngredientPage, LoginPage, MainPage, NotFound404, ProfilePage, RegisterPage, ResetPasswordPage };

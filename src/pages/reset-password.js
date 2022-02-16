@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import React from "react";
+import { useHistory, Link ,Redirect} from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { API_URL } from "../utils/constants";
@@ -12,7 +12,7 @@ export function ResetPasswordPage() {
     const [password, setPassword] = React.useState('');
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef(null);
-
+    const history = useHistory();
 
     const onChange = e => {
         setPassword(e.target.value)
@@ -23,7 +23,6 @@ export function ResetPasswordPage() {
     }
 
     const onResetPassword = (e) => {
-        console.log("onResetPassword")
         e.preventDefault()
         fetch(`${API_URL}password-reset/reset`, {
             method: 'POST',
@@ -38,14 +37,24 @@ export function ResetPasswordPage() {
         .then(checkResponse)
         .then(res => {
             if(res && res.success){
-                console.log(res.message)
-            }else throw Promise.reject('ошибка')
+                history.replace("/login")
+                return res.message
+                
+            }else throw Promise.reject(res.message)
         }).catch(function(e) {
-            console.log(e); 
+            return e
         })
     }
 
+    let isFromForgotPage = false
+
+    if(history.location.state){
+        isFromForgotPage = history.location.state.fromForgotPassword
+        console.log("isFromForgotPage", isFromForgotPage)
+    }
+
     return (
+        isFromForgotPage ? 
         <>
             <AppHeader/>
             <main  className={styles.main}>
@@ -71,5 +80,5 @@ export function ResetPasswordPage() {
                 </div>
             </main>
         </>
-    )
+    : <Redirect  to={{pathname: "/forgot-password", state: { fromForgotPassword: false }}} /> )
 }

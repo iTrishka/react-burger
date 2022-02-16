@@ -1,27 +1,21 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useParams, useRouteMatch} from 'react-router-dom';
+import React from "react";
+import { useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import AppHeader from "../components/app-header/app-header"
-import { menuItemPropTypes } from '../utils/constants';
 import { useDispatch } from "react-redux";
-import getIngredientsApi from '../services/actions/get-ingredients-api';
 
-import StyleIngredientDetails from '../components/ingredient-details/ingredient-details';
 import StyleIngredient from './ingredient.module.css';
-import { getSelectedIngredient } from '../services/actions/selected-ingredient'
 import getIngredientsAndCurrent from "../services/actions/get-ingredients-and-current";
 
 export function IngredientPage() {
-    const ingredientsList = useSelector(state => state.dataApiReducer.dataApi)
     const {selectedIngredient } = useSelector(store => ({selectedIngredient: store.selectedIngredient}));
-    const { id } = useParams()
-
+    const { ingredientId } = useParams()
     const dispatch = useDispatch(); 
 
     //запрос ингридиентов с API
     React.useEffect(()=> {
-        dispatch(getIngredientsAndCurrent(id));
-    }, [dispatch])
+        dispatch(getIngredientsAndCurrent(ingredientId));
+    }, [dispatch, ingredientId])
 
     return ( selectedIngredient ?
         <>

@@ -1,31 +1,21 @@
-import React, { useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom'; 
+import React, { useRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBurgerIngredient from './burger-ingredients.module.css';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import PropTypes from 'prop-types';
 import { menuItemPropTypes } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import getIngredientsApi from '../../services/actions/get-ingredients-api';
-import { getSelectedIngredient, resetSelectedIngredient } from '../../services/actions/selected-ingredient';
-
 
 const BurgerIngredients = () => {
     const { dataApiRequest, dataApiFailed, dataApi } = useSelector(state => state.dataApiReducer);
-    const {selectedIngredient } = useSelector(store => ({selectedIngredient: store.selectedIngredient}));
-    const [ isModalOnen, setIsModalOnen] = useState(false)
-    
 
-    const history = useHistory(); 
     const dispatch = useDispatch();
     
     //запрос ингридиентов с API
     React.useEffect(()=> {
-        console.log(dataApi)
         if(dataApi.length < 1) {dispatch(getIngredientsApi("ingredients"))}
-    }, [dispatch])
+    }, [dispatch, dataApi.length])
 
     //табы
     const [current, setCurrent] = React.useState('Булки');
@@ -77,34 +67,6 @@ const BurgerIngredients = () => {
         
     };
 
-    //модальное окно    
-    const handleCloseModal = (e) => {
-        dispatch(resetSelectedIngredient())
-        setIsModalOnen(!isModalOnen)
-    };
-
-    console.log(window.history.state)
-
-    const handleOpenModal = (e) => {
-        setIsModalOnen(!isModalOnen)
-        const id = e.currentTarget.getAttribute('data-id');
-        const getCurrentElem =  dataApi.filter((item) => {return item._id === id});
-        dispatch(getSelectedIngredient(getCurrentElem[0]))
-        const data = id
-        localStorage.setItem('selectIngredient', JSON.stringify(data));
-    
-        
-        const newUrl = '/ingredients/'+ id +" "
-        window.history.replaceState({id}, 'new title', newUrl)   
-    };
-
-    React.useEffect(()=> {
-        console.log(localStorage.getItem('id'))
-        
-    }, [])
-
-
-
 
     //верстка_блоки с ингрединтами
     const blockIngredientsType = (pKey, ulKey, name, refName) => {
@@ -114,7 +76,7 @@ const BurgerIngredients = () => {
                 <p key={pKey} className="text text_type_main-medium" ref={refName} >{name}</p> 
                 <ul key={ulKey} className={`${styleBurgerIngredient.ingedientType} pl-1`} >
                     {category.map(card =>(                         
-                        <IngredientCard card={card} handleOpenModal={handleOpenModal} key={`${card._id}`} />
+                        <IngredientCard card={card}  key={`${card._id}`} />
                         ))}
                 </ul>
             </>
@@ -140,12 +102,6 @@ const BurgerIngredients = () => {
 
     const ingredient = getIngedients()
 
-    const fillModal = (elem) => (
-        <Modal header="Детали ингредиента" onClose={handleCloseModal}> 
-             {selectedIngredient ? <IngredientDetails elem={elem}/> : ""}
-        </Modal>
-      );
-
     return(
         <section className={`${styleBurgerIngredient.wrapper} mt-10 mb-10 mr-10`}>
             <p className="text text_type_main-large mt-40" > Соберите бургер</p>
@@ -155,7 +111,7 @@ const BurgerIngredients = () => {
             <div className={`${styleBurgerIngredient.ingedientCardContainer} mt-10`} onScroll={getScroll} >                
                {ingredient}
             </div>
-            {isModalOnen ? fillModal(selectedIngredient) : null}
+            
         </section>
     )
 };  

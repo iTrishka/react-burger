@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect, useState, useRef} from "react";
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from "react";
+import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
-import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
+import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getCookie } from "../services/cookies";
 import getUserInfoApi from "../services/actions/get-user-info-api";
 import { useDispatch, useSelector } from 'react-redux';
 import userLogoutRequestApi from "../services/actions/user-logout-request-api";
 import changeUserInfoApi from "../services/actions/change-user-info-api";
-import { resetUserInfo } from "../services/actions/user-info";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { apiFetchRefresh } from "../services/refresh-token";
+import { Switch, Route } from 'react-router-dom';
 
 
 import ProfileStyles  from './profile.module.css';
@@ -27,7 +25,7 @@ export function ProfilePage() {
 
     const { url } = useRouteMatch();
     const dispatch = useDispatch();
-    const history = useHistory();
+
 
 
     React.useEffect(()=> {
@@ -45,8 +43,7 @@ export function ProfilePage() {
     const onLogout = (e) => {
         e.preventDefault();
         let refreshToken =  getCookie('refreshToken');
-        dispatch(userLogoutRequestApi({"token" : refreshToken}));
-        history.push("/login");
+        dispatch(userLogoutRequestApi({"token" : refreshToken}))
     }
 
     //изменить данные 
@@ -72,9 +69,6 @@ export function ProfilePage() {
         if(!isButtonShow) {setIsButtonShow(true)}
     }
 
-    
-
-
     const onChangeUserInfo = useCallback(
         () => {
             let body = {
@@ -95,7 +89,7 @@ export function ProfilePage() {
             setPassword("")  
             }
         },
-        [login, inputName, password, userInfoRequestFailed],
+        [login, inputName, password, userInfoRequestFailed, dispatch, email, name],
       );
     
 
@@ -190,63 +184,29 @@ export function ProfilePage() {
     />
     </form>
     );
-    const Orders = <div>Orders</div>
-    
-
-        //переключение кнопок
-    
-    const [styleProfile, setStyleProfile] = useState(false)
-    const [styleOrders, setStyleOrders] = useState(true)
-
-    const switchTab = (e) => {
-        if(history.location.pathname === "/profile/orders"){
-            setStyleOrders(!styleOrders)
-            setStyleProfile(!styleProfile)
-        }else if(history.location.pathname === "/profile"){
-            console.log()
-            setStyleOrders(!styleOrders)
-            setStyleProfile(!styleProfile)
-        } else {}
-
-    }
-
-
-    //useEffect(() => {switchTab()}, [history.location.pathname])
-    console.log("history", history.location.pathname)
-    const [colorProfile, setColorProfile] = useState("secondary")
-    const [colorOrders, setColorOrders] = useState("secondary")
-
-    const setActiveMenu = () => {
-        if(history.location.pathname === "/profile"){
-            setColorProfile("primary")
-            setColorOrders("secondary")
-        }else if(history.location.pathname === "/profile/orders"){
-            setColorProfile("secondary")
-            setColorOrders("primary")
-        }else{}
-    }
-
-    useEffect(()=> {
-        setActiveMenu()
-    }, [history.location.pathname])
- 
-     
-    
+    const Orders = <div className="text  text_type_main-default">Здесь будет храниться история Ваших заказов</div>
+      
 
     return (
-        <>
+        email ? (
+            <>
             <AppHeader/>
                 <main>
                     <div className={`${ProfileStyles.container} mt-30`}>
                         <section className="mr-15"> 
-                        <Button  type="secondary" size="medium">
-                            <Link to={`${url}`}  className={`text text_type_main-medium ${ProfileStyles[colorProfile]}`}> Профиль</Link>
-                        </Button>
-                        <Button   type="secondary" size="medium">
-                            <Link to={`${url}/orders`}  className={`text text_type_main-medium } ${ProfileStyles[colorOrders]}`}> История заказов</Link>
-                        </Button>
+                        <NavLink  exact 
+                            to={`${url}`}
+                            className={`text text_type_main-medium pt-4 pb-4 ${ProfileStyles.secondary}`}
+                            activeClassName={ProfileStyles.primary}
+                        > Профиль </NavLink>
+                        <NavLink exact 
+                            to={`${url}/orders`} 
+                            className={`text text_type_main-medium pt-4 pb-4  ${ProfileStyles.secondary}`}
+                            activeClassName={ProfileStyles.primary}
+                        > История заказов </NavLink>
+
                         <Button type="secondary" size="medium" onClick={onLogout}>
-                            <a className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> Выход</a>
+                            <span className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> Выход</span>
                         </Button>
                             <p className="text text_type_main-default text_color_inactive mt-20">
                                 В этом разделе вы можете
@@ -265,6 +225,7 @@ export function ProfilePage() {
                     </div>
                 </main>
         </>
+        ) : <Redirect to="/login" />
     )
 }         
 

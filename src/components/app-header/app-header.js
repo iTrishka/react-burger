@@ -10,26 +10,24 @@ const AppHeader =  () => {
     const [colorOrders, setColorOrders] = useState("secondary")
     const [colorProfile, setColorProfiles] = useState("secondary")
 
-    let history = useHistory();
-    console.log("history", history.location.pathname)
-
-    const setActiveMenu = () => {
-        if(history.location.pathname === "/"){
-            setColorConstructor("primary")
-            setColorOrders("secondary")
-            setColorProfiles("secondary")
-        }else if(history.location.pathname === "/profile/orders"){
-            setColorConstructor("secondary")
-            setColorOrders("primary")
-            setColorProfiles("secondary")
-        } else if(history.location.pathname.includes("/profile")){
-            setColorConstructor("secondary")
-            setColorOrders("secondary")
-            setColorProfiles("primary")
-        }
-    }
+    let history = useHistory(); 
 
     useEffect(()=> {
+        const setActiveMenu = () => {
+            if(history.location.pathname === "/"){
+                setColorConstructor("primary")
+                setColorOrders("secondary")
+                setColorProfiles("secondary")
+            }else if(history.location.pathname === "/profile/orders"){
+                setColorConstructor("secondary")
+                setColorOrders("primary")
+                setColorProfiles("secondary")
+            } else if(history.location.pathname.includes("/profile")){
+                setColorConstructor("secondary")
+                setColorOrders("secondary")
+                setColorProfiles("primary")
+            }
+        }
         setActiveMenu()
     }, [history.location.pathname])
 
@@ -44,7 +42,7 @@ const AppHeader =  () => {
                         </Link>
                     </button>
                     <button className={`${styleHeader.btn} pr-5  mr-2`}>
-                        <Link to="/profile/orders">
+                        <Link to={{pathname: "/profile/orders", state: { lastPage: "/profile/orders" }}}>
                         <ListIcon type={colorOrders} />
                         <span className={styleHeader[colorOrders]}>Лента заказов</span>
                         </Link>
@@ -56,7 +54,7 @@ const AppHeader =  () => {
                     </Link>
                 </section>
                 <section className={styleHeader.btn }>
-                    <Link to="/profile">
+                    <Link to={{pathname: "/profile", state: { lastPage: "/profile" }}}>
                     <ProfileIcon type={colorProfile} />
                     <span className={styleHeader[colorProfile]}>Личный кабинет</span>
                     </Link>

@@ -24,7 +24,6 @@ function getIngredientsAndCurrent(id) {
      }).then(res => {
        console.log(res)
        const currentIngredient =  res.data.filter((item) => {return item._id === id});
-       console.log(currentIngredient[0])
        dispatch(getSelectedIngredient(currentIngredient[0]))
      }
   ).catch( err => {

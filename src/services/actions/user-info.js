@@ -5,7 +5,6 @@ export const USER_INFO_REQUEST_SUCCESS = 'USER_INFO_REQUEST_SUCCESS';
 export const RESET_USER_INFO = 'RESET_USER_INFO';
 
 function getUserInfo(payload) {
-   console.log("Вызываем getUserInfo")
     return {
       type: GET_USER_INFO,
       payload
@@ -13,7 +12,6 @@ function getUserInfo(payload) {
 }
 
 function addUserInfo(payload) {
-  console.log("Вызываем addUserInfo")
    return {
      type: ADD_USER_INFO,
      payload

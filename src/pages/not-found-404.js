@@ -3,7 +3,7 @@ export function NotFound404() {
     return (
         <>
         <AppHeader/>
-        <main>
+        <main className="m-10">
             <p>Упс! Страница не найдена</p>
         </main>
         </>

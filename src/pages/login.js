@@ -1,53 +1,45 @@
-import React, { useState, useEffect } from "react";
-import { Redirect, Link, useHistory } from 'react-router-dom';
+import React, { useState, useEffect,useCallback } from "react";
+import { useHistory,  Redirect, Link } from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import userLoginRequest from "../services/actions/user-login-request";
 import  getUserInfoApi from '../services/actions/get-user-info-api';
-import { getCookie } from "../services/cookies";
 
 import styles from './common.module.css';
 
 export function LoginPage() {
-    const { userInfo } = useSelector(state => state.userInfo)
+    const { userInfo, userInfoRequest } = useSelector(state => state.userInfo)
     const [password, setPassword] = React.useState('');
     const [email, setEmail] = React.useState('');
+    const [lastPage, setLastPage] = React.useState('');
     const inputRef = React.useRef(null);
-    const { userLoginRequest1, uuserLoginFailed, userLogin } = useSelector(state => state.userLogin);
-    const [isUserLoaded, setUserLoaded] = useState(false);
-
-
-    const dispatch = useDispatch();
+    const [pathRedirect, setPathRedirect] = useState('');
     const history = useHistory();
 
-    //получить данные о пользователе 
-    const init =  () => {
-        // Вызовем запрос getUser и изменим состояние isUserLoaded
-        dispatch(getUserInfoApi());
-        setUserLoaded(true);
-    };
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        //получить данные о пользователе 
+        const init =  () => {
+            // Вызовем запрос getUser и изменим состояние isUserLoaded
+            dispatch(getUserInfoApi());
+        };
         // При монтировании компонента запросим данные о пользователе
         init();
-    }, []);
+    }, [dispatch]);
 
 
     //запрос к API, авторизация
-    const onLogin = (e) => {
-        e.preventDefault();
+    const onLogin =  useCallback(
+        e => {
+        e.preventDefault(); 
         let body = {
             "email": email, 
             "password": password, 
         }
-        console.log("кнопка логин")
-        dispatch(userLoginRequest("auth/login", body))
-        if (userInfo.name) {
-            return (
-                history.push("/")
-            )};
-    }
+        dispatch(userLoginRequest("auth/login", body))   
+    },[email, password, dispatch])
 
     const onChange = e => {
         setPassword(e.target.value)
@@ -57,13 +49,20 @@ export function LoginPage() {
         setTimeout(() => inputRef.current.focus(), 0)
     }
 
-    if (!isUserLoaded) {
+    
+    useEffect(()=> {
+        if(history.location.state){
+            setLastPage(history.location.state.lastPage)
+            setPathRedirect(lastPage)
+        }
+    }, [history.location.state, lastPage] )
+
+    if (userInfoRequest && !userInfo.name   ) {
         return null;
     }
 
-
- if (!userInfo.name) {
-        return (
+    return (
+        !userInfo.name ?
         <>
             <AppHeader/>
             <main  className={styles.main}>
@@ -90,8 +89,7 @@ export function LoginPage() {
                 </div>
             </main>
         </>
-        )
-    } else return (
-       <Redirect  to='/profile' />
-    )
+        
+  :   <Redirect  to={{pathname: pathRedirect, state: { lastPage: "" }}}/> )
+  
 }

@@ -2,8 +2,6 @@ import { API_URL } from '../utils/constants';
 import checkResponse from './checkResponse';
 import { setCookie, getCookie } from './cookies';
 import {
-    getUserInfo,
-    userInfoRequestFailed,
     userInfoRequestSuccess,
 } from '../services/actions/user-info';
 

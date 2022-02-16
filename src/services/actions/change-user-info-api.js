@@ -1,4 +1,3 @@
-import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 import { getCookie } from '../cookies';
 import { customFetch } from '../custom-fetch';

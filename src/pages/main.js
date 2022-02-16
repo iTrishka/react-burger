@@ -6,13 +6,11 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import getUserInfoApi from '../services/actions/get-user-info-api';
 import { useDispatch } from 'react-redux';
-import { useParams, useRouteMatch} from 'react-router-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { IngredientPage } from '../pages';
 
 
 export function MainPage() {
     const dispatch = useDispatch();
+
 
     React.useEffect(()=> {
         dispatch(getUserInfoApi())

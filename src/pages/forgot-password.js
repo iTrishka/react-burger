@@ -1,45 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, Link } from 'react-router-dom';
+import React, {useEffect} from "react";
+import { useHistory, Link, Redirect } from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
-import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { API_URL } from "../utils/constants";
+import { useDispatch, useSelector } from 'react-redux';
 import checkResponse from "../services/checkResponse";
+import  getUserInfoApi from '../services/actions/get-user-info-api';
 
 import styles from './common.module.css';
 
 export function ForgotPasswordPage() {
-    const [password, setPassword] = React.useState('');
+    const { userInfo, userInfoRequest } = useSelector(state => state.userInfo)
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef(null);
     const history = useHistory();
 
-    // const createUser = () => {
-    //     fetch(`https://norma.nomoreparties.space/api/auth/register`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //           },
-    //         body: JSON.stringify({
-    //             "email": "snowflak@yandex.ru", 
-    //             "password": "123456789op", 
-    //             "name": "Kris" 
-    //         })            
-    //     })
-    //     .then(checkResponse)
-    //     .then(res => {
-    //         if(res && res.success){
-    //             console.log(res.message)
-    //         }else throw Promise.reject('ошибка')
-    //     }).catch(function(e) {
-    //         console.log(e); 
-    //     })
-    // }
+    const dispatch = useDispatch();
 
-    // useEffect(() => createUser(), [])
-
-    const onChange = e => {
-        setPassword(e.target.value)
-    }
+    useEffect(() => {
+        //получить данные о пользователе 
+        const init =  () => {
+            // Вызовем запрос getUser и изменим состояние isUserLoaded
+            dispatch(getUserInfoApi());
+        };
+        // При монтировании компонента запросим данные о пользователе
+        init();
+    }, [dispatch]);
   
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
@@ -61,14 +47,20 @@ export function ForgotPasswordPage() {
             if(res && res.success){
                 console.log(res.message)
                 setValue("")
-                history.replace({ pathname: '/reset-password' });
+                history.replace({ pathname: '/reset-password' , state: { fromForgotPassword: true } });
             }else throw Promise.reject('ошибка')
         }).catch(function(e) {
             console.log(e); 
         })
+
+    }
+
+    if (userInfoRequest && !userInfo.name   ) {
+        return null;
     }
 
     return (
+        !userInfo.name ?
         <>
             <AppHeader/>
             <main  className={styles.main}>
@@ -93,5 +85,5 @@ export function ForgotPasswordPage() {
                 </div>
             </main>
         </>
-    )
+     :   <Redirect  to={"/"}/> )
 }

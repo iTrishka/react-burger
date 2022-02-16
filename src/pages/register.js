@@ -1,20 +1,30 @@
-import React, { useState } from "react";
-import { Redirect, Link } from 'react-router-dom';
+import React, {useEffect} from "react";
+import { Link, Redirect } from 'react-router-dom';
 import AppHeader from "../components/app-header/app-header"
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import getUserRegisterApiRequest from "../services/actions/get-user-register-api-request";
+import  getUserInfoApi from '../services/actions/get-user-info-api';
 
 import styles from './common.module.css';
 
 export function RegisterPage() {
-
+    const { userInfo, userInfoRequest } = useSelector(state => state.userInfo)
     const [password, setPassword] = React.useState('');
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');
-    const { userRegisterApiRequest, userRegisterApiFailed, userRegisterApi } = useSelector(state => state.userInfo);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        //получить данные о пользователе 
+        const init =  () => {
+            // Вызовем запрос getUser и изменим состояние isUserLoaded
+            dispatch(getUserInfoApi());
+        };
+        // При монтировании компонента запросим данные о пользователе
+        init();
+    }, [dispatch]);
 
     //запрос к API, регистрация
     const onRegister = (e) => {
@@ -24,13 +34,8 @@ export function RegisterPage() {
             "password": password, 
             "name": name 
         }
-    
         dispatch(getUserRegisterApiRequest("auth/register", body))
     }
-
-
-
-
     
     const inputRef = React.useRef(null);
 
@@ -42,8 +47,13 @@ export function RegisterPage() {
         setTimeout(() => inputRef.current.focus(), 0)
     }
 
+    if (userInfoRequest && !userInfo.name   ) {
+        return null;
+    }
+
 
     return (
+        !userInfo.name ?
         <>
             <AppHeader/>
             <main  className={styles.main}>
@@ -81,5 +91,5 @@ export function RegisterPage() {
                 </div>
             </main>
         </>
-    )
+     :   <Redirect  to={"/"}/> )
 }

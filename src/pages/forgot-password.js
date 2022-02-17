@@ -1,15 +1,16 @@
 import React, {useEffect} from "react";
 import { useHistory, Link, Redirect } from 'react-router-dom';
-import AppHeader from "../components/app-header/app-header"
 import { Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { API_URL } from "../utils/constants";
 import { useDispatch, useSelector } from 'react-redux';
-import checkResponse from "../services/checkResponse";
 import  getUserInfoApi from '../services/actions/get-user-info-api';
+import getResetPasswordToken from "../services/actions/get-reset-password-token";
+import { getResetPasswordTokenStatus } from "../services/actions/password";
+
 
 import styles from './common.module.css';
 
 export function ForgotPasswordPage() {
+    const getTokenStatusText = useSelector(state => state.password.getTokenStatus)
     const { userInfo, userInfoRequest } = useSelector(state => state.userInfo)
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef(null);
@@ -32,28 +33,20 @@ export function ForgotPasswordPage() {
     }
 
     const onForgotPassword = (e) => {
-        e.preventDefault()
-        fetch(`${API_URL}password-reset`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify( {
-                "email": value
-            })            
-        })
-        .then(checkResponse)
-        .then(res => {
-            if(res && res.success){
-                console.log(res.message)
-                setValue("")
-                history.replace({ pathname: '/reset-password' , state: { fromForgotPassword: true } });
-            }else throw Promise.reject('ошибка')
-        }).catch(function(e) {
-            console.log(e); 
-        })
-
+        e.preventDefault();
+        dispatch(getResetPasswordToken({"email": value}))
     }
+
+    useEffect(()=> {
+        if(getTokenStatusText === "Reset email sent"){
+            setValue("")
+            dispatch(getResetPasswordTokenStatus(""))
+        history.replace({ pathname: '/reset-password' , state: { fromForgotPassword: true }});
+        
+    }
+    },[getTokenStatusText, dispatch, history])
+
+    
 
     if (userInfoRequest && !userInfo.name   ) {
         return null;
@@ -62,11 +55,10 @@ export function ForgotPasswordPage() {
     return (
         !userInfo.name ?
         <>
-            <AppHeader/>
             <main  className={styles.main}>
                 <div className={styles.container}>
                     <p className={`text text_type_main-medium mb-6`}>Восстановление пароля</p>
-                    <form className={`${styles.form} mb-20`} >
+                    <form className={`${styles.form} mb-20`} onSubmit={onForgotPassword} >
                         <Input 
                         type={'email'}
                         placeholder={'Укажите e-mail'}
@@ -77,7 +69,7 @@ export function ForgotPasswordPage() {
                         onIconClick={onIconClick}
                         errorText={'Ошибка'}
                         size={'default'} />
-                        <Button type="primary" size="medium" onClick={onForgotPassword}>
+                        <Button type="primary" size="medium">
                             Восстановить
                         </Button>
                     </form>

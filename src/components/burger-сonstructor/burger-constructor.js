@@ -17,6 +17,7 @@ import { getIngredientsConstructorBun,
         sortSngredientsConstructor  } from '../../services/actions/constructor-list';
 import { setDataApi } from '../../services/actions/data-api';
 import { resetOrder } from '../../services/actions/order-number';
+import Spinner from '../spinner/spinner';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 import { useHistory } from 'react-router-dom'; 
@@ -26,13 +27,13 @@ import { loadStateFromLocalstorage, saveStateInLocalstorage } from '../localstor
 export const BurgerConstructor = memo(function BurgerConstructor()  {
     const dataApi = useSelector(state => state.dataApiReducer.dataApi);
     const { bun, main } = useSelector(state => state.constructorList);
-    const orderNumber = useSelector(state => state.orderNumber.orderNumber);
+    const {orderApiRequest, orderNumber, orderApiFailed} = useSelector(state => state.orderNumber);
     const { userInfo } = useSelector(state => state.userInfo)
-    const [totalPrice, setTotalPrice] = useState(0)
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [isActiveStyleClass, setActiveStyleClass ] = useState(false)
     
     const dispatch = useDispatch();  
     const history = useHistory(); 
-    // history.push({ pathname: '/' });
    
     //Сохранение заказа в localStorage
     useEffect(()=> {
@@ -70,17 +71,22 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     };
 
     const handleOpenModal = () => {
+        //await dispatch(refreshToken)
         if(userInfo.name){getOrderNumberApi();}
+        else if(!bun.name){}
         else{
             history.push({ pathname: '/login' });
-        }
-        
-               
+        }          
     };
+
+    //Спиннер при получении заказа
+
 
     const fillModal = () =>  (
         <Modal header="" onClose={handleCloseModal}> 
              {orderNumber > 0 ? <OrderDetails/> : ""}
+             {orderNumber === 0 && orderApiRequest ? <Spinner/> : "" }
+             {orderApiFailed ? <>Произошла ошибка. Попробуйте позже</>: ""}
         </Modal>
     );
 
@@ -202,6 +208,13 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         },
     })
 
+    //деактивировать кнопку
+    useEffect(()=> {
+        if(bun.name){
+            setActiveStyleClass(true)
+        } else {setActiveStyleClass(false)}
+    },[bun.name])
+
     const emptyBunTop = <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>
     const emptyBunBottom = <li  className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>
     const emptyMain = <li   className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>
@@ -211,14 +224,13 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         <>
             <section ref={ drop } className={styleBurgerConstructor.wrapper} >
                 <ul  
-               
                ref={dropSort}  
                 className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
                     {bun.name  ? getBunElement("top") : emptyBunTop}
                     {main.length ? getIngridientElements() : emptyMain}
                     {bun.name ? getBunElement("bottom") : emptyBunBottom}
                 </ul>
-                <div className={`${styleBurgerConstructor.totalWrapper} mt-10 mb-15`} >
+                <div  className={`${styleBurgerConstructor.totalWrapper} ${!isActiveStyleClass ? styleBurgerConstructor.nonActiveButton : ""} mt-10 mb-15`} >
                     <div className={`mr-10`} >
                     <p className={`text text_type_digits-medium mt-1 mr-2 ` }>{totalPrice}</p>
                     <CurrencyIcon type="primary" />
@@ -228,7 +240,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 </Button>
                 </div>
             </section>
-            {orderNumber > 0 ? fillModal() : null}
+            {orderNumber > 0 | orderApiRequest | orderApiFailed ? fillModal() : null}
         </>
     )
     

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
-import AppHeader from "../components/app-header/app-header"
 import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { getCookie } from "../services/cookies";
 import getUserInfoApi from "../services/actions/get-user-info-api";
 import { useDispatch, useSelector } from 'react-redux';
 import userLogoutRequestApi from "../services/actions/user-logout-request-api";
 import changeUserInfoApi from "../services/actions/change-user-info-api";
 import { Switch, Route } from 'react-router-dom';
+import { refreshToken } from "../services/refresh-token";
+import { loadStateFromLocalstorage } from "../components/localstorage";
 
 
 import ProfileStyles  from './profile.module.css';
@@ -15,7 +15,6 @@ import ProfileStyles  from './profile.module.css';
 export function ProfilePage() {
     const { email, name} = useSelector(state => state.userInfo.userInfo)
     const  userInfoRequestFailed  = useSelector(store => store.userInfo.userInfoRequestFailed)
-
     const [inputName, setInputName] = React.useState('имя')
     const [login, setLogin] = React.useState('email')
     const [password, setPassword] = React.useState('')
@@ -26,9 +25,8 @@ export function ProfilePage() {
     const { url } = useRouteMatch();
     const dispatch = useDispatch();
 
-
-
     React.useEffect(()=> {
+        refreshToken();
         dispatch(getUserInfoApi)
     }, [dispatch])
 
@@ -42,8 +40,8 @@ export function ProfilePage() {
 
     const onLogout = (e) => {
         e.preventDefault();
-        let refreshToken =  getCookie('refreshToken');
-        dispatch(userLogoutRequestApi({"token" : refreshToken}))
+        let refreshToken =  loadStateFromLocalstorage('refreshToken');
+        dispatch(userLogoutRequestApi({"token" :  refreshToken}))
     }
 
     //изменить данные 
@@ -187,46 +185,48 @@ export function ProfilePage() {
     const Orders = <div className="text  text_type_main-default">Здесь будет храниться история Ваших заказов</div>
       
 
-    return (
-        email ? (
-            <>
-            <AppHeader/>
-                <main>
-                    <div className={`${ProfileStyles.container} mt-30`}>
-                        <section className="mr-15"> 
-                        <NavLink  exact 
-                            to={`${url}`}
-                            className={`text text_type_main-medium pt-4 pb-4 ${ProfileStyles.secondary}`}
-                            activeClassName={ProfileStyles.primary}
-                        > Профиль </NavLink>
-                        <NavLink exact 
-                            to={`${url}/orders`} 
-                            className={`text text_type_main-medium pt-4 pb-4  ${ProfileStyles.secondary}`}
-                            activeClassName={ProfileStyles.primary}
-                        > История заказов </NavLink>
+    const loginView = <Redirect to="/login" />
+    const profileView = (<main>
+        <div className={`${ProfileStyles.container} mt-30`}>
+            <section className="mr-15"> 
+            <NavLink  exact 
+                to={`${url}`}
+                className={`text text_type_main-medium pt-4 pb-4 ${ProfileStyles.secondary}`}
+                activeClassName={ProfileStyles.primary}
+            > Профиль </NavLink>
+            <NavLink exact 
+                to={`${url}/orders`} 
+                className={`text text_type_main-medium pt-4 pb-4  ${ProfileStyles.secondary}`}
+                activeClassName={ProfileStyles.primary}
+            > История заказов </NavLink>
 
-                        <Button type="secondary" size="medium" onClick={onLogout}>
-                            <span className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> Выход</span>
-                        </Button>
-                            <p className="text text_type_main-default text_color_inactive mt-20">
-                                В этом разделе вы можете
-                                изменить свои персональные данные
-                            </p>
-                    </section>
-                    <section>
-                        <Switch>
-                        <Route path={`${url}`} exact > 
-                        {Profile}
-                        {isButtonShow ? ChangeButton : ""}
-                        </Route>
-                        <Route path={`${url}/orders`} exact> {Orders} </Route> 
-                        </Switch>
-                    </section>
-                    </div>
-                </main>
-        </>
-        ) : <Redirect to="/login" />
+            <Button type="secondary" size="medium" onClick={onLogout}>
+                <span className={`text text_type_main-medium text_color_inactive ${ProfileStyles.textBtn}`}> Выход</span>
+            </Button>
+                <p className="text text_type_main-default text_color_inactive mt-20">
+                    В этом разделе вы можете
+                    изменить свои персональные данные
+                </p>
+        </section>
+        <section>
+            <Switch>
+            <Route path={`${url}`} exact > 
+            {Profile}
+            {isButtonShow ? ChangeButton : ""}
+            </Route>
+            <Route path={`${url}/orders`} exact> {Orders} </Route> 
+            </Switch>
+        </section>
+        </div>
+    </main>)
+
+
+    return (
+        email ? profileView : loginView 
+
     )
+
+    
 }         
 
 

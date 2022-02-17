@@ -3,12 +3,14 @@ import {
     ADD_USER_INFO,
     USER_INFO_REQUEST_FAILED,
     USER_INFO_REQUEST_SUCCESS,
-    RESET_USER_INFO
+    RESET_USER_INFO,
+    USER_INFO_STATUS
 } from '../actions/user-info';
 
 const initialState = {
     userInfoRequest: false,
     userInfoRequestFailed: false,
+    userInfoStatus: "",
     userInfo: {}   
 }
 
@@ -45,6 +47,13 @@ export const userInfo = (state = initialState, action) => {
             return { 
                         ...state, 
                         userInfo:{}
+                    };
+            }
+        
+        case USER_INFO_STATUS: {
+            return { 
+                    ...state, 
+                    userInfoStatus: action.payload
                     };
             }
         default: {

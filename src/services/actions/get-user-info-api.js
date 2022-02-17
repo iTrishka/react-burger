@@ -1,12 +1,13 @@
 import checkResponse from '../checkResponse';
-import { getCookie } from '../cookies';
 import { customFetch } from '../custom-fetch';
 import { refreshToken } from '../refresh-token';
+import { loadStateFromLocalstorage } from '../../components/localstorage';
 
 import {
     getUserInfo,
     userInfoRequestFailed,
     userInfoRequestSuccess,
+    userInfoStatus
 } from './user-info';
 
  function getUserInfoApi() {
@@ -14,32 +15,37 @@ import {
       dispatch(getUserInfo())
       customFetch("auth/user", "GET", "" ,{
         'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + getCookie('token')})
+        'authorization': 'Bearer ' + loadStateFromLocalstorage('token')})
         .then(checkResponse)
         .then( res => {
           if (res && res.success) {
             dispatch(userInfoRequestSuccess(res.user))
+            dispatch(userInfoStatus(res.success))
             return res
       } else {
           dispatch(userInfoRequestFailed())
-          if(res.message === "jwt expired"){
+          dispatch(userInfoStatus(res.message))
+          if(res.message === "jwt expired" && loadStateFromLocalstorage('refreshToken')){
             refreshToken()
             customFetch("auth/user", "GET", "" ,{
               'Content-Type': 'application/json',
-              'authorization': 'Bearer ' + getCookie('token')})
+              'authorization': 'Bearer ' + loadStateFromLocalstorage('token')})
             .then(checkResponse).then(
               res => {
                 if (res && res.success) {
                   dispatch(userInfoRequestSuccess(res.user))
+                  dispatch(userInfoStatus(res.success))
                   return res
               }
             })
           }
-          else {return res}
+          else {
+            dispatch(userInfoRequestFailed())
+            dispatch(userInfoStatus(res.message))}
       }
       }).catch( err => {
           dispatch(userInfoRequestFailed())
-          return err
+          dispatch(userInfoStatus(err.message))
         })
   } 
 }

@@ -72,6 +72,15 @@ li:last-child{
 .totalWrapper p{
     display: inline;
 }
+.nonActiveButton button{
+    opacity: 0.5;
+}
+
+.nonActiveButton button:hover{
+    box-shadow: none;
+    filter: none;
+    cursor: auto;
+}
 
 
 .emptyTopElement{

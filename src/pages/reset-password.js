@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useEffect} from "react";
 import { useHistory, Link ,Redirect} from 'react-router-dom';
-import AppHeader from "../components/app-header/app-header"
+import { useDispatch, useSelector } from 'react-redux';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { API_URL } from "../utils/constants";
-import checkResponse from "../services/checkResponse";
+import resetPassword from "../services/actions/reset-password";
+import { resetPasswordStatus } from "../services/actions/password";
 
 
 import styles from './common.module.css';
 
 export function ResetPasswordPage() {
+    const resetPasswordStatusText = useSelector(state => state.password.resetPasswordStatus)
     const [password, setPassword] = React.useState('');
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef(null);
     const history = useHistory();
-
+    const dispatch = useDispatch();
     const onChange = e => {
         setPassword(e.target.value)
     }
@@ -24,43 +25,32 @@ export function ResetPasswordPage() {
 
     const onResetPassword = (e) => {
         e.preventDefault()
-        fetch(`${API_URL}password-reset/reset`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify( {
-                "password": password,
-                "token": value
-            })            
-        })
-        .then(checkResponse)
-        .then(res => {
-            if(res && res.success){
-                history.replace("/login")
-                return res.message
-                
-            }else throw Promise.reject(res.message)
-        }).catch(function(e) {
-            return e
-        })
+        dispatch(resetPassword({"password": password, "token": value }))
+
     }
+
+    useEffect(()=> {
+        if(resetPasswordStatusText === "Password successfully reset"){
+        history.replace({ pathname: '/login' });
+        dispatch(resetPasswordStatus(""))
+    }
+    },[resetPasswordStatusText, dispatch, history])
+
+
 
     let isFromForgotPage = false
 
     if(history.location.state){
         isFromForgotPage = history.location.state.fromForgotPassword
-        console.log("isFromForgotPage", isFromForgotPage)
     }
 
     return (
         isFromForgotPage ? 
         <>
-            <AppHeader/>
             <main  className={styles.main}>
                 <div className={styles.container}>
                     <p className={`text text_type_main-medium mb-6`}>Восстановление пароля</p>
-                    <form className={`${styles.form} mb-20`} >
+                    <form className={`${styles.form} mb-20`}  onSubmit={onResetPassword}>
                         <PasswordInput  onChange={onChange} value={password} name={'Пароль'}  />
                         <Input 
                         type={'text'}
@@ -72,7 +62,7 @@ export function ResetPasswordPage() {
                         onIconClick={onIconClick}
                         errorText={'Ошибка'}
                         size={'default'} />
-                        <Button type="primary" size="medium" onClick={onResetPassword}>
+                        <Button type="primary" size="medium" >
                             Сохранить
                         </Button>
                     </form>

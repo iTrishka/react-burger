@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import { Link, Redirect } from 'react-router-dom';
-import AppHeader from "../components/app-header/app-header"
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import getUserRegisterApiRequest from "../services/actions/get-user-register-api-request";
@@ -55,7 +54,6 @@ export function RegisterPage() {
     return (
         !userInfo.name ?
         <>
-            <AppHeader/>
             <main  className={styles.main}>
                 <div className={styles.container}>
                     <p className={`text text_type_main-medium mb-6`}>Регистрация</p>

@@ -10,7 +10,7 @@ const AppHeader =  () => {
     const [colorOrders, setColorOrders] = useState("secondary")
     const [colorProfile, setColorProfiles] = useState("secondary")
 
-    let history = useHistory(); 
+    const history = useHistory(); 
 
     useEffect(()=> {
         const setActiveMenu = () => {
@@ -42,7 +42,7 @@ const AppHeader =  () => {
                         </Link>
                     </button>
                     <button className={`${styleHeader.btn} pr-5  mr-2`}>
-                        <Link to={{pathname: "/profile/orders", state: { lastPage: "/profile/orders" }}}>
+                        <Link to={{pathname: "/profile/orders"}}>
                         <ListIcon type={colorOrders} />
                         <span className={styleHeader[colorOrders]}>Лента заказов</span>
                         </Link>
@@ -54,7 +54,7 @@ const AppHeader =  () => {
                     </Link>
                 </section>
                 <section className={styleHeader.btn }>
-                    <Link to={{pathname: "/profile", state: { lastPage: "/profile" }}}>
+                    <Link to={{pathname: "/profile"}}>
                     <ProfileIcon type={colorProfile} />
                     <span className={styleHeader[colorProfile]}>Личный кабинет</span>
                     </Link>

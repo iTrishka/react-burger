@@ -1,6 +1,5 @@
-import React, { useState, useEffect,useCallback } from "react";
-import { useHistory,  Redirect, Link } from 'react-router-dom';
-import AppHeader from "../components/app-header/app-header"
+import React, {  useEffect,useCallback } from "react";
+import { useHistory,  Redirect, Link, useLocation } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import userLoginRequest from "../services/actions/user-login-request";
@@ -14,10 +13,11 @@ export function LoginPage() {
     const [email, setEmail] = React.useState('');
     const [lastPage, setLastPage] = React.useState('');
     const inputRef = React.useRef(null);
-    const [pathRedirect, setPathRedirect] = useState('');
     const history = useHistory();
-
     const dispatch = useDispatch();
+    let location = useLocation();
+ 
+    let { from } = location.state || { from: { pathname: "/" } };
 
     useEffect(() => {
         //получить данные о пользователе 
@@ -53,7 +53,6 @@ export function LoginPage() {
     useEffect(()=> {
         if(history.location.state){
             setLastPage(history.location.state.lastPage)
-            setPathRedirect(lastPage)
         }
     }, [history.location.state, lastPage] )
 
@@ -64,11 +63,10 @@ export function LoginPage() {
     return (
         !userInfo.name ?
         <>
-            <AppHeader/>
             <main  className={styles.main}>
                 <div className={styles.container}>
                     <p className={`text text_type_main-medium mb-6`}>Вход</p>
-                    <form className={`${styles.form} mb-20`} >
+                    <form className={`${styles.form} mb-20`} onSubmit={onLogin}>
                         <Input 
                         type={'email'}
                         placeholder={'E-mail'}
@@ -80,7 +78,7 @@ export function LoginPage() {
                         errorText={'Ошибка'}
                         size={'default'} />
                         <PasswordInput  onChange={onChange} value={password} name={'Пароль'}  />
-                        <Button type="primary" size="medium" onClick={onLogin}>
+                        <Button type="primary" size="medium">
                             Войти
                         </Button>
                     </form>
@@ -90,6 +88,6 @@ export function LoginPage() {
             </main>
         </>
         
-  :   <Redirect  to={{pathname: pathRedirect, state: { lastPage: "" }}}/> )
+  :   <Redirect  to={from}/> )
   
 }

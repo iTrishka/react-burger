@@ -1,4 +1,4 @@
-import { useHistory, Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getUserInfoApi from '../services/actions/get-user-info-api';
 import { useSelector } from 'react-redux';
@@ -6,28 +6,29 @@ import { useDispatch } from 'react-redux';
 
 
 export function ProtectedRoute({ children, ...rest }) {
-    const { userInfo } = useSelector(state => state.userInfo)
+    const { userInfo, userInfoStatus } = useSelector(state => state.userInfo)
     const [isUserLoaded, setUserLoaded] = useState(false);
-    const history = useHistory();
     const dispatch = useDispatch();
-    let lastPage = "" 
-    if(history.location.state){
-      lastPage =  history.location.state.lastPage 
-    }
-  
-    
+    let location = useLocation();
+   
     useEffect(() => {
       const init = () => {
         // Вызовем запрос getUser и изменим состояние isUserLoaded
-        dispatch(getUserInfoApi);
-        setUserLoaded(true);
-    };
-    // При монтировании компонента запросим данные о пользователе
+        dispatch(getUserInfoApi());
+      };
+      // При монтировании компонента запросим данные о пользователе
         init();
     }, [dispatch]);
 
+    useEffect(()=>{
+      if(userInfoStatus){
+        setUserLoaded(true)
+      }
+    },[userInfoStatus,userInfo])
+
+
     if (!isUserLoaded) {
-        return null;
+        return <>Спиннер</>;
     }
 
     return (
@@ -35,11 +36,11 @@ export function ProtectedRoute({ children, ...rest }) {
           {...rest}
           render={() =>
          // Если пользователь есть, используем компонент, который передан в ProtectedRoute
-        userInfo.name ? (
+         userInfo.email ? (
               children
             ) : (
                 // Если пользователя нет в хранилище, происходит переадресация на роут /login
-                <Redirect to={{pathname: "/login", state: { lastPage: lastPage }}}/>
+                <Redirect to={{ pathname: "/login", state: { from: location } }}/>
             )
           }
         />

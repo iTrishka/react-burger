@@ -1,21 +1,20 @@
 import { API_URL } from '../utils/constants';
 import checkResponse from './checkResponse';
-import { setCookie, getCookie } from './cookies';
+import { loadStateFromLocalstorage } from '../components/localstorage';
 import {
     userInfoRequestSuccess,
+    userInfoRequestFailed,
+    userInfoStatus
 } from '../services/actions/user-info';
 
 
-
-
 export function refreshToken() { 
-  console.log("Refreshing token...")
     fetch(`${API_URL}auth/token`, {
         method: 'POST', 
         headers: {
             'Content-Type': 'application/json'
           },
-        body: JSON.stringify({"token": getCookie('refreshToken')})
+        body: JSON.stringify({"token": loadStateFromLocalstorage('refreshToken')})
       })
         .then(checkResponse)
         .then( res => {
@@ -27,33 +26,22 @@ export function refreshToken() {
             refreshToken = res.refreshToken
             }
             if(authToken){
-              setCookie('token', "");
-              setCookie('refreshToken', "");
-              setCookie('token', authToken);
-              setCookie('refreshToken', refreshToken);
+              loadStateFromLocalstorage('token', authToken);
+              loadStateFromLocalstorage('refreshToken', refreshToken);
               userInfoRequestSuccess(res.user)
             }
             return res
       } else {
-          throw res.err
+        userInfoRequestFailed()
+        userInfoStatus(res.status)
       }
   }).catch( err => {
-      console.log(err)
+      userInfoRequestFailed()
+      userInfoStatus(err.status)
   })
 }
 
-
-export function apiFetchRefresh(f){
-    console.log("INSIDE REFRESH")
-    let res = f.apply(this)
-    res = res()
-    console.log("RES: ", res)
-    if (res === 'jwt expired') {
-        refreshToken()
-        f.apply(this)
-    }
-}
-        
+   
 
 
 

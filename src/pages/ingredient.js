@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import AppHeader from "../components/app-header/app-header"
 import { useDispatch } from "react-redux";
 
 import StyleIngredient from './ingredient.module.css';
@@ -19,7 +18,6 @@ export function IngredientPage() {
 
     return ( selectedIngredient ?
         <>
-        <AppHeader/>
         <main>
             <section className={`${StyleIngredient.wrapper}`}>
                 <div className={StyleIngredient.card}>
@@ -52,12 +50,9 @@ export function IngredientPage() {
         </main>
         </>
         
-     :  (<><AppHeader/></>)
+     :  (<></>)
      )
 }
 
-// IngredientPage.propTypes  = {
-//     selectedIngredient: menuItemPropTypes.isRequired
-// }
 
 

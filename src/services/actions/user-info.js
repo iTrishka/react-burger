@@ -3,6 +3,7 @@ export const ADD_USER_INFO = 'ADD_USER_INFO';
 export const USER_INFO_REQUEST_FAILED = 'USER_INFO_REQUEST_FAILED';
 export const USER_INFO_REQUEST_SUCCESS = 'USER_INFO_REQUEST_SUCCESS';
 export const RESET_USER_INFO = 'RESET_USER_INFO';
+export const USER_INFO_STATUS = 'USER_INFO_STATUS';
 
 function getUserInfo(payload) {
     return {
@@ -37,10 +38,18 @@ function resetUserInfo() {
   }
 }
 
+function userInfoStatus(payload) {
+  return {
+    type: USER_INFO_STATUS,
+    payload
+  }
+}
+
 export {
   getUserInfo,
   addUserInfo,
   userInfoRequestFailed,
   userInfoRequestSuccess,
-  resetUserInfo
+  resetUserInfo,
+  userInfoStatus
 }

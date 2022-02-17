@@ -11,6 +11,7 @@ import Modal from "./modal/modal";
 import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage } from '../pages';
 import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from '../components/localstorage';
+import AppHeader from "./app-header/app-header";
 
 
   
@@ -18,7 +19,7 @@ const ModalSwitch = () => {
     const location = useLocation();
     const history = useHistory();
     const dispatch = useDispatch();
-    let background = location.state && location.state.background;
+    const  background = location.state && location.state.background;
     const [ isModalOpen, setIsModalOnen] = useState(false)
 
     const handleCloseModal = (e) => {
@@ -31,6 +32,7 @@ const ModalSwitch = () => {
 
     return (
       <>
+        <AppHeader/>
         <Switch location={background || location}>
             <Route path='/' exact>
                 <MainPage />

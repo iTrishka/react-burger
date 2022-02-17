@@ -1,5 +1,4 @@
 import React from "react";
-import AppHeader from "../components/app-header/app-header"; 
 import BurgerIngredients from "../components/burger-ingredients/burger-ingredients";
 import { BurgerConstructor } from "../components/burger-сonstructor/burger-constructor";
 import { DndProvider } from "react-dnd"; 
@@ -17,13 +16,12 @@ export function MainPage() {
     }, [dispatch])
     return (
         <>
-        <AppHeader/>
-                <main>
-                  <DndProvider backend={HTML5Backend}>
-                    <BurgerIngredients />
-                    <BurgerConstructor />
-                  </DndProvider>
-                </main> 
+          <main>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </DndProvider>
+          </main> 
         </>
     )
 }

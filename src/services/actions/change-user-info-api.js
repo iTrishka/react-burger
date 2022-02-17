@@ -1,7 +1,7 @@
 import checkResponse from '../checkResponse';
-import { getCookie } from '../cookies';
 import { customFetch } from '../custom-fetch';
 import { refreshToken } from '../refresh-token';
+import { loadStateFromLocalstorage } from '../../components/localstorage';
 
 import {
     getUserInfo,
@@ -14,7 +14,7 @@ function changeUserInfoApi(data) {
       dispatch(getUserInfo())
       customFetch("auth/user", "PATCH", data, {
         'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + getCookie('token')
+        'authorization': 'Bearer ' + loadStateFromLocalstorage('token')
       })
         .then(checkResponse)
         .then( res => {
@@ -23,11 +23,11 @@ function changeUserInfoApi(data) {
             return res
       } else {
           dispatch(userInfoRequestFailed())
-          if(res.message === "jwt expired"){
+          if(res.message === "jwt expired" && loadStateFromLocalstorage('refreshToken') ){
             refreshToken()
             customFetch("auth/user", "PATCH", data, {
               'Content-Type': 'application/json',
-              'authorization': 'Bearer ' + getCookie('token')
+              'authorization': 'Bearer ' + loadStateFromLocalstorage('token')
             })
             .then(checkResponse).then(
               res => {

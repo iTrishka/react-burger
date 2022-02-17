@@ -1,6 +1,6 @@
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
-import { setCookie } from '../cookies';
+import { saveStateInLocalstorage } from '../../components/localstorage';
 
 import {
     getUserLogin,
@@ -29,8 +29,10 @@ function userLoginRequest(endpoint, body) {
             refreshToken = res.refreshToken
             }
             if(authToken){
-              setCookie('token', authToken);
-              setCookie('refreshToken', refreshToken);
+              saveStateInLocalstorage('token', authToken);
+              saveStateInLocalstorage('refreshToken', refreshToken);
+              //setCookie('token', authToken);
+              //setCookie('refreshToken', refreshToken);
               dispatch(addUserInfo(res.user))
             }
             

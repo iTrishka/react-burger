@@ -6,7 +6,9 @@ import { dataApiReducer } from "./data-api";
 import { userRegisterApi } from "./user-register-api";
 import { userLogin } from "./user-login";
 import { userLogout } from "./user-logout";
+import { password } from "./password";
 import { userInfo } from "./user-info";
+
 
 const rootReducer = combineReducers({
     dataApiReducer,
@@ -16,6 +18,7 @@ const rootReducer = combineReducers({
     userRegisterApi, 
     userLogin, 
     userLogout,
+    password,
     userInfo,
 })
 

@@ -27,10 +27,10 @@
 }
 
 .container section:last-child>form{
-    height: 240px;
+    /* height: 240px; */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .changeButton{
@@ -44,5 +44,14 @@
   
   .secondary{
     color: #8585AD;
+  }
+
+  form div {
+    margin-bottom: 12px;
+  }
+
+  form button:first-child{
+    display: flex;
+    order: 2;
   }
   

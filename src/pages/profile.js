@@ -92,14 +92,14 @@ export function ProfilePage() {
     
 
     const ChangeButton = <div className={ProfileStyles.changeButton}>
+        <Button type="primary" size="medium" > Сохранить </Button>   
+        <span className="mr-2"></span>  
         <Button type="secondary" size="medium" onClick={()=> {
             setInputName(name);
             setLogin(email);
             setIsButtonShow(false);
             setIconNameAll()
-        }} > Отменить </Button>
-        <span className="mr-2"></span>
-        <Button type="primary" size="medium" onClick={()=>onChangeUserInfo()}> Сохранить </Button>       
+        }} > Отменить </Button>  
     </div>
 
     const setIconNameAll = () => {
@@ -135,7 +135,9 @@ export function ProfilePage() {
     
 
     const Profile = (
-        <form className="mb-20"><Input
+        <form className="mb-20" onSubmit={(e)=> {
+            e.preventDefault();
+            onChangeUserInfo()}}><Input
         type={'text'}
         placeholder={'Имя'}
         onChange={e => {setInputName(e.target.value); showButton()}}
@@ -179,7 +181,9 @@ export function ProfilePage() {
         size={'default'}
         disabled={disablePassword}
         key={'3userProfile'}
+        
     />
+    {isButtonShow ? ChangeButton : ""}
     </form>
     );
     const Orders = <div className="text  text_type_main-default">Здесь будет храниться история Ваших заказов</div>
@@ -212,7 +216,6 @@ export function ProfilePage() {
             <Switch>
             <Route path={`${url}`} exact > 
             {Profile}
-            {isButtonShow ? ChangeButton : ""}
             </Route>
             <Route path={`${url}/orders`} exact> {Orders} </Route> 
             </Switch>

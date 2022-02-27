@@ -13,7 +13,7 @@ const constructorList = (state = initialState.constructorList, action) => {
         case GET_INGREDIENTS_CONSTRUCTOR_BUN:
             return {
                 ...state,
-                bun: [action.payload]
+                bun: action.payload
             }
         case ADD_INGREDIENTS_CONSTRUCTOR_MAIN:
             return {

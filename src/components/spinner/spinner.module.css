@@ -1,0 +1,36 @@
+.iconWrapper{
+    width: 720px;
+    height: 150px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconWrapper span {
+    position: absolute;
+}
+
+.iconWrapper span svg:first-child{
+    animation: spin 2s infinite linear;
+}
+
+.iconWrapper span svg:nth-child(2){
+    animation: spin 6s infinite linear;
+}
+
+.iconWrapper span svg:last-child{
+    animation: spin 10s infinite linear;
+}
+
+@keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
+
+
+
+

@@ -39,6 +39,8 @@ const initialState = {
         case RESET_ORDER: {
             return {
                 ...state, 
+                orderApiRequest: false,
+                orderApiFailed: false,
                 orderNumber: 0
             }
         }

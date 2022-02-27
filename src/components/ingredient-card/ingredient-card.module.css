@@ -5,6 +5,8 @@
     align-items: center;
     position: relative;
     cursor: pointer;
+    text-decoration:  none;
+    color: #F2F2F3
 }
 
 .priceWrapper{
@@ -13,4 +15,8 @@
 
 .titleCard{
     text-align: center;
+}
+
+.link{
+    text-decoration: none;
 }

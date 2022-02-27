@@ -23,12 +23,14 @@ function getOrder(endpoint, data) {
         .then( res => {
           if (res && res.success) {
           dispatch(getOrderSuccess(res.order.number))
+          return res
       } else {
           dispatch(getOrderFailed())
+          return res
       }
   }).catch( err => {
-    console.log(err)
        dispatch(getOrderFailed())
+       return err
   })
   }
   } 

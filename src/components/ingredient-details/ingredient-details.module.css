@@ -1,5 +1,6 @@
 .modalMain{
     width: 480px;
+    text-decoration: none;
 }
 
 .modalMain p{
@@ -16,4 +17,8 @@
     list-style: none;
     text-align: center;
     flex-direction: column;
+}
+
+.link{
+    text-decoration: none;
 }

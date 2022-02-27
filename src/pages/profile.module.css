@@ -1,0 +1,57 @@
+.container{
+    display: flex;
+    flex-flow: row nowrap;
+    width: 1240px;
+}
+
+.container section:first-child{
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.container section:first-child button{
+    padding: 17px 0;
+}
+
+
+.container section:first-child a{
+    text-decoration: none;
+}
+
+
+.container section:first-child p{
+    opacity: 0.4;
+}
+
+.container section:last-child>form{
+    /* height: 240px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+.changeButton{
+    display: flex;
+    justify-content: flex-end ;
+}
+
+.primary{
+    color: #F2F2F3 !important;
+  }
+  
+  .secondary{
+    color: #8585AD;
+  }
+
+  form div {
+    margin-bottom: 12px;
+  }
+
+  form button:first-child{
+    display: flex;
+    order: 2;
+  }
+  

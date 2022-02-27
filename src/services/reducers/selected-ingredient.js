@@ -1,11 +1,9 @@
-import { GET_SELECTED_INGREDIENT, RESET_SELECTED_INGREDIENT } from '../actions/selected-ingedient';
+import { GET_SELECTED_INGREDIENT, RESET_SELECTED_INGREDIENT } from '../actions/selected-ingredient';
 
-const initialState = {
-    selectedIngidient: null
-}
+const initialState = null
 
 // Редьюсер отображения выбранного ингредиента
-const selectedIngidient = (state = initialState.selectedIngidient, action) => { 
+const selectedIngredient = (state = initialState, action) => { 
     switch(action.type) {
         case GET_SELECTED_INGREDIENT:
             return action.payload
@@ -15,4 +13,4 @@ const selectedIngidient = (state = initialState.selectedIngidient, action) => {
             return state;
  }};
 
- export default selectedIngidient;
+ export default selectedIngredient;

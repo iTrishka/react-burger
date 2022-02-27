@@ -1,0 +1,28 @@
+.wrapper{
+    width: 100vh;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.card{
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalProps{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.modalProps li{
+    list-style: none;
+    text-align: center;
+    flex-direction: column;
+}

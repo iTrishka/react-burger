@@ -1,9 +1,23 @@
-import { menuItemPropTypes } from '../../utils/constants';
-
+import { useEffect } from 'react';
+import { useParams, useRouteMatch} from "react-router-dom";
 import StyleIngredientDetails from './ingredient-details.module.css';
+import { useSelector } from 'react-redux';
+import { saveStateInLocalstorage } from '../localstorage';
 
-const IngredientDetails =  ({elem}) => {
-    return(
+const IngredientDetails = () => {
+  const { dataApi } = useSelector(state => state.dataApiReducer)
+  let { ingredientId } = useParams();
+  const elem = dataApi.filter(item => item._id === ingredientId)[0]
+  const { url } = useRouteMatch();
+
+  //Сохранение дынных об открутой модальном окне в localStorage
+  useEffect(()=> {
+    if(url){
+        saveStateInLocalstorage('ingredientInModal', url);
+    }
+  },[url])
+
+    if(elem) {return(
         <section className={`${StyleIngredientDetails.modalMain} `}>
             <img src={elem.image_large} alt={elem.name} className={`mr-4`}/>
             <p className={`text text_type_main-medium mb-4`}>
@@ -30,11 +44,7 @@ const IngredientDetails =  ({elem}) => {
                 </li>
             </ul>
             </section>
-    )
+    )} else return (<></>)
 };  
-
-IngredientDetails.propTypes  = {
-  elem: menuItemPropTypes.isRequired
-}
 
 export default IngredientDetails;

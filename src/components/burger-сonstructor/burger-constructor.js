@@ -1,4 +1,4 @@
-import React, { useCallback, memo} from 'react';
+import React, { useCallback, memo, useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {ConstructorElement, CurrencyIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
@@ -10,28 +10,51 @@ import { useDrop } from "react-dnd";
 import { IngrediendCardConstructor } from '../ingrediend-card-constructor/ingrediend-card-constructor';
 import update from 'immutability-helper';
 import getOrder from '../../services/actions/get-order';
-import { get_ingredients_constructor_bun, 
-        get_ingredients_constructor_main, 
-        add_ingredients_constructor_main,
-        reset_ingredients_constructor,
-        sort_ingredients_constructor } from '../../services/actions/constructor-list';
+import { getIngredientsConstructorBun, 
+        getIngredientsConstructorMain, 
+        addIngredientsConstructorMain,
+        resetIngredientsConstructor,
+        sortSngredientsConstructor  } from '../../services/actions/constructor-list';
 import { setDataApi } from '../../services/actions/data-api';
 import { resetOrder } from '../../services/actions/order-number';
+import Spinner from '../spinner/spinner';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
+import { useHistory } from 'react-router-dom'; 
+
+import { loadStateFromLocalstorage, saveStateInLocalstorage } from '../localstorage';
 
 export const BurgerConstructor = memo(function BurgerConstructor()  {
-    const { dataApi } = useSelector(state => state.dataApiReducer);
+    const dataApi = useSelector(state => state.dataApiReducer.dataApi);
     const { bun, main } = useSelector(state => state.constructorList);
-    const orderNumber = useSelector(state => state.orderNumber.orderNumber);
-    let totalPrice = 0;
+    const {orderApiRequest, orderNumber, orderApiFailed} = useSelector(state => state.orderNumber);
+    const { userInfo } = useSelector(state => state.userInfo)
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [isActiveStyleClass, setActiveStyleClass ] = useState(false)
     
     const dispatch = useDispatch();  
+    const history = useHistory(); 
+   
+    //Сохранение заказа в localStorage
+    useEffect(()=> {
+        saveStateInLocalstorage('burgerIngredient', {bun, main});
+
+    },[bun, main])
+
+    //получить данные из Localstorage
+    useEffect(()=> {
+        const {bun, main} = loadStateFromLocalstorage('burgerIngredient')
+        if(bun || main){
+            dispatch(getIngredientsConstructorBun(bun))
+            dispatch(getIngredientsConstructorMain(main))
+        }
+    }, [dispatch])
+
 
     //получение номера заказа    
     const getOrderNumberApi = () => {
-        if(!bun[0]){return}
-        const allSelectedIdBun = [bun[0]._id]
+        if(!bun){return}
+        const allSelectedIdBun = [bun._id]
         const allSelectedIdBMain = main.map(item => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain);
         dispatch(getOrder("orders", allSelectedId))     
@@ -41,50 +64,54 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     //модальное окно
     const handleCloseModal = () => {
         dispatch(resetOrder())
-        dispatch(reset_ingredients_constructor())
+        dispatch(resetIngredientsConstructor())
         const arrayWithZeroCounter = dataApi.map(item => {
                 return {...item, counter: 0}})
-        dispatch(setDataApi(arrayWithZeroCounter))
-
+        dispatch(setDataApi(arrayWithZeroCounter));
     };
 
     const handleOpenModal = () => {
-        getOrderNumberApi();        
+        //await dispatch(refreshToken)
+        if(userInfo.name){getOrderNumberApi();}
+        else if(!bun.name){}
+        else{
+            history.push({ pathname: '/login' });
+        }          
     };
+
+    //Спиннер при получении заказа
+
 
     const fillModal = () =>  (
         <Modal header="" onClose={handleCloseModal}> 
              {orderNumber > 0 ? <OrderDetails/> : ""}
+             {orderNumber === 0 && orderApiRequest ? <Spinner/> : "" }
+             {orderApiFailed ? <>Произошла ошибка. Попробуйте позже</>: ""}
         </Modal>
     );
 
 
     //Рассчет итоговой стоимости  
-    totalPrice = React.useMemo(() => { 
+    React.useMemo(() => { 
         let totalBun = 0;
         let totalIngedients = 0;
-
-        if(main.length){
+        if(main){
             main.forEach(item => {
                 totalIngedients += item.price;
-        })}
+        })}else{totalBun = 0;}
         
-        if(bun.length){
-            bun.forEach(item => {
-                totalBun += item.price;
-            })
-            totalBun = totalBun*2
-        }
-
-        return (totalBun + totalIngedients)
+        if(bun.name){
+            totalBun += bun.price*2
+        }else{totalBun = 0;}
+        setTotalPrice(totalBun + totalIngedients)
         
-    }, [bun, main]);
+    }, [main, bun]);
 
     
      // удаление ингредиентов из конструктора
      const onDeleteIngredient = (uid, id) => {
         const newIngerientsAr = main.filter(item => item.key !== uid);
-        dispatch(get_ingredients_constructor_main(newIngerientsAr))
+        dispatch(getIngredientsConstructorMain(newIngerientsAr))
 
         const newArrDataApi = dataApi.map(item => {
             if(item._id === id){
@@ -104,19 +131,20 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         if(pos === "bottom"){
             textPosition = "низ"
         }
-        return bun.map(bunItem => {
             return(
-            <li key={uuidv4()} className="mr-4">
-                <ConstructorElement
-                    type={pos}
-                    isLocked={true}
-                    text={`${bunItem.name} (${textPosition})`}
-                    price={bunItem.price}
-                    thumbnail={bunItem.image}
-                />
-            </li>    
-        )})
+             <li key={uuidv4()} className="mr-4">
+            <ConstructorElement
+                type={pos}
+                isLocked={true}
+                text={`${bun.name} (${textPosition})`}
+                price={bun.price}
+                thumbnail={bun.image}
+            />
+        </li>   
+        )
     };
+
+    
 
     //сортировка 
     const findCard = useCallback((id) => {
@@ -133,7 +161,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                     [index, 1],
                     [atIndex, 0, card],
                 ]})
-        dispatch( sort_ingredients_constructor(newArr))
+        dispatch( sortSngredientsConstructor(newArr))
         
     }, [findCard, main, dispatch]);
 
@@ -159,8 +187,8 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         accept: 'constructor', 
         drop(item) {
             if(item.card.type === 'bun'){
-                dispatch(get_ingredients_constructor_bun({...item.card, key: uuidv4()}));    
-            }else{dispatch(add_ingredients_constructor_main({...item.card, key: uuidv4()}))}
+                dispatch(getIngredientsConstructorBun({...item.card, key: uuidv4()}));    
+            }else{dispatch(addIngredientsConstructorMain({...item.card, key: uuidv4()}))}
 
             const arrayWithNewCounter = dataApi.map(ingred => {
                 if(ingred.type === 'bun' && item.card.type === "bun"){
@@ -179,20 +207,30 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
             dispatch(setDataApi(arrayWithNewCounter))
         },
     })
+
+    //деактивировать кнопку
+    useEffect(()=> {
+        if(bun.name){
+            setActiveStyleClass(true)
+        } else {setActiveStyleClass(false)}
+    },[bun.name])
+
+    const emptyBunTop = <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>
+    const emptyBunBottom = <li  className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>
+    const emptyMain = <li   className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>
   
 
-    return(
+    return (
         <>
             <section ref={ drop } className={styleBurgerConstructor.wrapper} >
                 <ul  
-               
                ref={dropSort}  
                 className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
-                    {bun.length ? getBunElement("top"): <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
-                    {main.length ? getIngridientElements() : <li   className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>}
-                    {bun.length ? getBunElement("bottom"): <li className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>}
+                    {bun.name  ? getBunElement("top") : emptyBunTop}
+                    {main.length ? getIngridientElements() : emptyMain}
+                    {bun.name ? getBunElement("bottom") : emptyBunBottom}
                 </ul>
-                <div className={`${styleBurgerConstructor.totalWrapper} mt-10 mb-15`} >
+                <div  className={`${styleBurgerConstructor.totalWrapper} ${!isActiveStyleClass ? styleBurgerConstructor.nonActiveButton : ""} mt-10 mb-15`} >
                     <div className={`mr-10`} >
                     <p className={`text text_type_digits-medium mt-1 mr-2 ` }>{totalPrice}</p>
                     <CurrencyIcon type="primary" />
@@ -202,7 +240,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 </Button>
                 </div>
             </section>
-            {orderNumber > 0 ? fillModal() : null}
+            {orderNumber > 0 | orderApiRequest | orderApiFailed ? fillModal() : null}
         </>
     )
     

@@ -1,8 +1,8 @@
-.primaryColor{
+.primary{
     color: #F2F2F3;
 }
 
-.secondaryColor{
+.secondary{
     color: #8585AD;
 }
 
@@ -51,6 +51,7 @@
     color: inherit;
     background-color: transparent;
     cursor: pointer;
+    text-decoration: none;
 
 }
 
@@ -60,4 +61,11 @@
 
 .btn span{
     margin-left: 8px;
+}
+
+.btn a{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    text-decoration: none;
 }

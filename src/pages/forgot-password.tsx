@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import { useHistory, Link, Redirect } from 'react-router-dom';
 import { Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +34,7 @@ export function ForgotPasswordPage() {
         setTimeout(() => inputRef?.current?.focus(), 0)
     }
 
-    const onForgotPassword = (e:any) => {
+    const onForgotPassword = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(getResetPasswordToken({"email": value}))
     }
@@ -64,7 +64,7 @@ export function ForgotPasswordPage() {
                         <Input 
                         type={'email'}
                         placeholder={'Укажите e-mail'}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         value={value}
                         error={false}
                         ref={inputRef}

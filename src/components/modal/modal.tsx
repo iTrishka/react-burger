@@ -11,7 +11,7 @@ const Modal = (props:IModal) => {
     const modalRoot: any = document.getElementById("reactModals");
 
     React.useEffect(() => {
-        const close = (e: any) => {
+        const close = (e: KeyboardEvent) => {
           if(e.key === "Escape"){
             onClose()
           }

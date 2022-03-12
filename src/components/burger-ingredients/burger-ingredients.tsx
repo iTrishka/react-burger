@@ -27,7 +27,7 @@ const BurgerIngredients = () => {
     const refMain = useRef<HTMLInputElement>(null);
     const reSauce = useRef<HTMLInputElement>(null); 
 
-    const changeTab = (e: any) => {
+    const changeTab = (e: string) => {
         setCurrent(e)
         if(refMain && e === "Начинки"){
             refMain.current?.scrollIntoView({ behavior: "smooth"});

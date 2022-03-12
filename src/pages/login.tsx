@@ -1,4 +1,4 @@
-import React, {  useEffect,useCallback } from "react";
+import React, {  useEffect,useCallback, ChangeEvent, KeyboardEvent } from "react";
 import { useHistory,  Redirect, Link } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
@@ -35,7 +35,7 @@ export function LoginPage()  {
 
     //запрос к API, авторизация
     const onLogin =  useCallback(
-        e => {
+        (e: KeyboardEvent<HTMLFormElement>) => {
         e.preventDefault(); 
         let body = {
             "email": email, 
@@ -44,7 +44,7 @@ export function LoginPage()  {
         dispatch(userLoginRequest("auth/login", body))   
     },[email, password, dispatch])
 
-    const onChange = (e: any) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
   

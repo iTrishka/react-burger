@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { ChangeEvent, useEffect} from "react";
 import { useHistory, Link ,Redirect} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -18,7 +18,7 @@ export function ResetPasswordPage() {
     const history = useHistory();
     const state = history.location.state as IHistoryState
     const dispatch = useDispatch();
-    const onChange = (e:any) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
   
@@ -26,7 +26,7 @@ export function ResetPasswordPage() {
         setTimeout(() => inputRef?.current?.focus(), 0)
     }
 
-    const onResetPassword = (e:any) => {
+    const onResetPassword = (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(resetPassword({"password": password, "token": value }))
 

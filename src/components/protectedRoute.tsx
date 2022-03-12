@@ -1,16 +1,12 @@
-import { Redirect, Route, useLocation } from 'react-router-dom';
+import { Redirect, Route, RouteProps, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getUserInfoApi from '../services/actions/get-user-info-api';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from "../services/reducers/root-reducer";
 import { ILocationState } from '../services/types/data';
 
-interface IProps {
-  children?: any;
-  path?: string;
-}
 
-export function ProtectedRoute({ children, ...rest }: IProps) {
+export function ProtectedRoute({ children, ...rest }: RouteProps) {
     const { userInfo, userInfoStatus } = useAppSelector(state => state.userInfo)
     const [isUserLoaded, setUserLoaded] = useState<boolean>(false);
     const dispatch = useDispatch();

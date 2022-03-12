@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, MouseEvent, SyntheticEvent } from "react";
 import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import getUserInfoApi from "../services/actions/get-user-info-api";
@@ -42,7 +42,7 @@ export function ProfilePage() {
      }, [email, name])
 
 
-    const onLogout = (e: any) => {
+    const onLogout = (e:  SyntheticEvent) => {
         e.preventDefault();
         let refreshToken =  loadStateFromLocalstorage('refreshToken');
         dispatch(userLogoutRequestApi({"token" :  refreshToken}))
@@ -115,21 +115,21 @@ export function ProfilePage() {
         setdisablePassword(true)
         }
 
-    const onChangeName = (e:any) => {
+    const onChangeName = (e: MouseEvent<HTMLElement>) => {
         showButton()
         setdisableName(!disableName)
         disableName ? setIconName('CheckMarkIcon') : setIconName('EditIcon');
         setTimeout(() => inputRefName?.current?.focus(), 0);
     }
 
-    const onChangeEmail = (e:any) => {
+    const onChangeEmail = (e: MouseEvent<HTMLElement>) => {
         showButton()
         setdisableEmail(!disableEmail)
         disableEmail ? setIconEmail('CheckMarkIcon') : setIconEmail('EditIcon');
         setTimeout(() => inputRefEmail?.current?.focus(), 0);
     }
 
-    const onChangePassword = (e:any) => {
+    const onChangePassword = (e: MouseEvent<HTMLElement>) => {
         showButton()
         setdisablePassword(!disablePassword)
         disablePassword ? setIconPassword('CheckMarkIcon') : setIconPassword('EditIcon');

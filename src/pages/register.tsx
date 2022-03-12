@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {ChangeEvent, SyntheticEvent, useEffect} from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +28,7 @@ export function RegisterPage() {
     }, [dispatch]);
 
     //запрос к API, регистрация
-    const onRegister = (e:any) => {
+    const onRegister = (e: SyntheticEvent) => {
         e.preventDefault();
         let body = {
             "email": email, 
@@ -40,7 +40,7 @@ export function RegisterPage() {
     
     const inputRef = React.useRef<HTMLInputElement>(null);
 
-    const onChange = (e:any) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
   

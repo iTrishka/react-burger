@@ -1,16 +1,14 @@
 import React, {ChangeEvent, SyntheticEvent, useEffect} from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
 import getUserRegisterApiRequest from "../services/actions/get-user-register-api-request";
 import  getUserInfoApi from '../services/actions/get-user-info-api';
-import { TRootState } from "../services/reducers/root-reducer";
+import { useAppSelector, useDispatch } from "../services/hooks";
 
 import styles from './common.module.css';
-import { IUserInfoInitial } from "../services/reducers/user-info";
 
 export function RegisterPage() {
-    const { userInfo, userInfoRequest } = useSelector<TRootState, IUserInfoInitial>(state => state.userInfo)
+    const { userInfo, userInfoRequest } = useAppSelector(state => state.userInfo)
     const [password, setPassword] = React.useState('');
     const [name, setName] = React.useState('');
     const [email, setEmail] = React.useState('');

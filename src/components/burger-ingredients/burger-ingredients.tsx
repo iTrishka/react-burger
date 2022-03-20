@@ -2,9 +2,8 @@ import React, { RefObject, useRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBurgerIngredient from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
-import { useDispatch } from 'react-redux';
 import getIngredientsApi from '../../services/actions/get-ingredients-api';
-import { useAppSelector } from '../../services/reducers/root-reducer';
+import { useAppSelector, useDispatch } from '../../services/hooks';
 
 
 

@@ -1,5 +1,4 @@
 import React, { useCallback, memo, useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
 import {ConstructorElement, CurrencyIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
@@ -12,12 +11,12 @@ import { getIngredientsConstructorBun,
         getIngredientsConstructorMain, 
         addIngredientsConstructorMain,
         resetIngredientsConstructor,
-        sortSngredientsConstructor  } from '../../services/actions/constructor-list';
+        sortIngredientsConstructor  } from '../../services/actions/constructor-list';
 import { setDataApi } from '../../services/actions/data-api';
 import { resetOrder } from '../../services/actions/order-number';
 import Spinner from '../spinner/spinner';
-import { useAppSelector } from '../../services/reducers/root-reducer';
-import { IIngredient } from '../../services/types/data';
+import { useAppSelector, useDispatch } from '../../services/hooks';
+import { ICardSorting, IIngredient } from '../../services/types/data';
 
 import styleBurgerConstructor from "./burger-constructor.module.css";
 import { useHistory } from 'react-router-dom'; 
@@ -43,7 +42,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
     //получить данные из Localstorage
     useEffect(()=> {
-        const {bun, main} = loadStateFromLocalstorage('burgerIngredient')
+        const {bun, main}  = loadStateFromLocalstorage('burgerIngredient')
         if(bun || main){
             dispatch(getIngredientsConstructorBun(bun))
             dispatch(getIngredientsConstructorMain(main))
@@ -54,7 +53,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     //получение номера заказа    
     const getOrderNumberApi = () => {
         if(!bun){return}
-        const allSelectedIdBun = [bun._id]
+        const allSelectedIdBun = [bun[0]._id]
         const allSelectedIdBMain = main.map((item: IIngredient) => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain);
         dispatch(getOrder("orders", allSelectedId))     
@@ -73,7 +72,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     const handleOpenModal = () => {
         //await dispatch(refreshToken)
         if(userInfo.name){getOrderNumberApi();}
-        else if(!bun.name){}
+        else if(!bun[0].name){}
         else{
             history.push({ pathname: '/login' });
         }          
@@ -100,8 +99,8 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 totalIngedients += item.price;
         })}else{totalBun = 0;}
         
-        if(bun.name){
-            totalBun += bun.price*2
+        if(bun[0]){
+            totalBun += bun[0].price*2
         }else{totalBun = 0;}
         setTotalPrice(totalBun + totalIngedients)
         
@@ -135,9 +134,9 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
             <ConstructorElement
                 type={pos}
                 isLocked={true}
-                text={`${bun.name} (${textPosition})`}
-                price={bun.price}
-                thumbnail={bun.image}
+                text={`${bun[0].name} (${textPosition})`}
+                price={bun[0].price}
+                thumbnail={bun[0].image}
             />
         </li>   
         )
@@ -146,21 +145,22 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     
 
     //сортировка 
-    const findCard = useCallback((id) => {
-        const card = main.filter((c:IIngredient) => `${c.key}` === id)[0];
+    const findCard = useCallback((id: string): ICardSorting => {
+        const card:IIngredient = main.filter((c:IIngredient) => `${c.key}` === id)[0];
+        const index: number = main.findIndex((item: IIngredient) => { return item.key === card.key } )
         return {
             card,
-            index: main.indexOf(card),
+            index
         };
     }, [main]);
     
-    const moveCard = useCallback((id, atIndex) => {
+    const moveCard = useCallback((id: string, atIndex: number) => {
         const { card, index } = findCard(id);
         const newArr = update(main, {$splice: [
                     [index, 1],
                     [atIndex, 0, card],
                 ]})
-        dispatch( sortSngredientsConstructor(newArr))
+        dispatch( sortIngredientsConstructor(newArr))
         
     }, [findCard, main, dispatch]);
 
@@ -209,10 +209,10 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
     //деактивировать кнопку
     useEffect(()=> {
-        if(bun.name){
+        if(bun[0]){
             setActiveStyleClass(true)
         } else {setActiveStyleClass(false)}
-    },[bun.name])
+    },[bun])
 
     const emptyBunTop = <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>
     const emptyBunBottom = <li  className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>
@@ -225,9 +225,9 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 <ul  
                ref={dropSort}  
                 className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
-                    {bun.name  ? getBunElement("top") : emptyBunTop}
+                    {bun[0]?.name  ? getBunElement("top") : emptyBunTop}
                     {main.length ? getIngridientElements() : emptyMain}
-                    {bun.name ? getBunElement("bottom") : emptyBunBottom}
+                    {bun[0]?.name ? getBunElement("bottom") : emptyBunBottom}
                 </ul>
                 <div  className={`${styleBurgerConstructor.totalWrapper} ${!isActiveStyleClass ? styleBurgerConstructor.nonActiveButton : ""} mt-10 mb-15`} >
                     <div className={`mr-10`} >

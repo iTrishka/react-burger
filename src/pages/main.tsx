@@ -4,7 +4,7 @@ import { BurgerConstructor } from "../components/burger-сonstructor/burger-cons
 import { DndProvider } from "react-dnd"; 
 import { HTML5Backend } from "react-dnd-html5-backend";
 import getUserInfoApi from '../services/actions/get-user-info-api';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "../services/hooks";
 
 
 export function MainPage() {

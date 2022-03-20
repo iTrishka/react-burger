@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams, useRouteMatch} from "react-router-dom";
 import StyleIngredientDetails from './ingredient-details.module.css';
 import { saveStateInLocalstorage } from '../localstorage';
-import { useAppSelector } from '../../services/reducers/root-reducer';
+import { useAppSelector } from '../../services/hooks';
 
 const IngredientDetails = () => {
   const { dataApi } = useAppSelector(state => state.dataApiReducer)

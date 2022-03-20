@@ -1,6 +1,6 @@
 export interface IIngredient{
     readonly _id: string,
-    readonly name: string,
+    readonly name: string ,
     readonly type: string,
     readonly proteins: number,
     readonly fat: number,
@@ -14,6 +14,12 @@ export interface IIngredient{
     counter?: number;
     key: string;
 } 
+
+export interface ICardSorting{
+    card: IIngredient;
+    index: number
+}
+
 
 export interface IIngredientId{
     readonly _id: string

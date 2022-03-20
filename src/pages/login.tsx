@@ -1,11 +1,10 @@
 import React, {  useEffect,useCallback, ChangeEvent, KeyboardEvent } from "react";
 import { useHistory,  Redirect, Link } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
 import userLoginRequest from "../services/actions/user-login-request";
 import  getUserInfoApi from '../services/actions/get-user-info-api';
 import { ILocationState } from "../services/types/data";
-import { useAppSelector } from "../services/reducers/root-reducer";
+import { useAppSelector, useDispatch } from "../services/hooks";
 
 import styles from './common.module.css';
 

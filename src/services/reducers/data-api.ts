@@ -1,6 +1,6 @@
 import {GET_DATA_API , GET_DATA_API_FAILED , GET_DATA_API_SUCCESS, SET_DATA_API} from '../actions/data-api';
 import { IIngredient } from '../types/data';
-import { TDataApi } from '../actions/data-api';
+import { TDataApiActions } from '../actions/data-api';
 
 export interface IDataApi {
     dataApiRequest: boolean,
@@ -15,7 +15,7 @@ const initialState = {
 }
 
 
-export const dataApiReducer = (state:IDataApi = initialState, action: TDataApi ): IDataApi => {
+export const dataApiReducer = (state:IDataApi = initialState, action: TDataApiActions ): IDataApi => {
     switch (action.type) {
         case GET_DATA_API: {
           return {

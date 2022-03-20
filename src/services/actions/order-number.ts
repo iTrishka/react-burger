@@ -1,7 +1,7 @@
-export const GET_ORDER_API = 'GET_ORDER_API';
-export const GET_ORDER_API_FAILED = 'GET_ORDER_API_FAILED';
-export const GET_ORDER_API_SUCCESS = 'GET_ORDER_API_SUCCESS';
-export const RESET_ORDER= 'RESET_ORDER';
+export const GET_ORDER_API: 'GET_ORDER_API' = 'GET_ORDER_API';
+export const GET_ORDER_API_FAILED: 'GET_ORDER_API_FAILED' =  'GET_ORDER_API_FAILED';
+export const GET_ORDER_API_SUCCESS: 'GET_ORDER_API_SUCCESS' = 'GET_ORDER_API_SUCCESS';
+export const RESET_ORDER: 'RESET_ORDER'= 'RESET_ORDER';
 
 export interface IGetOrderApi{
   readonly type: typeof GET_ORDER_API
@@ -17,7 +17,7 @@ export interface IResetOrder{
   readonly type: typeof GET_ORDER_API_SUCCESS
 }
 
-export type TOrderNumber = 
+export type TOrderNumberActions = 
     IGetOrderApi | 
     IGetOrderFailed |
     IGetOrderSuccess | 

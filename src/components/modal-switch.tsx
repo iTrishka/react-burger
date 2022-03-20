@@ -1,5 +1,4 @@
 import {useState} from "react";
-import { useDispatch } from 'react-redux';
 import {
     Route,
     Switch, useLocation, useHistory
@@ -11,6 +10,7 @@ import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPag
 import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";
+import { useDispatch } from "../services/hooks";
 
   
 const ModalSwitch = () => {

@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useState, MouseEvent, SyntheticEvent } f
 import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
 import getUserInfoApi from "../services/actions/get-user-info-api";
-import { useDispatch, useSelector } from 'react-redux';
 import userLogoutRequestApi from "../services/actions/user-logout-request-api";
 import changeUserInfoApi from "../services/actions/change-user-info-api";
 import { Switch, Route } from 'react-router-dom';
 import { refreshToken } from "../services/refresh-token";
 import { loadStateFromLocalstorage } from "../components/localstorage";
-import { TRootState } from "../services/reducers/root-reducer";
-import { useAppSelector } from "../services/reducers/root-reducer";
+import { useAppSelector, useDispatch } from "../services/hooks";
 
 
 import ProfileStyles  from './profile.module.css';
@@ -18,7 +16,7 @@ import { TICons } from "@ya.praktikum/react-developer-burger-ui-components/dist/
 export function ProfilePage() {
     const email = useAppSelector(state => state.userInfo.userInfo!.email)
     const name = useAppSelector(state => state.userInfo.userInfo!.name)
-    const  userInfoRequestFailed  = useSelector<TRootState>(state => state.userInfo.userInfoRequestFailed)
+    const  userInfoRequestFailed  = useAppSelector(state => state.userInfo.userInfoRequestFailed)
     const [inputName, setInputName] = React.useState('имя')
     const [login, setLogin] = React.useState<string>('email')
     const [password, setPassword] = React.useState('')

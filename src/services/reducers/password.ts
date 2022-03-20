@@ -8,9 +8,9 @@ import{
     RESET_PASSWORD_FAILED,
     RESET_PASSWORD_STATUS 
 } from '../actions/password';
-import {ITypeAction} from '../types/data';
+import { TPasswordActions } from '../actions/password';
 
-export interface IPassword {
+export interface IPasswordInit {
     getTokenRequest: boolean,
     getTokenFailed: boolean,
     getTokenStatus: string,
@@ -19,7 +19,7 @@ export interface IPassword {
     resetPasswordStatus: string
 }
 
-const initialState: IPassword = {
+const initialState: IPasswordInit = {
     getTokenRequest: false,
     getTokenFailed: false,
     getTokenStatus: "",
@@ -29,7 +29,7 @@ const initialState: IPassword = {
     
 }
 
-export const password = (state:IPassword = initialState, action: ITypeAction<`GET_RESET_PASSWORD_TOKEN_REQUEST` | `GET_RESET_PASSWORD_TOKEN_SUCCESS` | `GET_RESET_PASSWORD_TOKEN_FAILED` | `GET_RESET_PASSWORD_TOKEN_STATUS` | `RESET_PASSWORD_REQUEST`| `RESET_PASSWORD_SUCCESS` | `RESET_PASSWORD_FAILED` | `RESET_PASSWORD_STATUS`>) => { 
+export const password = (state:IPasswordInit = initialState, action: TPasswordActions): IPasswordInit => { 
     switch(action.type) {
         case GET_RESET_PASSWORD_TOKEN_REQUEST: {
             return {

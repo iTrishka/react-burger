@@ -1,0 +1,36 @@
+.section{
+    width: 640px;
+    margin: 0 auto;
+    margin-top: 20vh;
+}
+
+.header{
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.ingredientsList{
+    overflow-y: auto;
+    height: 312px;
+
+}
+
+.ingredientsList::-webkit-scrollbar {
+    width: 12px;
+    background: #2f2f37;
+}
+
+.ingredientsList::-webkit-scrollbar-thumb {
+	background: #8585AD;
+	border-radius: 6px;
+}
+
+.footer{
+    display: flex;
+    flex-flow: wrap nowrap;
+    justify-content: space-between;
+}
+
+.status{
+    color: #00CCCC;
+}

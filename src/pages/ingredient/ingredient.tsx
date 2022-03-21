@@ -1,9 +1,9 @@
 import React from "react";
 import { useParams } from 'react-router-dom';
-import { useAppSelector, useDispatch } from "../services/hooks";
+import { useAppSelector, useDispatch } from "../../services/hooks";
 
 import StyleIngredient from './ingredient.module.css';
-import getIngredientsAndCurrent from "../services/actions/get-ingredients-and-current";
+import getIngredientsAndCurrent from "../../services/actions/get-ingredients-and-current";
 
 export function IngredientPage(){
     const {selectedIngredient } = useAppSelector(state=> ({selectedIngredient: state.selectedIngredient}));

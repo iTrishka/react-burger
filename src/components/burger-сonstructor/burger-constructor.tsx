@@ -99,7 +99,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 totalIngedients += item.price;
         })}else{totalBun = 0;}
         
-        if(bun[0]){
+        if(bun[0] && bun[0].name){
             totalBun += bun[0].price*2
         }else{totalBun = 0;}
         setTotalPrice(totalBun + totalIngedients)

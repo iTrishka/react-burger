@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState, MouseEvent, SyntheticEvent } from "react";
 import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import getUserInfoApi from "../services/actions/get-user-info-api";
-import userLogoutRequestApi from "../services/actions/user-logout-request-api";
-import changeUserInfoApi from "../services/actions/change-user-info-api";
+import getUserInfoApi from "../../services/actions/get-user-info-api";
+import userLogoutRequestApi from "../../services/actions/user-logout-request-api";
+import changeUserInfoApi from "../../services/actions/change-user-info-api";
 import { Switch, Route } from 'react-router-dom';
-import { refreshToken } from "../services/refresh-token";
-import { loadStateFromLocalstorage } from "../components/localstorage";
-import { useAppSelector, useDispatch } from "../services/hooks";
+import { refreshToken } from "../../services/refresh-token";
+import { loadStateFromLocalstorage } from "../../components/localstorage";
+import { useAppSelector, useDispatch } from "../../services/hooks";
 
 
 import ProfileStyles  from './profile.module.css';

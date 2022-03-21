@@ -6,7 +6,7 @@ import {
 import IngredientDetails from "./ingredient-details/ingredient-details";
 import { resetSelectedIngredient } from "../services/actions/selected-ingredient";
 import Modal from "./modal/modal";
-import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage } from '../pages';
+import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage, FeedPage, OrderPage } from '../pages';
 import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";
@@ -63,6 +63,12 @@ const ModalSwitch = () => {
             <ProtectedRoute path="/profile">
                 <ProfilePage />
             </ProtectedRoute>
+            <Route path="/feed">
+                <FeedPage/>
+            </Route>
+            <Route path="/feedID">
+                <OrderPage/>
+            </Route>
             <Route>
                 <NotFound404 />
             </Route>

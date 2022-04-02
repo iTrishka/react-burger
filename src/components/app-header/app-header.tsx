@@ -43,7 +43,7 @@ const AppHeader =  () => {
                         </Link>
                     </button>
                     <button className={`${styleHeader.btn} pr-5  mr-2`}>
-                        <Link to={{pathname: "/profile/orders"}}>
+                        <Link to={{pathname: "/feed"}}>
                         <ListIcon type={colorOrders} />
                         <span className={styleHeader[colorOrders]}>Лента заказов</span>
                         </Link>

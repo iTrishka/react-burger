@@ -1,5 +1,9 @@
 import { IDataApi } from "../reducers/data-api";
 import { IIngredient } from "../types/data";
+import { Dispatch } from 'redux';
+import { API_URL } from '../../utils/constants';
+import checkResponse from '../checkResponse';
+import { getSelectedIngredient } from "./selected-ingredient";
 
 export const GET_DATA_API: 'GET_DATA_API' = 'GET_DATA_API';
 export const GET_DATA_API_FAILED: 'GET_DATA_API_FAILED' = 'GET_DATA_API_FAILED';
@@ -54,9 +58,53 @@ function setDataApi(payload: IIngredient[]) {
     }
 }
 
+
+function getIngredientsApi(endpoint:string) {
+  return function(dispatch:Dispatch) {
+    dispatch(getDataApi())
+    fetch(`${API_URL}${endpoint}`)
+      .then(checkResponse)
+      .then( res => {
+        if (res && res.success) {
+        dispatch(getDataApiSuccess(res.data))
+    } else {
+        dispatch(getDataApiFailed())
+    }
+}).catch( err => {
+    dispatch(getDataApiFailed())
+})
+}
+} 
+
+function getIngredientsAndCurrent(id:string) {
+  return function(dispatch: Dispatch) {
+    dispatch(getDataApi())
+    fetch(`${API_URL}ingredients`)
+      .then(checkResponse)
+      .then( res => {
+        if (res && res.success) {
+        dispatch(getDataApiSuccess(res.data))
+        return res
+    } else {
+        dispatch(getDataApiFailed())
+    }
+   }).then(res => {
+     console.log(res)
+     const currentIngredient =  res?.data.filter((item:IIngredient) => {return item._id === id});
+     dispatch(getSelectedIngredient(currentIngredient[0]))
+   }
+).catch( err => {
+    dispatch(getDataApiFailed())
+})
+}
+} 
+
+
 export {
     getDataApi,
     getDataApiFailed,
     getDataApiSuccess,
-    setDataApi
+    setDataApi, 
+    getIngredientsApi, 
+    getIngredientsAndCurrent
 }

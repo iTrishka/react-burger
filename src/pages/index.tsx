@@ -7,8 +7,9 @@ import { RegisterPage } from "./register";
 import { ResetPasswordPage } from "./reset-password";
 import { FeedPage } from "./feed/feed";
 import { ProfilePage } from "./profile/profile";
+import { OrdersPage } from "./orders/orders";
 import { OrderPage } from "./order/order";
 
 
 
-export { ForgotPasswordPage, IngredientPage, LoginPage, MainPage, NotFound404, ProfilePage, RegisterPage, ResetPasswordPage, FeedPage, OrderPage };
+export { ForgotPasswordPage, IngredientPage, LoginPage, MainPage, NotFound404, ProfilePage, RegisterPage, ResetPasswordPage, FeedPage, OrdersPage, OrderPage };

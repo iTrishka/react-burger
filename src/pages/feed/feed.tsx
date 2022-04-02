@@ -1,9 +1,18 @@
 import OrderItem from "../../components/order-item/order-item";
 
 import styles from './feed.module.css';
+import Modal from "../../components/modal/modal";
+import OrderDetails from "../../components/order-details/order-details";
+import { OrderPage } from "../order/order";
+
+
 
 export const FeedPage = () => {
+
+    
+
     return (
+        <>
         <main className={styles.container}>
             <h1 className="text text_type_main-large mb-5 mt-10">Лента заказов</h1>
             <section className={styles.wrapperOrder}>
@@ -62,5 +71,7 @@ export const FeedPage = () => {
                 </div>
             </section>
         </main>
+
+        </>
     )
 }

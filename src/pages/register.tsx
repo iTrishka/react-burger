@@ -1,11 +1,11 @@
 import React, {ChangeEvent, SyntheticEvent, useEffect} from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import getUserRegisterApiRequest from "../services/actions/get-user-register-api-request";
-import  getUserInfoApi from '../services/actions/get-user-info-api';
+import { getUserRegisterApiRequest } from "../services/actions/user-register-api";
 import { useAppSelector, useDispatch } from "../services/hooks";
 
 import styles from './common.module.css';
+import { getUserInfoApi } from "../services/actions/user-info";
 
 export function RegisterPage() {
     const { userInfo, userInfoRequest } = useAppSelector(state => state.userInfo)

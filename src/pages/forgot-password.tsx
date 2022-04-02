@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useEffect} from "react";
 import { useHistory, Link, Redirect } from 'react-router-dom';
 import { Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import  getUserInfoApi from '../services/actions/get-user-info-api';
-import getResetPasswordToken from "../services/actions/get-reset-password-token";
+import { getUserInfoApi } from "../services/actions/user-info";
+import { getResetPasswordToken } from "../services/actions/password";
 import { getResetPasswordTokenStatus } from "../services/actions/password";
 import { TRootState } from "../services/types";
 import { useAppSelector, useDispatch } from "../services/hooks";

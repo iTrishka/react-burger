@@ -1,3 +1,7 @@
+import { Dispatch } from 'redux';
+import { API_URL } from '../../utils/constants';
+import checkResponse from '../checkResponse';
+
 export const GET_ORDER_API: 'GET_ORDER_API' = 'GET_ORDER_API';
 export const GET_ORDER_API_FAILED: 'GET_ORDER_API_FAILED' =  'GET_ORDER_API_FAILED';
 export const GET_ORDER_API_SUCCESS: 'GET_ORDER_API_SUCCESS' = 'GET_ORDER_API_SUCCESS';
@@ -49,9 +53,38 @@ function resetOrder() {
     }
 }
 
+function getOrder(endpoint:string, data:Array<string>) {
+  return function(dispatch:Dispatch) {
+    dispatch(getOrderApi())
+    fetch(`${API_URL}${endpoint}`, { 
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                  },
+              body: JSON.stringify({ 
+                  "ingredients": data
+              }) 
+              })
+      .then(checkResponse)
+      .then( res => {
+        if (res && res.success) {
+        dispatch(getOrderSuccess(res.order!.number))
+        return res
+    } else {
+        dispatch(getOrderFailed())
+        return res
+    }
+}).catch( err => {
+     dispatch(getOrderFailed())
+     return err
+})
+}
+} 
+
 export {
     getOrderApi,
     getOrderFailed,
     getOrderSuccess,
-    resetOrder
+    resetOrder, 
+    getOrder
 }

@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState, MouseEvent, SyntheticEvent } from "react";
 import {  useRouteMatch, NavLink, Redirect } from 'react-router-dom';
 import {  Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import getUserInfoApi from "../../services/actions/get-user-info-api";
-import userLogoutRequestApi from "../../services/actions/user-logout-request-api";
-import changeUserInfoApi from "../../services/actions/change-user-info-api";
+import { getUserInfoApi } from "../../services/actions/user-info";
+import { userLogoutRequestApi } from "../../services/actions/user-logout";
+import { changeUserInfoApi } from "../../services/actions/user-info";
 import { Switch, Route } from 'react-router-dom';
 import { refreshToken } from "../../services/refresh-token";
 import { loadStateFromLocalstorage } from "../../components/localstorage";
 import { useAppSelector, useDispatch } from "../../services/hooks";
+import { OrdersPage } from "../orders/orders";
+import { OrderPage } from "../order/order";
 
 
 import ProfileStyles  from './profile.module.css';
@@ -188,13 +190,12 @@ export function ProfilePage() {
     {isButtonShow ? ChangeButton : ""}
     </form>
     );
-    const Orders = <div className="text  text_type_main-default">Здесь будет храниться история Ваших заказов</div>
       
 
     const loginView = <Redirect to="/login" />
     const profileView = (<main>
         <div className={`${ProfileStyles.container} mt-30`}>
-            <section className="mr-15"> 
+            <section className={`${ProfileStyles.menu} mr-15`}> 
             <NavLink  exact 
                 to={`${url}`}
                 className={`text text_type_main-medium pt-4 pb-4 ${ProfileStyles.secondary}`}
@@ -216,10 +217,9 @@ export function ProfilePage() {
         </section>
         <section>
             <Switch>
-            <Route path={`${url}`} exact > 
-            {Profile}
-            </Route>
-            <Route path={`${url}/orders`} exact> {Orders} </Route> 
+            <Route path={`${url}`} exact> {Profile}</Route>
+            <Route path={`${url}/orders`} exact> <OrdersPage/> </Route> 
+            <Route path='/profile/orders/:id'> <OrderPage /></Route>
             </Switch>
         </section>
         </div>

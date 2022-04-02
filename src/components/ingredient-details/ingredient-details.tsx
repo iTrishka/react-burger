@@ -10,7 +10,7 @@ const IngredientDetails = () => {
   const elem = dataApi.filter(item => item._id === ingredientId)[0]
   const { url } = useRouteMatch();
 
-  //Сохранение дынных об открутой модальном окне в localStorage
+  //Сохранение дынных об открытом модальном окне в localStorage
   useEffect(()=> {
     if(url){
         saveStateInLocalstorage('ingredientInModal', url);

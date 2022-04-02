@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {
     Route,
-    Switch, useLocation, useHistory
+    Switch, useLocation, useHistory, Router
   } from "react-router-dom";
 import IngredientDetails from "./ingredient-details/ingredient-details";
 import { resetSelectedIngredient } from "../services/actions/selected-ingredient";
 import Modal from "./modal/modal";
-import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage, FeedPage, OrderPage } from '../pages';
+import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage, FeedPage, OrdersPage, OrderPage } from '../pages';
 import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";

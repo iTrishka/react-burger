@@ -57,23 +57,6 @@ export interface ILocationState {
     path: string;
   }
 
-
-// export interface IResFetch {
-//     ok?: boolean;
-//     success?: string;
-//     message?: string;
-//     data?: any;
-//     order?: {
-//         number: string;
-//     };
-//     user?: IUserInfo | undefined;
-//     err?: string;
-//     accessToken?: string | undefined;
-//     refreshToken?: string | undefined;
-//     status: string;
-//     json<T>(): Promise<T>;
-// }
-
 export interface IModal{
     onClose: () => void;
     header?: string;

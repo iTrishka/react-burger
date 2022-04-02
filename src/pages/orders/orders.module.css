@@ -1,0 +1,29 @@
+.section{
+    width: 840px;
+    margin: 0 auto;
+}
+
+.orderList{
+    padding: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+}
+
+.orderList::-webkit-scrollbar{
+    width: 10px;  
+   
+}
+
+.orderList::-webkit-scrollbar-track{
+    background: #2F2F37;
+    margin-bottom: 25vh;
+}
+
+.orderList::-webkit-scrollbar-thumb{
+    background-color: #8585AD;
+    border-radius: 6px;
+}
+
+
+

@@ -1,8 +1,7 @@
 import React, { ChangeEvent, useEffect} from "react";
 import { useHistory, Link ,Redirect} from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import resetPassword from "../services/actions/reset-password";
-import { resetPasswordStatus } from "../services/actions/password";
+import { resetPassword, resetPasswordStatus } from "../services/actions/password";
 import { TRootState } from "../services/types";
 import { IHistoryState } from "../services/types/data";
 import { useAppSelector, useDispatch } from "../services/hooks";

@@ -6,7 +6,7 @@ import  { v4 as uuidv4 } from 'uuid';
 import { useDrop } from "react-dnd";
 import { IngrediendCardConstructor } from '../ingrediend-card-constructor/ingrediend-card-constructor';
 import update from 'immutability-helper';
-import getOrder from '../../services/actions/get-order';
+import { getOrder } from '../../services/actions/order-number';
 import { getIngredientsConstructorBun, 
         getIngredientsConstructorMain, 
         addIngredientsConstructorMain,

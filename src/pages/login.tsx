@@ -1,8 +1,8 @@
 import React, {  useEffect,useCallback, ChangeEvent, KeyboardEvent } from "react";
 import { useHistory,  Redirect, Link } from 'react-router-dom';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import userLoginRequest from "../services/actions/user-login-request";
-import  getUserInfoApi from '../services/actions/get-user-info-api';
+import { userLoginRequest } from "../services/actions/user-login";
+import { getUserInfoApi } from "../services/actions/user-info";
 import { ILocationState } from "../services/types/data";
 import { useAppSelector, useDispatch } from "../services/hooks";
 

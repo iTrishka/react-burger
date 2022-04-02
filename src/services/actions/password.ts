@@ -1,4 +1,9 @@
 
+import { Dispatch } from 'redux';
+import checkResponse from '../checkResponse';
+import { customFetch } from '../custom-fetch';
+
+
 export const GET_RESET_PASSWORD_TOKEN_REQUEST: 'GET_RESET_PASSWORD_TOKEN_REQUEST' = 'GET_RESET_PASSWORD_TOKEN_REQUEST';
 export const GET_RESET_PASSWORD_TOKEN_SUCCESS: 'GET_RESET_PASSWORD_TOKEN_SUCCESS' = 'GET_RESET_PASSWORD_TOKEN_SUCCESS';
 export const GET_RESET_PASSWORD_TOKEN_FAILED: 'GET_RESET_PASSWORD_TOKEN_FAILED' = 'GET_RESET_PASSWORD_TOKEN_FAILED';
@@ -95,6 +100,56 @@ function resetPasswordStatus(payload: string | undefined) {
   }
 }
 
+function resetPassword(data: {"password": string; "token": string}) {
+  return function(dispatch: Dispatch){
+      dispatch(resetPasswordRequest())
+      customFetch({
+        endpoint: "password-reset/reset", 
+        method: "POST", 
+        body: data ,
+        header:{
+        'Content-Type': 'application/json'}})!
+        .then(checkResponse)
+        .then( res => {
+          if (res && res.success) {
+            dispatch(resetPasswordSuccess())
+            dispatch(resetPasswordStatus(res.message))
+            return res
+      } else throw Promise.reject(res.message)
+      }).catch( err => {
+          dispatch(resetPasswordFailed())
+          dispatch(resetPasswordStatus(err.message))
+          return err
+        })
+  } 
+}
+
+
+function getResetPasswordToken(data: {email: string}) {
+  return function(dispatch:Dispatch){
+      dispatch(getResetPasswordTokenRequest())
+      customFetch({
+        endpoint: "password-reset", 
+        method: "POST", 
+        body: data ,
+        header: {
+        'Content-Type': 'application/json'}})!
+        .then(checkResponse)
+        .then( res => {
+          if (res && res.success) {
+            dispatch(getResetPasswordTokenSuccess())
+            dispatch(getResetPasswordTokenStatus(res.message))
+            return res
+      } else throw Promise.reject(res.message)
+      }).catch( err => {
+          dispatch(getResetPasswordTokenFailed())
+          dispatch(getResetPasswordTokenStatus(err.message))
+          return err
+        })
+  } 
+}
+
+
 
 export {
     getResetPasswordTokenRequest,
@@ -104,5 +159,7 @@ export {
     resetPasswordRequest,
     resetPasswordFailed,
     resetPasswordSuccess, 
-    resetPasswordStatus
+    resetPasswordStatus,
+    resetPassword, 
+    getResetPasswordToken
 }

@@ -1,12 +1,17 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './order-item.module.css';
+import { getDataOrder, setShortName } from '../../utils/utils';
 
-const OrderItem = () => {
+
+const OrderItem = (order:any) => {
+    const {createdAt, number, status, _id, name} = order.order;    
     const location = useLocation();
 
+    
+
     return(
-        <li className={`${styles.container} p-6 ml-0 mr-6 mb-4 mt-4`}>
+        <li key={_id} className={`${styles.container} p-6 ml-0 mr-6 mb-4 mt-4`}>
             <Link 
              to={{
                 pathname: `/orders/1`,
@@ -14,10 +19,10 @@ const OrderItem = () => {
                 className={`${styles.ingedientCard} `}
              >
                 <div className={`${styles.headerCard} `}>
-                    <p className="text text_type_main-medium">#034535</p>
-                    <p className="text text_type_main-default text_color_inactive">Сегодня, 16:20 i-GMT+3</p>
+                    <p className="text text_type_main-medium">#{number}</p>
+                    <p className="text text_type_main-default text_color_inactive">{getDataOrder(createdAt)}</p>
                 </div>
-                <h2 className="text text_type_main-medium">Death Star Starship Main бургер</h2>
+                <h2 className="text text_type_main-medium">{setShortName(name)}</h2>
                 <div className={`${styles.footerCard} `}>
                     <div>иконки</div>
                     <div>

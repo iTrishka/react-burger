@@ -1,15 +1,45 @@
+import React from 'react';
 import OrderItem from "../../components/order-item/order-item";
+import { useLocation } from 'react-router-dom';
+import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/websockets';
 
 import styles from './feed.module.css';
 import Modal from "../../components/modal/modal";
 import OrderDetails from "../../components/order-details/order-details";
 import { OrderPage } from "../order/order";
+import { useAppSelector, useDispatch } from "../../services/hooks";
 
 
 
 export const FeedPage = () => {
+    const location = useLocation();
+    const { wsConnected,  orders, total, totalToday } = useAppSelector(state => state.wsConnection);
+    const dispatch = useDispatch();
 
-    
+    //запрос заказов с API
+    React.useEffect(()=> {
+        dispatch(wsConnectionStart())
+    }, [dispatch])
+
+    //Получить количество заказов в статусе "Готово"
+    const getNumsOrdersbyStatus = (statusOrder: "done" | "pending") => {
+        const numsOrdersByDone: number[] = [];
+        const numsOrdersByPending: number[]  = [];
+
+        orders.map((order) => {
+            if(order.status === 'done' && numsOrdersByDone.length < 20){
+                numsOrdersByDone.push(order.number)
+            }
+            else if(order.status === 'pending' && numsOrdersByPending.length <  20){
+                numsOrdersByPending.push(order.number)
+            }   
+        })
+        if(statusOrder === 'done'){
+            return numsOrdersByDone
+        }else if(statusOrder === 'pending'){
+            return numsOrdersByPending
+        }
+    }
 
     return (
         <>
@@ -17,21 +47,9 @@ export const FeedPage = () => {
             <h1 className="text text_type_main-large mb-5 mt-10">Лента заказов</h1>
             <section className={styles.wrapperOrder}>
                 <ul className={`${styles.orderList} mr-4 mb-5 `}>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
+                    {orders?.map((order) => {
+                        return <OrderItem order={order}/>
+                    })}
                 </ul>
                 <div className={`${styles.сommonInfo} ml-15`}>
                     <div className={`${styles.orderDisplay} mt-4 mb-15`}>
@@ -40,7 +58,9 @@ export const FeedPage = () => {
                                 Готовы:
                             </p>
                             <p className={`${styles.waveColor}  text text_type_digits-default`}>
-                                    0000
+                                {getNumsOrdersbyStatus("done")?.map(item =>{
+                                    return <><span>{item}</span><br/></>
+                                })}
                             </p>
                         </div>
                         <div>
@@ -48,7 +68,9 @@ export const FeedPage = () => {
                                 В работе:
                             </p>
                             <p className={`text text_type_digits-default`}>
-                                    0000
+                                {getNumsOrdersbyStatus("pending")?.map(item =>{
+                                    return <><span>{item}</span><br/></>
+                                })}
                             </p>
                         </div>
                     </div>
@@ -57,7 +79,7 @@ export const FeedPage = () => {
                             Выполнено за все время:
                         </p>
                         <p className={`${styles.digits} text text_type_digits-large`}>
-                                0000
+                               {total}
                         </p>
                     </div>
                     <div>
@@ -65,7 +87,7 @@ export const FeedPage = () => {
                             Выполнено за сегодня:
                         </p>
                         <p className={`${styles.digits} text text_type_digits-large`}>
-                            0000
+                            {totalToday}
                         </p>
                     </div>
                 </div>

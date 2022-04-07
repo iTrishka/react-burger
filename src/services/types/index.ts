@@ -19,7 +19,7 @@ import { TUserActions } from "../actions/user-info";
 export type TRootState= ReturnType<typeof store.getState>;
 
 //типизация всех экшенов приложения
-type TAppActions = 
+export type TAppActions = 
         TDataApiActions |
         TConstructorListActions |
         TSelectedIngredientActions |

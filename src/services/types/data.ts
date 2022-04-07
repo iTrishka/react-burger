@@ -70,6 +70,24 @@ export interface IDropItem{
     }
 }
 
+export type TOrder = {
+    ingredients: string[],
+    name: string,
+    _id: string,
+    status: 'pending' | 'created' | 'done';
+    number: number,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface IMessageWS{
+    wsConnected: boolean,
+    orders: TOrder[] | [],
+    total: null | number,
+    totalToday: null | number,
+    error?: Event
+}
+
 
 
 

@@ -8,6 +8,7 @@ import { userLogin } from "./user-login";
 import { userLogout } from "./user-logout";
 import { password } from "./password";
 import { userInfo } from "./user-info";
+import { wsConnection } from "./websockets";
 
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     userLogout,
     password,
     userInfo,
+    wsConnection
 } )
 
 export default rootReducer;

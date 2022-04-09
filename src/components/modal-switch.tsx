@@ -11,19 +11,11 @@ import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";
 import { useDispatch } from "../services/hooks";
+import { IBackgroundLocation } from "../services/types/data";
 
   
 const ModalSwitch = () => {
 
-  interface IBackgroundLocation {
-    background: {
-      pathname: string
-      search: string
-      hash: string
-      state: undefined
-      key: string
-    }
-  }
     const location = useLocation<IBackgroundLocation>();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -63,11 +55,11 @@ const ModalSwitch = () => {
             <ProtectedRoute path="/profile">
                 <ProfilePage />
             </ProtectedRoute>
+            <Route path='/feed/:id' exact>
+                <OrderPage/>
+            </Route>
             <Route path="/feed">
                 <FeedPage/>
-            </Route>
-            <Route path="/feedID">
-                <OrderPage/>
             </Route>
             <Route>
                 <NotFound404 />
@@ -80,6 +72,16 @@ const ModalSwitch = () => {
             children={
               <Modal header="Детали ингредиента" onClose={handleCloseModal}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+        )}
+        {background && (
+          <Route exact
+            path='/feed/:id'
+            children={
+              <Modal header="" onClose={handleCloseModal}>
+                <OrderPage />
               </Modal>
             }
           />

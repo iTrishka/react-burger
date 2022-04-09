@@ -6,10 +6,10 @@ const orderList = () => {
             <h1>Лента заказов</h1>
             <section>
                 <ul>
+                    {/* <OrderItem/>
                     <OrderItem/>
                     <OrderItem/>
-                    <OrderItem/>
-                    <OrderItem/>
+                    <OrderItem/> */}
                 </ul>
             </section>    
             <section>

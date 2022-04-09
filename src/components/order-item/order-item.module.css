@@ -24,9 +24,62 @@
     color: #F2F2F3
 }
 
+.wrapperIcons{
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.wrapperIconImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, rgba(76,76,255,1) 0%, rgba(128,26,178,1) 100%);
+    overflow: hidden;
+    position: relative;
+}
+.wrapperIconImg>div{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #131316;
+}
+
+.wrapperIconImg>div>img{
+    width: 160%;
+    height: auto;
+}
+
+.wrapperIconImg:not(:first-child){
+    margin-left: -32px;
+}
+.wrapperIconImg span{
+    position: absolute;
+    z-index: 100;
+    background: rgb(0,0,0,0.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .footerCard{
     width: 100%;
     display: flex;
     flex-flow: wrap nowrap;
     justify-content: space-between;
 }
+
+.wrapperPrice{
+    display: flex;
+    align-items: center;
+}
+

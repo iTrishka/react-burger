@@ -5,7 +5,6 @@
 
 .orderList{
     padding: 0;
-    height: 100vh;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
 }

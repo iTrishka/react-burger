@@ -89,5 +89,15 @@ export interface IMessageWS{
 }
 
 
+export interface IBackgroundLocation {
+    background: {
+      pathname: string
+      search: string
+      hash: string
+      state: undefined
+      key: string
+    }
+  }
+
 
 

@@ -35,7 +35,7 @@ export const getDataOrder = (data:string) => {
 //Троеточие в названии, если очень длинное слово
 
 export const setShortName = (name: string) => {
-    if(name.length > 80){
-        return name.substring(0, 80) + "..."
+    if(name.length > 60){
+        return name.substring(0, 60) + "..."
     }else return name
 }

@@ -10,9 +10,94 @@ main.orderMain{
     align-items: flex-start;  
 }
 
+.wrapper ul {
+    width: 640px;
+    padding-left: 0;
+    max-height: 312px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.wrapper ul::-webkit-scrollbar{
+    width: 8px;  
+}
+
+.wrapper ul::-webkit-scrollbar-track{
+    background: #2F2F37;
+}
+
+.wrapper ul::-webkit-scrollbar-thumb{
+    background-color: #8585AD;    /* цвет плашки */ 
+}
+
+
+.wrapperIconImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, rgba(76,76,255,1) 0%, rgba(128,26,178,1) 100%);
+    overflow: hidden;
+    position: relative;
+}
+
+.wrapperIconImg>div{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #131316;
+}
+
+.wrapperIconImg>div>img{
+    width: 160%;
+    height: auto;
+}
+
+.wrapperLi{
+    display: flex;
+    flex-flow: row nowrap;
+    list-style: none;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+
+
+.liText{
+    max-width: 320px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.liCount{
+    margin-left: auto;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.liPrice{
+    align-self: flex-end;
+}
+
+
+
 .footer{
-    width: 100%;
+    width: 640px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+}
+
+.footer div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,8 +1,11 @@
 import { useAppSelector, useDispatch } from '../../services/hooks';
+import { getIngredientsApi } from '../../services/actions/data-api';
+import React from "react";
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './order-item.module.css';
 import { getDataOrder, setShortName } from '../../utils/utils';
+import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/websockets';
 import { IIngredient, TOrder } from '../../services/types/data';
 import { FC } from 'react';
 import  { v4 as uuidv4 } from 'uuid';
@@ -12,6 +15,17 @@ const OrderItem = (order: {order: TOrder}) => {
     const {createdAt, number, _id, name, ingredients} = order.order; 
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
     const location = useLocation();
+    const dispatch = useDispatch();
+
+     //запрос ингридиентов с API
+     React.useEffect(()=> {
+        if(dataApi.length < 1) {dispatch(getIngredientsApi("ingredients"))}
+    }, [dispatch, dataApi.length])
+
+    //запрос заказов с API
+    React.useEffect(()=> {
+        dispatch(wsConnectionStart())
+    }, [dispatch])
 
 
     let orderedIngredients: IIngredient[] | [] = [];

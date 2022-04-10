@@ -31,6 +31,9 @@ export const FeedPage = () => {
     //запрос заказов с API
     React.useEffect(()=> {
         dispatch(wsConnectionStart())
+        return (): void => {
+            dispatch(wsConnectionClosed())
+        }
     }, [dispatch])
 
     //Получить количество заказов в статусе "Готово"

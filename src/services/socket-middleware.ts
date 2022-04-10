@@ -1,4 +1,5 @@
 import type { Middleware, MiddlewareAPI } from "redux";
+import { loadStateFromLocalstorage } from "../components/localstorage";
 import { wsConnectionError, wsConnectionSuccess, wsGetOrders } from "./actions/websockets";
 import type { AppDispatch, TAppActions, TRootState } from "./types";
 
@@ -9,9 +10,15 @@ export const socketMiddleware  = (wsURL: string): Middleware => {
         return next => (action: TAppActions) => {
             const { dispatch, getState }  = store; 
             const { type, payload } = action;
+            
+
 
             if(type === 'WS_CONNECTION_START'){
-                socket = new WebSocket(wsURL);
+                socket = new WebSocket(`${wsURL}/all`);
+                
+            }else if(type === 'WS_CONNECTION_PROFILE_START'){
+                const accessToken = loadStateFromLocalstorage('token');
+                socket = new WebSocket(`${wsURL}?token=${accessToken}`);
             }
             if(socket){
                 //функция вызывается при открытии сокета
@@ -27,6 +34,7 @@ export const socketMiddleware  = (wsURL: string): Middleware => {
                 //функция вызывается при получении события от сервера
                 socket.onmessage = event => {
                     const {data} = event;
+                    console.log(data)
                     const parsedData = JSON.parse(data);
                     dispatch(wsGetOrders(parsedData))
                 }

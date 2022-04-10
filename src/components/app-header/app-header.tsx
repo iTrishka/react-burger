@@ -19,7 +19,7 @@ const AppHeader =  () => {
                 setColorConstructor("primary")
                 setColorOrders("secondary")
                 setColorProfiles("secondary")
-            }else if(history.location.pathname === "/profile/orders"){
+            }else if(history.location.pathname === "/feed"){
                 setColorConstructor("secondary")
                 setColorOrders("primary")
                 setColorProfiles("secondary")

@@ -12,6 +12,7 @@ import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";
 import { useDispatch } from "../services/hooks";
 import { IBackgroundLocation } from "../services/types/data";
+import { OrderComponent } from "./order-component/order-component";
 
   
 const ModalSwitch = () => {
@@ -81,7 +82,7 @@ const ModalSwitch = () => {
             path='/feed/:id'
             children={
               <Modal header="" onClose={handleCloseModal}>
-                <OrderPage />
+                <OrderComponent />
               </Modal>
             }
           />

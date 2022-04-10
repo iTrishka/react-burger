@@ -1,5 +1,6 @@
 import {
     WS_CONNECTION_SUCCESS, 
+    WS_CONNECTION_PROFILE_START,
     WS_CONNECTION_ERROR, 
     WS_CONNECTION_CLOSED,
     WS_GET_ORDERS
@@ -8,14 +9,6 @@ import {
 import { TWsConnectionActions } from '../actions/websockets';
 import { TOrder, IMessageWS } from '../types/data';
 
-// export interface IMessageWS {
-//     wsConnected: boolean,
-//     orders: TOrder[] | [],
-//     total: number | null,
-//     totalToday: number | null, 
-//     error?: Event
-
-// }
 
 const wsConnectionState: IMessageWS = {
     wsConnected: false,

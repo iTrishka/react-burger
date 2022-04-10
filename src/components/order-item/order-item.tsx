@@ -17,16 +17,6 @@ const OrderItem = (order: {order: TOrder}) => {
     const location = useLocation();
     const dispatch = useDispatch();
 
-     //запрос ингридиентов с API
-     React.useEffect(()=> {
-        if(dataApi.length < 1) {dispatch(getIngredientsApi("ingredients"))}
-    }, [dispatch, dataApi.length])
-
-    //запрос заказов с API
-    React.useEffect(()=> {
-        dispatch(wsConnectionStart())
-    }, [dispatch])
-
 
     let orderedIngredients: IIngredient[] | [] = [];
     let sum: number = 0;   

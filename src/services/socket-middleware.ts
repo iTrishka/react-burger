@@ -8,8 +8,8 @@ export const socketMiddleware  = (wsURL: string): Middleware => {
         let socket: WebSocket | null = null;
 
         return next => (action: TAppActions) => {
-            const { dispatch, getState }  = store; 
-            const { type, payload } = action;
+            const { dispatch }  = store; 
+            const { type } = action;
             
 
 
@@ -34,7 +34,6 @@ export const socketMiddleware  = (wsURL: string): Middleware => {
                 //функция вызывается при получении события от сервера
                 socket.onmessage = event => {
                     const {data} = event;
-                    console.log(data)
                     const parsedData = JSON.parse(data);
                     dispatch(wsGetOrders(parsedData))
                 }

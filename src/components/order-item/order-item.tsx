@@ -1,21 +1,17 @@
-import { useAppSelector, useDispatch } from '../../services/hooks';
-import { getIngredientsApi } from '../../services/actions/data-api';
-import React from "react";
+import { useAppSelector } from '../../services/hooks';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './order-item.module.css';
 import { getDataOrder, setShortName } from '../../utils/utils';
-import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/websockets';
 import { IIngredient, TOrder } from '../../services/types/data';
 import { FC } from 'react';
 import  { v4 as uuidv4 } from 'uuid';
 
 
-const OrderItem = (order: {order: TOrder}) => {
-    const {createdAt, number, _id, name, ingredients} = order.order; 
+const   OrderItem = (order: {order: TOrder; path: string}) => {
+    const {createdAt, number, _id, name, ingredients, status} = order.order; 
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
     const location = useLocation();
-    const dispatch = useDispatch();
 
 
     let orderedIngredients: IIngredient[] | [] = [];
@@ -44,20 +40,37 @@ const OrderItem = (order: {order: TOrder}) => {
     }
 
 
+    //получить статус
+
+    //Получить текст статуса
+    const getStatus = (status: "done" | "pending" | "created" | undefined) =>{
+        switch(status){
+            case "done": 
+                return  "Выполнен";
+            case 'pending':
+                return "Готовится";
+            case 'created':
+                return "Создан";
+            default: 
+                return ""
+            
+        }
+    }
     return(
         <li key={_id} className={`${styles.container} p-6 ml-0 mr-6 mb-4 mt-4`}>
             <Link 
              to={{
-                pathname: `/feed/${_id}`,
+                pathname: `/${order.path}/${_id}`,
                 state: { background: location }
             }}
                 className={`${styles.ingedientCard} `}
              >
-                <div className={`${styles.headerCard} `}>
+                <div className={`${styles.headerCard} mb-2`}>
                     <p className="text text_type_main-medium">#{number}</p>
                     <p className="text text_type_main-default text_color_inactive">{getDataOrder(createdAt)}</p>
                 </div>
-                <h2 className="text text_type_main-medium">{setShortName(name)}</h2>
+                <h2 className="text text_type_main-medium mb-2">{setShortName(name)}</h2>
+                { order.path === "feed" ? '' : <p className="text text_type_main-small mb-2 textColor2">{getStatus(status)}</p>}
                 <div className={`${styles.footerCard} `}>
                     <div className={`${styles.wrapperIcons}`}>
                         {orderedIngredients.map((item, index) => {

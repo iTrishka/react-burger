@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { loadStateFromLocalstorage } from '../../components/localstorage';
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 
@@ -59,7 +60,8 @@ function getOrder(endpoint:string, data:Array<string>) {
     fetch(`${API_URL}${endpoint}`, { 
               method: 'POST',
               headers: {
-                  'Content-Type': 'application/json;charset=utf-8'
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'Authorization': 'Bearer ' + loadStateFromLocalstorage('token')
                   },
               body: JSON.stringify({ 
                   "ingredients": data

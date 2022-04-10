@@ -25,7 +25,7 @@ export const getDataOrder = (data:string) => {
     }
     })
     dayjs.extend(relativeTime)
-    const dataTime = dayjs(data).format(", HH:mm"+" i-GMT+3")
+    const dataTime = dayjs(data).format(`, HH:mm i-GMT+3`)
     const dataDAy = dayjs(data).fromNow(true)
     return dataDAy+dataTime
 

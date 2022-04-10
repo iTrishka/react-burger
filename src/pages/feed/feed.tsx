@@ -1,25 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import OrderItem from "../../components/order-item/order-item";
-import { Switch, useLocation, useHistory, Route } from 'react-router-dom';
 import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/websockets';
 import  { v4 as uuidv4 } from 'uuid';
 
 import styles from './feed.module.css';
-import Modal from "../../components/modal/modal";
-import OrderDetails from "../../components/order-details/order-details";
-import { OrderPage } from "../order/order";
 import { getIngredientsApi } from '../../services/actions/data-api';
 import { useAppSelector, useDispatch } from "../../services/hooks";
-import { IBackgroundLocation } from '../../services/types/data';
 
 
 
 export const FeedPage = () => {
-    const location = useLocation<IBackgroundLocation>();
-    const history = useHistory();
-    let background = location.state && location.state.background;
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
-    const { wsConnected,  orders, total, totalToday } = useAppSelector(state => state.wsConnection);
+    const { orders, total, totalToday } = useAppSelector(state => state.wsConnection);
     const dispatch = useDispatch();
 
     
@@ -41,7 +33,7 @@ export const FeedPage = () => {
         const numsOrdersByDone: number[] = [];
         const numsOrdersByPending: number[]  = [];
 
-        orders.map((order) => {
+        orders.forEach((order) => {
             if(order.status === 'done' && numsOrdersByDone.length < 20){
                 numsOrdersByDone.push(order.number)
             }
@@ -62,7 +54,7 @@ export const FeedPage = () => {
                 <section className={styles.wrapperOrder}>
                     <ul className={`${styles.orderList} mr-4 mb-5 `}>
                         {dataApi.length>1 ? orders?.map((order) => {
-                            return <OrderItem key={uuidv4()} order={order}/>
+                            return <OrderItem key={uuidv4()} order={order} path="feed"/>
                         }): ""}
                     </ul>
                     <div className={`${styles.сommonInfo} ml-15`}>

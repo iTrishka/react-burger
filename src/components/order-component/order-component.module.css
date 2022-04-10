@@ -101,3 +101,11 @@ main.orderMain{
     justify-content: center;
     align-items: center;
 }
+
+.numberOrderCenter{
+    align-self: center;
+}
+
+.numberOrderleft{
+    align-self: left;
+}

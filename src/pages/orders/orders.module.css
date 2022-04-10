@@ -3,23 +3,24 @@
     margin: 0 auto;
 }
 
-.orderList{
+.ordersList{
     padding: 0;
+    height: 70vh;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
 }
 
-.orderList::-webkit-scrollbar{
+.ordersList::-webkit-scrollbar{
     width: 10px;  
    
 }
 
-.orderList::-webkit-scrollbar-track{
+.ordersList::-webkit-scrollbar-track{
     background: #2F2F37;
-    margin-bottom: 25vh;
+    margin-bottom: 5vh;
 }
 
-.orderList::-webkit-scrollbar-thumb{
+.ordersList::-webkit-scrollbar-thumb{
     background-color: #8585AD;
     border-radius: 6px;
 }

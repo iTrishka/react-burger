@@ -1,7 +1,3 @@
-import { Dispatch } from 'redux';
-import { API_URL } from '../../utils/constants';
-import checkResponse from '../checkResponse';
-import { customFetch } from '../custom-fetch';
 import { IMessageWS } from '../types/data';
 
 export const WS_CONNECTION_START: 'WS_CONNECTION_START' = 'WS_CONNECTION_START';
@@ -77,8 +73,6 @@ function wsGetOrders(message: IMessageWS){
         payload: message        
     }
 }
-
-
 
 export {
     wsConnectionStart,

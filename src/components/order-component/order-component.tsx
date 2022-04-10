@@ -2,17 +2,21 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import stylesOrderComp from "./order-component.module.css";
 import React from "react";
 import  { v4 as uuidv4 } from 'uuid';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useAppSelector, useDispatch } from "../../services/hooks";
-import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/websockets';
-import { IIngredient, IMessageWS, TOrder } from '../../services/types/data';
+import { wsConnectionStart, wsConnectionProfileStart } from '../../services/actions/websockets';
+import { IIngredient } from '../../services/types/data';
 import { getDataOrder } from '../../utils/utils';
 import { getIngredientsApi } from '../../services/actions/data-api';
+import { loadStateFromLocalstorage } from '../localstorage';
+import { IBackgroundLocation } from "../../services/types/data";
 
 export const OrderComponent = () => {
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
     const { orders } = useAppSelector(state => state.wsConnection);
     const { id }: {[name: string] : string} = useParams()
+    const location = useLocation<IBackgroundLocation>();
+    let background = location.state && location.state.background;
     const dispatch = useDispatch(); 
 
     const currentOrder = orders.find(order => order._id === id)
@@ -25,7 +29,10 @@ export const OrderComponent = () => {
 
     //запрос заказов с API
     React.useEffect(()=> {
-        dispatch(wsConnectionStart())
+        const token = loadStateFromLocalstorage('token');
+        if(token){
+            dispatch(wsConnectionProfileStart())
+        }else dispatch(wsConnectionStart())
     }, [dispatch])
 
 
@@ -48,7 +55,7 @@ export const OrderComponent = () => {
     const IngredientInOrder = (id: {id: string}) => {
         const currentIngredient: IIngredient | undefined = dataApi.find(item => item._id === id.id)
         let count = 0;
-        currentOrder?.ingredients.map( item => {
+        currentOrder?.ingredients.forEach( item => {
             if(item === id.id){ 
                 count++
             }
@@ -79,12 +86,17 @@ export const OrderComponent = () => {
         sum = sum + foundIngredient!.price;
     });
 
-    
+    //Стиль номера заказа
+    const stylуOrderNumber = () => {
+        if(!background){
+            return stylesOrderComp.numberOrderCenter
+        }else return stylesOrderComp.numberOrderleft
+    }
 
     return(
         <main className={stylesOrderComp.orderMain}>
            <section className={`${stylesOrderComp.wrapper}`}>
-                <p className="text text_type_main-medium mb-10">#{currentOrder?.number}</p>
+                <p className={`${stylуOrderNumber()} text text_type_main-medium mb-10`}>#{currentOrder?.number}</p>
                 <h2 className="text text_type_main-medium mb-3">{currentOrder?.name}</h2>
                 <p className="text text_type_main-small mb-15 textColor2">{getStatus(currentOrder?.status)}</p>
 

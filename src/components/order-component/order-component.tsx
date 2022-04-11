@@ -18,7 +18,7 @@ export const OrderComponent = () => {
     const location = useLocation<IBackgroundLocation>();
     let background = location.state && location.state.background;
     const dispatch = useDispatch(); 
-
+    
     const currentOrder = orders.find(order => order._id === id)
     const uniquListIngredient  = Array.from(new Set(currentOrder?.ingredients));
 
@@ -29,11 +29,10 @@ export const OrderComponent = () => {
 
     //запрос заказов с API
     React.useEffect(()=> {
-        const token = loadStateFromLocalstorage('token');
-        if(token){
+        if(location.pathname.includes("orders") && loadStateFromLocalstorage('token')){
             dispatch(wsConnectionProfileStart())
         }else dispatch(wsConnectionStart())
-    }, [dispatch])
+    }, [dispatch, location.pathname])
 
 
     //Получить текст статуса
@@ -52,8 +51,9 @@ export const OrderComponent = () => {
     }
 
     //Ингридиент
-    const IngredientInOrder = (id: {id: string}) => {
+    const IngredientInOrder = (id: {id: string}) => {     
         const currentIngredient: IIngredient | undefined = dataApi.find(item => item._id === id.id)
+        
         let count = 0;
         currentOrder?.ingredients.forEach( item => {
             if(item === id.id){ 
@@ -83,7 +83,7 @@ export const OrderComponent = () => {
     
     currentOrder?.ingredients.forEach((_id:string) => {
         const foundIngredient: IIngredient | undefined= dataApi.find((item)=> item._id === _id)
-        sum = sum + foundIngredient!.price;
+        if(foundIngredient){ sum = sum + foundIngredient!.price }
     });
 
     //Стиль номера заказа

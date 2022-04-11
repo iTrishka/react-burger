@@ -47,6 +47,10 @@ export const FeedPage = () => {
             return numsOrdersByPending
         }
     }
+
+    if (!orders.length) {
+        return <div>Загрузка заказов...</div>;
+    }
     return (
         <>
         <main className={styles.container}>

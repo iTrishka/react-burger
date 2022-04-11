@@ -8,7 +8,8 @@ import { FC } from 'react';
 import  { v4 as uuidv4 } from 'uuid';
 
 
-const   OrderItem = (order: {order: TOrder; path: string}) => {
+const OrderItem = (order: {order: TOrder; path: string}) => {
+    
     const {createdAt, number, _id, name, ingredients, status} = order.order; 
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
     const location = useLocation();
@@ -16,11 +17,10 @@ const   OrderItem = (order: {order: TOrder; path: string}) => {
 
     let orderedIngredients: IIngredient[] | [] = [];
     let sum: number = 0;   
-    
     ingredients.forEach((_id:string) => {
         const foundIngredient: IIngredient | undefined= dataApi.find((item)=> item._id === _id)
-        sum = sum + foundIngredient!.price;
         if (foundIngredient){
+            sum = sum + foundIngredient!.price;
             orderedIngredients = [...orderedIngredients, foundIngredient]
         }
     });

@@ -2,7 +2,7 @@ import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 import { saveStateInLocalstorage } from '../../components/localstorage';
 import { addUserInfo } from './user-info'
-import { Dispatch } from 'redux';
+import { AppThunk } from '../types';
 
 export const GET_USER_LOGIN: 'GET_USER_LOGIN' = 'GET_USER_LOGIN';
 export const GET_USER_LOGIN_FAILED: 'GET_USER_LOGIN_FAILED' = 'GET_USER_LOGIN_FAILED';
@@ -43,8 +43,8 @@ function getUserLoginSuccess() {
     }
 }
 
-function userLoginRequest(endpoint:string, body:any) {
-  return function(dispatch:Dispatch) {
+const userLoginRequest: AppThunk = (endpoint:string, body:any) => {
+  return function(dispatch) {
     dispatch(getUserLogin())
     fetch(`${API_URL}${endpoint}`, {
       method: 'POST', 
@@ -65,8 +65,6 @@ function userLoginRequest(endpoint:string, body:any) {
           if(authToken){
             saveStateInLocalstorage('token', authToken);
             saveStateInLocalstorage('refreshToken', refreshToken);
-            //setCookie('token', authToken);
-            //setCookie('refreshToken', refreshToken);
             dispatch(addUserInfo(res.user))
           }
           

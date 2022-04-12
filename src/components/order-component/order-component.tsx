@@ -4,12 +4,15 @@ import React from "react";
 import  { v4 as uuidv4 } from 'uuid';
 import { useParams, useLocation } from 'react-router-dom';
 import { useAppSelector, useDispatch } from "../../services/hooks";
-import { wsConnectionStart, wsConnectionProfileStart } from '../../services/actions/websockets';
+import { wsConnectionStart, 
+    // wsConnectionProfileStart 
+} from '../../services/actions/websockets';
 import { IIngredient } from '../../services/types/data';
 import { getDataOrder } from '../../utils/utils';
 import { getIngredientsApi } from '../../services/actions/data-api';
 import { loadStateFromLocalstorage } from '../localstorage';
 import { IBackgroundLocation } from "../../services/types/data";
+import { WS_URL } from '../../utils/constants';
 
 export const OrderComponent = () => {
     const { dataApi } = useAppSelector(state => state.dataApiReducer);
@@ -30,8 +33,9 @@ export const OrderComponent = () => {
     //запрос заказов с API
     React.useEffect(()=> {
         if(location.pathname.includes("orders") && loadStateFromLocalstorage('token')){
-            dispatch(wsConnectionProfileStart())
-        }else dispatch(wsConnectionStart())
+            const accessToken = loadStateFromLocalstorage('token');
+            dispatch(wsConnectionStart(`${WS_URL}?token=${accessToken}`))
+        }else dispatch(wsConnectionStart(`${WS_URL}/all`))
     }, [dispatch, location.pathname])
 
 
@@ -81,7 +85,7 @@ export const OrderComponent = () => {
 
     let sum: number = 0;   
     
-    currentOrder?.ingredients.forEach((_id:string) => {
+    currentOrder?.ingredients.forEach(_id => {
         const foundIngredient: IIngredient | undefined= dataApi.find((item)=> item._id === _id)
         if(foundIngredient){ sum = sum + foundIngredient!.price }
     });
@@ -91,6 +95,10 @@ export const OrderComponent = () => {
         if(!background){
             return stylesOrderComp.numberOrderCenter
         }else return stylesOrderComp.numberOrderleft
+    }
+
+    if (!orders.length) {
+        return <div>Загрузка заказа...</div>;
     }
 
     return(

@@ -1,5 +1,5 @@
 
-import { Dispatch } from 'redux';
+import { AppThunk } from '../types';
 import checkResponse from '../checkResponse';
 import { customFetch } from '../custom-fetch';
 
@@ -100,8 +100,8 @@ function resetPasswordStatus(payload: string | undefined) {
   }
 }
 
-function resetPassword(data: {"password": string; "token": string}) {
-  return function(dispatch: Dispatch){
+const  resetPassword: AppThunk = (data: {"password": string; "token": string}) =>{
+  return function(dispatch){
       dispatch(resetPasswordRequest())
       customFetch({
         endpoint: "password-reset/reset", 
@@ -125,8 +125,8 @@ function resetPassword(data: {"password": string; "token": string}) {
 }
 
 
-function getResetPasswordToken(data: {email: string}) {
-  return function(dispatch:Dispatch){
+const getResetPasswordToken:AppThunk = (data: {email: string}) => {
+  return function(dispatch){
       dispatch(getResetPasswordTokenRequest())
       customFetch({
         endpoint: "password-reset", 

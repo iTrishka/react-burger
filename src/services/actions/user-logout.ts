@@ -1,10 +1,10 @@
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 import { saveStateInLocalstorage } from '../../components/localstorage';
-import { Dispatch } from 'redux';
 import {
   resetUserInfo
 } from './user-info'
+import { AppThunk } from '../types';
 
 export const USER_LOGOUT_REQUEST: 'USER_LOGOUT_REQUEST' = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_REQUEST_FAILED: 'USER_LOGOUT_REQUEST_FAILED' = 'USER_LOGOUT_REQUEST_FAILED';
@@ -47,8 +47,8 @@ function userLogoutSuccess() {
 
 
 
-function userLogoutRequestApi(refreshToken: {[key:string]: string}) {
-  return function(dispatch: Dispatch) {
+const userLogoutRequestApi: AppThunk = (refreshToken: {[key:string]: string}) => {
+  return function(dispatch) {
     dispatch(userLogoutRequest())
     fetch(`${API_URL}auth/logout `, {
       method: 'POST', 

@@ -1,4 +1,5 @@
-import { Dispatch } from 'redux';
+
+import { AppThunk } from '../types';
 import { loadStateFromLocalstorage } from '../../components/localstorage';
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
@@ -54,8 +55,8 @@ function resetOrder() {
     }
 }
 
-function getOrder(endpoint:string, data:Array<string>) {
-  return function(dispatch:Dispatch) {
+const getOrder:AppThunk = (endpoint:string, data:Array<string>) => {
+  return function(dispatch) {
     dispatch(getOrderApi())
     fetch(`${API_URL}${endpoint}`, { 
               method: 'POST',

@@ -17,7 +17,7 @@ const OrderItem = (order: {order: TOrder; path: string}) => {
 
     let orderedIngredients: IIngredient[] | [] = [];
     let sum: number = 0;   
-    ingredients.forEach((_id:string) => {
+    ingredients.forEach(_id => {
         const foundIngredient: IIngredient | undefined= dataApi.find((item)=> item._id === _id)
         if (foundIngredient){
             sum = sum + foundIngredient!.price;

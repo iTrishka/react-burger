@@ -1,5 +1,5 @@
 import { IUserInfo } from "../types/data";
-import { Dispatch } from 'redux';
+import { AppThunk } from "../types";
 import checkResponse from '../checkResponse';
 import { customFetch } from '../custom-fetch';
 import { refreshToken } from '../refresh-token';
@@ -89,8 +89,8 @@ function userInfoStatus(payload:string | undefined) {
   }
 }
 
-function getUserInfoApi() {
-  return function(dispatch:Dispatch){
+const getUserInfoApi: AppThunk = () => {
+  return function(dispatch){
     dispatch(getUserInfo())
     customFetch({
       endpoint: "auth/user", 
@@ -138,8 +138,8 @@ function getUserInfoApi() {
 }
 
 
-function changeUserInfoApi(data: IUserInfo) {
-  return function(dispatch: Dispatch){
+const changeUserInfoApi:AppThunk = (data: IUserInfo) => {
+  return function(dispatch){
     dispatch(getUserInfo())
     customFetch({
         endpoint: "auth/user", 

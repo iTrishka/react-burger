@@ -1,7 +1,6 @@
 import { IMessageWS } from '../types/data';
 
 export const WS_CONNECTION_START: 'WS_CONNECTION_START' = 'WS_CONNECTION_START';
-export const WS_CONNECTION_PROFILE_START: 'WS_CONNECTION_PROFILE_START' = 'WS_CONNECTION_PROFILE_START'
 export const WS_CONNECTION_SUCCESS: 'WS_CONNECTION_SUCCESS' = 'WS_CONNECTION_SUCCESS';
 export const WS_CONNECTION_ERROR: 'WS_CONNECTION_ERROR' = 'WS_CONNECTION_ERROR';
 export const WS_CONNECTION_CLOSED: 'WS_CONNECTION_CLOSED'= 'WS_CONNECTION_CLOSED';
@@ -10,10 +9,6 @@ export const WS_GET_ORDERS: 'WS_GET_ORDERS' = 'WS_GET_ORDERS';
 
 export interface IWsConnectionStart{
     readonly type: typeof WS_CONNECTION_START;
-}
-
-export interface IWsConnectionProfileStart{
-    readonly type: typeof WS_CONNECTION_PROFILE_START;
 }
 
 export interface IWsConnectionSuccess{
@@ -32,22 +27,16 @@ export interface IWsGetOrders{
 
 export type TWsConnectionActions = 
 IWsConnectionStart |
-IWsConnectionProfileStart |
 IWsConnectionSuccess |
 IWsConnectionError |
 IWsConnectionClosed |
 IWsGetOrders |
 any;
 
-function wsConnectionStart() {
+function wsConnectionStart(payload: string) {
     return {
-        type: WS_CONNECTION_START
-    }
-}
-
-function wsConnectionProfileStart() {
-    return {
-        type: WS_CONNECTION_PROFILE_START
+        type: WS_CONNECTION_START, 
+        payload
     }
 }
 
@@ -74,11 +63,18 @@ function wsGetOrders(message: IMessageWS){
     }
 }
 
-export {
+export const wsActions = {
     wsConnectionStart,
-    wsConnectionProfileStart,
     wsConnectionSuccess,
     wsConnectionError, 
     wsConnectionClosed,
-    wsGetOrders,
+    wsGetOrders
+}
+
+export {
+    wsConnectionStart,
+    wsConnectionSuccess,
+    wsConnectionError, 
+    wsConnectionClosed,
+    wsGetOrders
 }

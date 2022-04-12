@@ -1,6 +1,6 @@
 import { IDataApi } from "../reducers/data-api";
 import { IIngredient } from "../types/data";
-import { Dispatch } from 'redux';
+import { AppThunk } from "../types";
 import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 import { getSelectedIngredient } from "./selected-ingredient";
@@ -59,8 +59,8 @@ function setDataApi(payload: IIngredient[]) {
 }
 
 
-function getIngredientsApi(endpoint:string) {
-  return function(dispatch:Dispatch) {
+const getIngredientsApi:AppThunk = (endpoint:string) => {
+  return function(dispatch) {
     dispatch(getDataApi())
     fetch(`${API_URL}${endpoint}`)
       .then(checkResponse)
@@ -76,8 +76,8 @@ function getIngredientsApi(endpoint:string) {
 }
 } 
 
-function getIngredientsAndCurrent(id:string) {
-  return function(dispatch: Dispatch) {
+const  getIngredientsAndCurrent: AppThunk  = (id:string) => {
+  return function(dispatch) {
     dispatch(getDataApi())
     fetch(`${API_URL}ingredients`)
       .then(checkResponse)

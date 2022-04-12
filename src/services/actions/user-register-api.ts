@@ -3,10 +3,10 @@ import { API_URL } from '../../utils/constants';
 import checkResponse from '../checkResponse';
 import { customFetch } from '../custom-fetch';
 import { IUserInfo } from '../types/data';
-import { Dispatch } from 'redux';
 import {
   addUserInfo
 } from './user-info'
+import { AppThunk } from '../types';
 
 export const GET_USER_REGISTER_API: 'GET_USER_REGISTER_API' = 'GET_USER_REGISTER_API';
 export const GET_USER_REGISTER_API_FAILED: 'GET_USER_REGISTER_API_FAILED' = 'GET_USER_REGISTER_API_FAILED';
@@ -60,8 +60,8 @@ function resetUserRegisterApi() {
     }
 }
 
-function getUserRegisterApiRequest(endpoint:string, body:IUserInfo ) {
-  return function(dispatch:Dispatch) {
+const getUserRegisterApiRequest: AppThunk = (endpoint:string, body:IUserInfo ) => {
+  return function(dispatch) {
     dispatch(getUserRegisterApi())
     customFetch({endpoint, method: "POST", body})
     fetch(`${API_URL}${endpoint}`, {

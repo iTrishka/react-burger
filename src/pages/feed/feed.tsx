@@ -6,6 +6,7 @@ import  { v4 as uuidv4 } from 'uuid';
 import styles from './feed.module.css';
 import { getIngredientsApi } from '../../services/actions/data-api';
 import { useAppSelector, useDispatch } from "../../services/hooks";
+import { WS_URL } from '../../utils/constants';
 
 
 
@@ -22,7 +23,7 @@ export const FeedPage = () => {
 
     //запрос заказов с API
     React.useEffect(()=> {
-        dispatch(wsConnectionStart())
+        dispatch(wsConnectionStart(`${WS_URL}/all`))
         return (): void => {
             dispatch(wsConnectionClosed())
         }
@@ -33,7 +34,7 @@ export const FeedPage = () => {
         const numsOrdersByDone: number[] = [];
         const numsOrdersByPending: number[]  = [];
 
-        orders.forEach((order) => {
+        orders.forEach(order => {
             if(order.status === 'done' && numsOrdersByDone.length < 20){
                 numsOrdersByDone.push(order.number)
             }

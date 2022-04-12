@@ -72,7 +72,7 @@ const BurgerIngredients = () => {
 
     //верстка_блоки с ингрединтами
     const blockIngredientsType = (pKey:string, ulKey:string, name:string, refName: RefObject<HTMLInputElement>) => {
-        const category = dataApi.filter((item) => {return item.type === pKey});
+        const category = dataApi.filter(item => {return item.type === pKey});
         return(
             <>
                 <p key={pKey} className="text text_type_main-medium" ref={refName} >{name}</p> 

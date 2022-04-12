@@ -54,7 +54,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     const getOrderNumberApi = () => {
         if(!bun){return}
         const allSelectedIdBun = [bun[0]._id]
-        const allSelectedIdBMain = main.map((item: IIngredient) => item._id)
+        const allSelectedIdBMain = main.map(item => item._id)
         const allSelectedId = allSelectedIdBun.concat(allSelectedIdBMain);
         dispatch(getOrder("orders", allSelectedId))     
     }
@@ -95,7 +95,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         let totalBun = 0;
         let totalIngedients = 0;
         if(main){
-            main.forEach((item:IIngredient) => {
+            main.forEach(item => {
                 totalIngedients += item.price;
         })}else{totalBun = 0;}
         
@@ -109,10 +109,10 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
     
      // удаление ингредиентов из конструктора
      const onDeleteIngredient = (uid:string, id:string) => {
-        const newIngerientsAr = main.filter((item:IIngredient) => item.key !== uid);
+        const newIngerientsAr = main.filter(item => item.key !== uid);
         dispatch(getIngredientsConstructorMain(newIngerientsAr))
 
-        const newArrDataApi:IIngredient[] = dataApi.map((item:IIngredient) => {
+        const newArrDataApi:IIngredient[] = dataApi.map(item => {
             if(item.counter){return {...item, counter: item?.counter-1}
             } else return item
         })
@@ -146,8 +146,8 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
     //сортировка 
     const findCard = useCallback((id: string): ICardSorting => {
-        const card:IIngredient = main.filter((c:IIngredient) => `${c.key}` === id)[0];
-        const index: number = main.findIndex((item: IIngredient) => { return item.key === card.key } )
+        const card:IIngredient = main.filter(c => `${c.key}` === id)[0];
+        const index: number = main.findIndex(item => { return item.key === card.key } )
         return {
             card,
             index
@@ -172,7 +172,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
 
     const getIngridientElements = () => {
        
-       return main.map((ingredient:IIngredient) => {  
+       return main.map(ingredient => {  
         return (<IngrediendCardConstructor 
                 key={ingredient.key} 
                 ingredient={ingredient} 

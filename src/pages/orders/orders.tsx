@@ -3,7 +3,11 @@ import styles from "./orders.module.css";
 import { useAppSelector, useDispatch } from "../../services/hooks";
 import OrderItem from "../../components/order-item/order-item";
 import { getIngredientsApi } from '../../services/actions/data-api';
-import { wsConnectionClosed, wsConnectionProfileStart } from '../../services/actions/websockets';
+import { loadStateFromLocalstorage } from '../../components/localstorage';
+import { wsConnectionClosed, wsConnectionStart, 
+    // wsConnectionProfileStart 
+} from '../../services/actions/websockets';
+import { WS_URL } from '../../utils/constants';
 import  { v4 as uuidv4 } from 'uuid';
 
 export const OrdersPage = () => {
@@ -18,7 +22,8 @@ export const OrdersPage = () => {
 
     //запрос заказов с API
     React.useEffect(()=> {
-        dispatch(wsConnectionProfileStart())
+        const accessToken = loadStateFromLocalstorage('token');
+        dispatch(wsConnectionStart(`${WS_URL}?token=${accessToken}`))
         return (): void => {
             dispatch(wsConnectionClosed())
         }
@@ -31,7 +36,7 @@ export const OrdersPage = () => {
     return(
         <section className={styles.section}>
             <ul className={`${styles.ordersList} mr-4 mb-5 `}>
-                { orders?.map((order) => {
+                { orders?.map(order => {
                     return <OrderItem key={uuidv4()} order={order} path="profile/orders"/>
                 })}
             </ul>

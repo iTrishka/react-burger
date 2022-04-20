@@ -46,6 +46,7 @@ export const userInfo = (state:IUserInfoInitial = initialState, action: TUserAct
         case USER_INFO_REQUEST_SUCCESS: {
             return { 
                       ...state, 
+                      userInfoRequest: false,
                       userInfo: action.payload, 
                       userInfoRequestFailed: false 
                   };

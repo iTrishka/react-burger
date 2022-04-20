@@ -27,6 +27,7 @@ export const userLogin = (state:IUserLoginInit = initialState, action: TUserLogi
         case GET_USER_LOGIN_SUCCESS: {
             return { 
                       ...state, 
+                      userLoginRequest1: false,
                       userLoginFailed: false 
                   };
           }

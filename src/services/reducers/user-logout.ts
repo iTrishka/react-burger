@@ -28,6 +28,7 @@ export const userLogout = (state:IUserLogoutInit = initialState, action: TUserLo
         case USER_LOGOUT_REQUEST_SUCCESS: {
             return { 
                       ...state, 
+                      userLogoutRequest: false,
                       userLogoutRequestFailed: false 
                   };
           }

@@ -16,8 +16,6 @@ import { OrderComponent } from "./order-component/order-component";
 
   
 const ModalSwitch = () => {
-  console.log(React.version)
-
     const location = useLocation<IBackgroundLocation>();
     const history = useHistory();
     const dispatch = useDispatch();

@@ -1,4 +1,5 @@
 .modalWrapper {
+    z-index: 102;
     width: 720px;
     position: absolute;
     display: flex;

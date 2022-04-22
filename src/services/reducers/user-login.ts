@@ -3,19 +3,19 @@ import {
     GET_USER_LOGIN_FAILED, 
     GET_USER_LOGIN_SUCCESS, 
 } from '../actions/user-login';
-import {ITypeAction} from '../types/data';
+import { TUserLoginActions } from '../actions/user-login';
 
-export interface IUserLogin {
+export interface IUserLoginInit {
     userLoginRequest1: boolean,
     userLoginFailed: boolean,
 }
 
-const initialState:IUserLogin = {
+const initialState:IUserLoginInit = {
     userLoginRequest1: false,
     userLoginFailed: false,  
 }
 
-export const userLogin = (state:IUserLogin = initialState, action: ITypeAction<`GET_USER_LOGIN` | `GET_USER_LOGIN_FAILED` | `GET_USER_LOGIN_SUCCESS`>) => { 
+export const userLogin = (state:IUserLoginInit = initialState, action: TUserLoginActions):IUserLoginInit => { 
     switch(action.type) {
         case GET_USER_LOGIN: {
             return {

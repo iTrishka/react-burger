@@ -1,6 +1,6 @@
 export interface IIngredient{
     readonly _id: string,
-    readonly name: string,
+    readonly name: string ,
     readonly type: string,
     readonly proteins: number,
     readonly fat: number,
@@ -14,6 +14,12 @@ export interface IIngredient{
     counter?: number;
     key: string;
 } 
+
+export interface ICardSorting{
+    card: IIngredient;
+    index: number
+}
+
 
 export interface IIngredientId{
     readonly _id: string
@@ -51,23 +57,6 @@ export interface ILocationState {
     path: string;
   }
 
-
-// export interface IResFetch {
-//     ok?: boolean;
-//     success?: string;
-//     message?: string;
-//     data?: any;
-//     order?: {
-//         number: string;
-//     };
-//     user?: IUserInfo | undefined;
-//     err?: string;
-//     accessToken?: string | undefined;
-//     refreshToken?: string | undefined;
-//     status: string;
-//     json<T>(): Promise<T>;
-// }
-
 export interface IModal{
     onClose: () => void;
     header?: string;
@@ -81,6 +70,34 @@ export interface IDropItem{
     }
 }
 
+export type TOrder = {
+    ingredients: string[],
+    name: string,
+    _id: string,
+    status: 'pending' | 'created' | 'done';
+    number: number,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface IMessageWS{
+    wsConnected: boolean,
+    orders: TOrder[] | [],
+    total: null | number,
+    totalToday: null | number,
+    error?: Event
+}
+
+
+export interface IBackgroundLocation {
+    background: {
+      pathname: string
+      search: string
+      hash: string
+      state: undefined
+      key: string
+    }
+  }
 
 
 

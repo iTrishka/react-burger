@@ -1,5 +1,5 @@
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useAppSelector } from '../../services/reducers/root-reducer';
+import { useAppSelector } from '../../services/hooks';
 
 const OrderDetails =  () => {
     const  orderNumber  = useAppSelector((state) => state.orderNumber.orderNumber);

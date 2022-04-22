@@ -1,8 +1,7 @@
 import { Redirect, Route, RouteProps, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import getUserInfoApi from '../services/actions/get-user-info-api';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from "../services/reducers/root-reducer";
+import { getUserInfoApi } from '../services/actions/user-info';
+import { useAppSelector, useDispatch } from "../services/hooks";
 import { ILocationState } from '../services/types/data';
 
 

@@ -1,7 +1,7 @@
 import { IIngredient } from "../types/data";
 
-export const GET_SELECTED_INGREDIENT = 'GET_SELECTED_INGREDIENT';
-export const RESET_SELECTED_INGREDIENT = 'RESET_SELECTED_INGREDIENT';
+export const GET_SELECTED_INGREDIENT: 'GET_SELECTED_INGREDIENT' = 'GET_SELECTED_INGREDIENT';
+export const RESET_SELECTED_INGREDIENT: 'RESET_SELECTED_INGREDIENT' = 'RESET_SELECTED_INGREDIENT';
 
 export interface IGetSelectedIngredient {
   readonly type: typeof GET_SELECTED_INGREDIENT,
@@ -11,7 +11,7 @@ export interface IResetSelectedIngredient {
   readonly type: typeof RESET_SELECTED_INGREDIENT
 }
 
-export type TSelectedIngredient = 
+export type TSelectedIngredientActions = 
     IGetSelectedIngredient | 
     IResetSelectedIngredient |
     any;

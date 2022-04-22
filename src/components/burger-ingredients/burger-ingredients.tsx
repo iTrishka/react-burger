@@ -2,9 +2,8 @@ import React, { RefObject, useRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styleBurgerIngredient from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
-import { useDispatch } from 'react-redux';
-import getIngredientsApi from '../../services/actions/get-ingredients-api';
-import { useAppSelector } from '../../services/reducers/root-reducer';
+import { getIngredientsApi } from '../../services/actions/data-api';
+import { useAppSelector, useDispatch } from '../../services/hooks';
 
 
 
@@ -73,7 +72,7 @@ const BurgerIngredients = () => {
 
     //верстка_блоки с ингрединтами
     const blockIngredientsType = (pKey:string, ulKey:string, name:string, refName: RefObject<HTMLInputElement>) => {
-        const category = dataApi.filter((item) => {return item.type === pKey});
+        const category = dataApi.filter(item => {return item.type === pKey});
         return(
             <>
                 <p key={pKey} className="text text_type_main-medium" ref={refName} >{name}</p> 

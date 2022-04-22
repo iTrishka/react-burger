@@ -3,21 +3,22 @@ import {
     GET_USER_REGISTER_API_FAILED, 
     GET_USER_REGISTER_API_SUCCESS } from '../actions/user-register-api';
 
-import {ITypeAction, TAuthorization} from '../types/data';
+import {TAuthorization} from '../types/data';
+import { TUserRegisterActions } from '../actions/user-register-api';
 
-export interface IUserRegister {
-    userLogoutRequest: boolean,
-    userLogoutRequestFailed: boolean,
-    userRegisterApi: TAuthorization
+export interface IUserRegisterInit {
+    userRegisterApiRequest: boolean,
+    userRegisterApiFailed: boolean,
+    userRegisterApi: TAuthorization | {}
 }
 
-const initialState = {
+const initialState: IUserRegisterInit = {
     userRegisterApiRequest: false,
     userRegisterApiFailed: false,
-    userRegisterApi: { }   
+    userRegisterApi: {}   
 }
 
-export const userRegisterApi = (state = initialState, action: ITypeAction<`GET_USER_REGISTER_API` | `GET_USER_REGISTER_API_FAILED` | `GET_USER_REGISTER_API_SUCCESS`>) => { 
+export const userRegisterApi = (state = initialState, action: TUserRegisterActions): IUserRegisterInit => { 
     switch(action.type) {
         case GET_USER_REGISTER_API: {
             return {

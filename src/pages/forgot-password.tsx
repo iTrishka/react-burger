@@ -1,19 +1,19 @@
 import React, {ChangeEvent, useEffect} from "react";
 import { useHistory, Link, Redirect } from 'react-router-dom';
 import { Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
-import  getUserInfoApi from '../services/actions/get-user-info-api';
-import getResetPasswordToken from "../services/actions/get-reset-password-token";
+import { getUserInfoApi } from "../services/actions/user-info";
+import { getResetPasswordToken } from "../services/actions/password";
 import { getResetPasswordTokenStatus } from "../services/actions/password";
-import { TRootState } from "../services/reducers/root-reducer";
+import { TRootState } from "../services/types";
+import { useAppSelector, useDispatch } from "../services/hooks";
 
 
 import styles from './common.module.css';
 
 
 export function ForgotPasswordPage() {
-    const getTokenStatusText = useSelector((state:TRootState)=> state.password.getTokenStatus)
-    const { userInfo, userInfoRequest } = useSelector((state:TRootState) => state.userInfo)
+    const getTokenStatusText = useAppSelector((state:TRootState)=> state.password.getTokenStatus)
+    const { userInfo, userInfoRequest } = useAppSelector((state:TRootState) => state.userInfo)
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef<HTMLInputElement>(null);
     const history = useHistory();

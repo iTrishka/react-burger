@@ -1,17 +1,16 @@
 import React, { ChangeEvent, useEffect} from "react";
 import { useHistory, Link ,Redirect} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { PasswordInput, Input, Button  } from '@ya.praktikum/react-developer-burger-ui-components';
-import resetPassword from "../services/actions/reset-password";
-import { resetPasswordStatus } from "../services/actions/password";
-import { TRootState } from "../services/reducers/root-reducer";
+import { resetPassword, resetPasswordStatus } from "../services/actions/password";
+import { TRootState } from "../services/types";
 import { IHistoryState } from "../services/types/data";
+import { useAppSelector, useDispatch } from "../services/hooks";
 
 
 import styles from './common.module.css';
 
 export function ResetPasswordPage() {
-    const resetPasswordStatusText = useSelector((state:TRootState) => state.password.resetPasswordStatus)
+    const resetPasswordStatusText = useAppSelector((state:TRootState) => state.password.resetPasswordStatus)
     const [password, setPassword] = React.useState('');
     const [value, setValue] = React.useState('');
     const inputRef = React.useRef<HTMLInputElement>(null);

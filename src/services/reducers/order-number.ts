@@ -1,4 +1,4 @@
-import { TOrderNumber } from '../actions/order-number';
+import { TOrderNumberActions } from '../actions/order-number';
 import {
     GET_ORDER_API, 
     GET_ORDER_API_FAILED, 
@@ -21,7 +21,7 @@ const initialState:TOrderNumberInit = {
     
  //Редьюсер номера заказа
 
- export const orderNumber = (state:TOrderNumberInit = initialState, action: TOrderNumber):TOrderNumberInit => { 
+ export const orderNumber = (state:TOrderNumberInit = initialState, action: TOrderNumberActions):TOrderNumberInit => { 
     switch(action.type) {
         case GET_ORDER_API: {
             return {

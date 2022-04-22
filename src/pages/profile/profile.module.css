@@ -4,7 +4,7 @@
     width: 1240px;
 }
 
-.container section:first-child{
+.container section.menu{
     width: 320px;
     display: flex;
     flex-direction: column;
@@ -12,17 +12,17 @@
     align-items: flex-start;
 }
 
-.container section:first-child button{
+.container section.menu button{
     padding: 17px 0;
 }
 
 
-.container section:first-child a{
+.container section.menu a{
     text-decoration: none;
 }
 
 
-.container section:first-child p{
+.container section.menu p{
     opacity: 0.4;
 }
 

@@ -1,5 +1,4 @@
 import {useState} from "react";
-import { useDispatch } from 'react-redux';
 import {
     Route,
     Switch, useLocation, useHistory
@@ -7,23 +6,17 @@ import {
 import IngredientDetails from "./ingredient-details/ingredient-details";
 import { resetSelectedIngredient } from "../services/actions/selected-ingredient";
 import Modal from "./modal/modal";
-import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage } from '../pages';
+import { MainPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, IngredientPage, FeedPage, OrderPage } from '../pages';
 import { ProtectedRoute } from "./protectedRoute";
 import { saveStateInLocalstorage } from './localstorage';
 import AppHeader from "./app-header/app-header";
+import { useDispatch } from "../services/hooks";
+import { IBackgroundLocation } from "../services/types/data";
+import { OrderComponent } from "./order-component/order-component";
 
   
 const ModalSwitch = () => {
 
-  interface IBackgroundLocation {
-    background: {
-      pathname: string
-      search: string
-      hash: string
-      state: undefined
-      key: string
-    }
-  }
     const location = useLocation<IBackgroundLocation>();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -60,9 +53,21 @@ const ModalSwitch = () => {
             <Route path="/reset-password" exact={true}>
                 <ResetPasswordPage />
             </Route>
+            <ProtectedRoute path="/profile/orders/:id" exact>
+                <OrderPage/>
+            </ProtectedRoute>
             <ProtectedRoute path="/profile">
                 <ProfilePage />
             </ProtectedRoute>
+            <ProtectedRoute path="/orders/:id">
+              <OrderPage/>
+            </ProtectedRoute>
+            <Route path='/feed/:id' exact>
+                <OrderPage/>
+            </Route>
+            <Route path="/feed">
+                <FeedPage/>
+            </Route>
             <Route>
                 <NotFound404 />
             </Route>
@@ -74,6 +79,26 @@ const ModalSwitch = () => {
             children={
               <Modal header="Детали ингредиента" onClose={handleCloseModal}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+        )}
+        {background && (
+          <Route exact
+            path='/feed/:id'
+            children={
+              <Modal header="" onClose={handleCloseModal}>
+                <OrderComponent />
+              </Modal>
+            }
+          />
+        )}
+        {background && (
+          <Route exact
+            path='/profile/orders/:id'
+            children={
+              <Modal header="" onClose={handleCloseModal}>
+                <OrderComponent />
               </Modal>
             }
           />

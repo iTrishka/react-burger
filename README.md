@@ -31,11 +31,11 @@ npm start
 
 Jest tests cover redusers. For run tests use following command:
 
-`npm test'
+`npm test`
 
 Cypress tests cover the functionality of ordering a burger. For run tests use following command:
 
-`npx cypress open cache clear'
+`npx cypress open cache clear`
 
 
 ## Build and deploy the project

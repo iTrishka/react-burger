@@ -11,7 +11,7 @@ export interface IUserLogoutInit {
 }
 
 
-const initialState:IUserLogoutInit = {
+export const initialState:IUserLogoutInit = {
     userLogoutRequest: false,
     userLogoutRequestFailed: false,
 }

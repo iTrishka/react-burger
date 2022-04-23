@@ -1,26 +1,18 @@
 import * as actionType from '../actions/user-register-api';
-import { userRegisterApi } from './user-register-api';
+import { userRegisterApi, initialState } from './user-register-api';
 
 describe('userRegisterApi reducer', () => {
     it('Должен вернуть начальное состояние', () => {
-        expect(userRegisterApi(undefined, {})).toEqual({
-            userRegisterApiRequest: false,
-            userRegisterApiFailed: false,
-            userRegisterApi: {} 
-        })
+        expect(userRegisterApi(undefined, {})).toEqual(initialState)
     })
 });
 
 it('Should show status the begginner userRegisterApi request', () => {
-    expect(userRegisterApi({
-        userRegisterApiRequest: false,
-        userRegisterApiFailed: false,
-        userRegisterApi: {} 
-    }, {
+    expect(userRegisterApi(initialState, {
             type: actionType.GET_USER_REGISTER_API
         }
     )).toEqual({
-        userRegisterApi: {},
+        ...initialState,
         userRegisterApiRequest: true,
         userRegisterApiFailed: false,
     })
@@ -28,7 +20,7 @@ it('Should show status the begginner userRegisterApi request', () => {
 
 it('Should show success status userRegisterApi request', () => {
     expect(userRegisterApi({
-        userRegisterApiRequest: false,
+        userRegisterApiRequest: true,
         userRegisterApiFailed: false,
         userRegisterApi: {}  
     }, {
@@ -63,14 +55,13 @@ it('Should show success status userRegisterApi request', () => {
 
 it('Should show failed status userRegisterApi request', () => {
     expect(userRegisterApi({
-        userRegisterApiRequest: false,
-        userRegisterApiFailed: false,
-        userRegisterApi: {}  
+        ...initialState,
+        userRegisterApiRequest: true 
     }, {
             type: actionType.GET_USER_REGISTER_API_FAILED
         }
     )).toEqual({
-        userRegisterApi: {},
+        ...initialState,
         userRegisterApiFailed: true, 
         userRegisterApiRequest: false      
     })

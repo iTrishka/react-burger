@@ -9,7 +9,7 @@ import { TWsConnectionActions } from '../actions/websockets';
 import { IMessageWS } from '../types/data';
 
 
-const wsConnectionState: IMessageWS = {
+export const wsConnectionState: IMessageWS = {
     wsConnected: false,
     orders: [],
     total: null,

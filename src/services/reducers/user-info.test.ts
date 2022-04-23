@@ -1,30 +1,14 @@
 import * as actionType from '../actions/user-info';
-import { userInfo } from './user-info';
+import { userInfo, initialState } from './user-info';
 
 describe('userInfo reducer', () => {
     it('Должен вернуть начальное состояние', () => {
-        expect(userInfo(undefined, {})).toEqual({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            } 
-        })
+        expect(userInfo(undefined, {})).toEqual(initialState)
     })
 });
 
 it('Should add user name and email', () => {
-    expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            }
-        }, {
+    expect(userInfo(initialState, {
             type: actionType.ADD_USER_INFO,
             payload: {
                 name: "Kris",
@@ -32,9 +16,7 @@ it('Should add user name and email', () => {
             }
         }
     )).toEqual({
-        userInfoRequest: false,
-        userInfoRequestFailed: false,
-        userInfoStatus: "",
+        ...initialState,
         userInfo: {
             name: "Kris",
             email: "Snowflak@ya.ru"
@@ -43,38 +25,18 @@ it('Should add user name and email', () => {
 })
 
 it('Should show status user info request', () => {
-    expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            }
-        }, {
+    expect(userInfo(initialState, {
             type: actionType.GET_USER_INFO
         }
     )).toEqual({
-        userInfoStatus: "",
-        userInfo: {
-            name: "",
-            email:  ""
-        },
+        ...initialState,
         userInfoRequest: true,
         userInfoRequestFailed: false
     })
 })
 
 it('Should show status success user info request', () => {
-    expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            }
-        }, {
+    expect(userInfo(initialState, {
             type: actionType.USER_INFO_REQUEST_SUCCESS,
             payload: {
                 name: "Kris",
@@ -82,8 +44,7 @@ it('Should show status success user info request', () => {
             }
         }
     )).toEqual({
-        userInfoStatus: "",
-        userInfoRequest: false,
+        ...initialState,
         userInfo: {
             name: "Kris",
             email: "Snowflak@ya.ru"
@@ -93,23 +54,11 @@ it('Should show status success user info request', () => {
 })
 
 it('Should show status failed user info request', () => {
-    expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            }
-        }, {
+    expect(userInfo(initialState, {
             type: actionType.USER_INFO_REQUEST_FAILED
         }
     )).toEqual({
-        userInfoStatus: "",
-        userInfo: {
-            name: "",
-            email: ""
-        },
+        ...initialState,
         userInfoRequestFailed: true,
         userInfoRequest: false
     })
@@ -117,9 +66,7 @@ it('Should show status failed user info request', () => {
 
 it('Should reset user info', () => {
     expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
+            ...initialState,
             userInfo: {
                 name: "Kris",
                 email: "Snowflak@ya.ru"
@@ -127,37 +74,16 @@ it('Should reset user info', () => {
         }, {
             type: actionType.RESET_USER_INFO
         }
-    )).toEqual({
-        userInfoRequest: false,
-        userInfoRequestFailed: false,
-        userInfoStatus: "",
-        userInfo: {
-            name: "",
-            email: ""
-        }
-    })
+    )).toEqual(initialState)
 })
 
 it('Should show status', () => {
-    expect(userInfo({
-            userInfoRequest: false,
-            userInfoRequestFailed: false,
-            userInfoStatus: "",
-            userInfo: {
-                name: "",
-                email: ""
-            }
-        }, {
+    expect(userInfo(initialState, {
             type: actionType.USER_INFO_STATUS,
             payload: "Nice to meet you"
         }
     )).toEqual({
-        userInfoRequest: false,
-        userInfoRequestFailed: false,
-        userInfo: {
-            name: "",
-            email: ""
-        },
+        ...initialState,
         userInfoStatus: "Nice to meet you"
     })
 })

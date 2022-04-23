@@ -1,23 +1,15 @@
 import * as actionType from '../actions/order-number';
-import { orderNumber } from './order-number';
+import { orderNumber, initialState } from './order-number';
 
 
 describe('orderNumber reducer', () => {
     it('Должен вернуть начальное состояние', () => {
-        expect(orderNumber(undefined, {})).toEqual({
-            orderApiRequest: false,
-            orderApiFailed: false,
-            orderNumber: ""
-        })
+        expect(orderNumber(undefined, {})).toEqual(initialState)
     })
 });
 
 it('Should show the status at the begginning of the request', () => {
-    expect(orderNumber({
-            orderApiRequest: false,
-            orderApiFailed: false,
-            orderNumber: ""
-        }, {
+    expect(orderNumber(initialState, {
             type: actionType.GET_ORDER_API           
         }
     )).toEqual({

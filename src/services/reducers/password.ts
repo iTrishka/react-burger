@@ -19,7 +19,7 @@ export interface IPasswordInit {
     resetPasswordStatus: string
 }
 
-const initialState: IPasswordInit = {
+export const initialState: IPasswordInit = {
     getTokenRequest: false,
     getTokenFailed: false,
     getTokenStatus: "",
@@ -41,6 +41,7 @@ export const password = (state:IPasswordInit = initialState, action: TPasswordAc
         case GET_RESET_PASSWORD_TOKEN_SUCCESS: {
             return {
               ...state,
+              getTokenRequest: false,
               getTokenFailed: false
             }
         }
@@ -67,6 +68,7 @@ export const password = (state:IPasswordInit = initialState, action: TPasswordAc
         case RESET_PASSWORD_SUCCESS: {
             return {
               ...state,
+              resetPasswordRequest: false,
               resetPasswordFailed: false
             }
         }

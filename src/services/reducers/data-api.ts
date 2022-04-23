@@ -8,7 +8,7 @@ export interface IDataApi {
     dataApi: Array<IIngredient> | []
 }
 
-const initialState = {
+export const initialState = {
     dataApiRequest: false,
     dataApiFailed: false,
     dataApi: []

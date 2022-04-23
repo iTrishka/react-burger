@@ -9,7 +9,7 @@ export type TConstructorListInit = {
     
 }
 
-const initialState = {
+export const initialState = {
         bun: [],
         main: []
 }

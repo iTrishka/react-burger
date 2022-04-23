@@ -10,7 +10,7 @@ export interface IUserLoginInit {
     userLoginFailed: boolean,
 }
 
-const initialState:IUserLoginInit = {
+export const initialState:IUserLoginInit = {
     userLoginRequest1: false,
     userLoginFailed: false,  
 }

@@ -18,7 +18,7 @@ export interface IUserInfoInitial {
     userInfo: IUserInfo
 }
 
-const initialState: IUserInfoInitial = {
+export const initialState: IUserInfoInitial = {
     userInfoRequest: false,
     userInfoRequestFailed: false,
     userInfoStatus: "",

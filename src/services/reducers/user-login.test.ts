@@ -1,20 +1,14 @@
 import * as actionType from '../actions/user-login';
-import { userLogin } from './user-login';
+import { userLogin, initialState} from './user-login';
 
 describe('userLogin reducer', () => {
     it('Должен вернуть начальное состояние', () => {
-        expect(userLogin(undefined, {})).toEqual({
-            userLoginRequest1: false,
-            userLoginFailed: false,  
-        })
+        expect(userLogin(undefined, {})).toEqual(initialState)
     })
 });
 
 it('Should show status the begginner Login request', () => {
-    expect(userLogin({
-        userLoginRequest1: false,
-        userLoginFailed: false,  
-    }, {
+    expect(userLogin(initialState, {
             type: actionType.GET_USER_LOGIN
         }
     )).toEqual({
@@ -24,10 +18,7 @@ it('Should show status the begginner Login request', () => {
 })
 
 it('Should show success status Login request', () => {
-    expect(userLogin({
-        userLoginRequest1: true,
-        userLoginFailed: false,  
-    }, {
+    expect(userLogin(initialState, {
             type: actionType.GET_USER_LOGIN_SUCCESS
         }
     )).toEqual({

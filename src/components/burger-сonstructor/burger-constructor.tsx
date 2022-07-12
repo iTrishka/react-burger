@@ -130,7 +130,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
             textPosition = "низ"
         }
             return(
-             <li key={uuidv4()} className="mr-4">
+             <li key={uuidv4()} className="mr-4"  data-cypress="constructor-section">
             <ConstructorElement
                 type={pos}
                 isLocked={true}
@@ -214,15 +214,15 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
         } else {setActiveStyleClass(false)}
     },[bun])
 
-    const emptyBunTop = <li  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>
-    const emptyBunBottom = <li  className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>
-    const emptyMain = <li   className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>
+    const emptyBunTop = <li data-cypress="constructor-section"  className={`${styleBurgerConstructor.emptyTopElement} mr-4 text text_type_main-default`}>Выберите булку</li>
+    const emptyBunBottom = <li data-cypress="constructor-section"  className={`${styleBurgerConstructor.emptyBottomElement} mr-4 text text_type_main-default`}>Выберите булку</li>
+    const emptyMain = <li  data-cypress="constructor-section"  className={`${styleBurgerConstructor.emptyIngredientElements} mr-4 text text_type_main-default`}>Выберите начинку</li>
   
 
     return (
         <>
             <section ref={ drop } className={styleBurgerConstructor.wrapper} >
-                <ul  
+                <ul   data-cypress="constructor-ul"
                ref={dropSort}  
                 className={`${styleBurgerConstructor.scroll} mt-25 pl-1`}> 
                     {bun[0]?.name  ? getBunElement("top") : emptyBunTop}
@@ -231,7 +231,7 @@ export const BurgerConstructor = memo(function BurgerConstructor()  {
                 </ul>
                 <div  className={`${styleBurgerConstructor.totalWrapper} ${!isActiveStyleClass ? styleBurgerConstructor.nonActiveButton : ""} mt-10 mb-15`} >
                     <div className={`mr-10`} >
-                    <p className={`text text_type_digits-medium mt-1 mr-2 ` }>{totalPrice}</p>
+                    <p data-cypress="total-cost" className={`text text_type_digits-medium mt-1 mr-2 ` }>{totalPrice}</p>
                     <CurrencyIcon type="primary" />
                 </div>
                 <Button type="primary" size="medium" onClick={handleOpenModal} >

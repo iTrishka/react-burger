@@ -12,7 +12,7 @@ export interface IUserRegisterInit {
     userRegisterApi: TAuthorization | {}
 }
 
-const initialState: IUserRegisterInit = {
+export const initialState: IUserRegisterInit = {
     userRegisterApiRequest: false,
     userRegisterApiFailed: false,
     userRegisterApi: {}   

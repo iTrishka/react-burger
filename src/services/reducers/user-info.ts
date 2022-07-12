@@ -18,7 +18,7 @@ export interface IUserInfoInitial {
     userInfo: IUserInfo
 }
 
-const initialState: IUserInfoInitial = {
+export const initialState: IUserInfoInitial = {
     userInfoRequest: false,
     userInfoRequestFailed: false,
     userInfoStatus: "",
@@ -46,6 +46,7 @@ export const userInfo = (state:IUserInfoInitial = initialState, action: TUserAct
         case USER_INFO_REQUEST_SUCCESS: {
             return { 
                       ...state, 
+                      userInfoRequest: false,
                       userInfo: action.payload, 
                       userInfoRequestFailed: false 
                   };

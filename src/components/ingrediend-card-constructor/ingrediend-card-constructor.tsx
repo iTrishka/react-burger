@@ -45,7 +45,7 @@ export const IngrediendCardConstructor = memo(function IngrediendCardConstructor
     const opacity = isDragging ? 0 : 1;
     
     return(
-        <li ref={(node) =>{dragSort(dropSort(node))}} style={{ cursor: "move", opacity }} className="mr-4"  >
+        <li  ref={(node) =>{dragSort(dropSort(node))}} style={{ cursor: "move", opacity }} className="mr-4"  >
              <DragIcon type="primary"/>
              <ConstructorElement
              isLocked={false}

@@ -13,7 +13,7 @@ export type TOrderNumberInit = {
     orderNumber: string
 }
 
-const initialState:TOrderNumberInit = {
+export const initialState:TOrderNumberInit = {
     orderApiRequest: false,
     orderApiFailed: false,
     orderNumber: ""

@@ -25,7 +25,7 @@ const Modal = (props:IModal) => {
             <div className={`${ModalStyle.modalWrapper} pl-10 pt-10 pr-10 pb-15`}>
                 <section className={ModalStyle.header}>
                     <p className="text text_type_main-large">{header}</p> 
-                    <CloseIcon type="primary" onClick={onClose}/>
+                    <span className='icon_close'><CloseIcon type="primary" onClick={onClose}/></span>
                 </section>
                 {props.children}
             </div>

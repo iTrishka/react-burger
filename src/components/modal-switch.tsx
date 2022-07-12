@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {
     Route,
     Switch, useLocation, useHistory
@@ -16,7 +16,6 @@ import { OrderComponent } from "./order-component/order-component";
 
   
 const ModalSwitch = () => {
-
     const location = useLocation<IBackgroundLocation>();
     const history = useHistory();
     const dispatch = useDispatch();
